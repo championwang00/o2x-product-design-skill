@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// One2X Skill 可视化预览器 —— 零依赖本地服务（只读）
+// O2X Product Design skill 可视化预览器 —— 零依赖本地服务（只读）
 // 读取仓库内的 SKILL.md / design.md / tokens 等文件，提供可视化预览 UI。
 // 启动: node skill-editor/server.mjs  (或 npm --prefix skill-editor start)
 
@@ -131,7 +131,7 @@ const server = createServer(async (req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`\nOne2X Skill Visualizer`);
+  console.log(`\nO2X Product Design skill Visualizer`);
   console.log(`  repo: ${ROOT}`);
   console.log(`  open: http://localhost:${PORT}\n`);
 });

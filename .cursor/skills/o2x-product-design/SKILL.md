@@ -1,9 +1,9 @@
 ---
-name: one2x-design-stack
-description: Unified One2X/Medeo design stack entry. Use for One2X design system work, Medeo UI implementation or review, Figma MCP writing, Figma variable binding, full-page Figma assembly, design tokens, typography, components, or animation. Routes the agent to the right sibling skills in order.
+name: o2x-product-design
+description: O2X Product Design skill entry for One2X/Medeo. Use for One2X design system work, Medeo UI implementation or review, Figma MCP writing, Figma variable binding, full-page Figma assembly, design tokens, typography, components, or animation. Routes the agent to the right sibling skills in order.
 ---
 
-# One2X Design Stack
+# O2X Product Design skill
 
 Use this as the default entry for One2X / Medeo design work. It is an orchestrator skill: read this file first, then load the required sibling skills before acting.
 
@@ -16,7 +16,7 @@ Use this as the default entry for One2X / Medeo design work. It is an orchestrat
 Path resolution:
 
 - If this skill is installed inside a project, `../../../design.md` means that project's root `design.md`.
-- If this skill is loaded globally through a symlink under `~/.cursor/skills`, resolve the symlink target first and use the cloned skill pack root that contains `.cursor/skills/one2x-design-stack/`.
+- If this skill is loaded globally through a symlink under `~/.cursor/skills`, resolve the symlink target first and use the cloned skill pack root that contains `.cursor/skills/o2x-product-design/`.
 - If the target project also has its own `design.md` / `tokens/`, prefer the target project for implementation details and use the skill pack copy as the One2X baseline.
 
 ## Routes
@@ -27,12 +27,12 @@ Use when building, reviewing, fixing, or refactoring One2X / Medeo frontend UI.
 
 Load:
 
-1. `../one2x-design-system/SKILL.md`
+1. `../o2x-design-system/SKILL.md`
 2. `../web-animation-design/SKILL.md` when the task involves hover, transition, entrance/exit motion, easing, loading states, touch interaction, or `prefers-reduced-motion`.
 
 Rules:
 
-- When a Figma URL or selected Figma node is the implementation source, follow the mandatory Figma-to-code workflow in `one2x-design-system`; do not implement from the screenshot alone.
+- When a Figma URL or selected Figma node is the implementation source, follow the mandatory Figma-to-code workflow in `o2x-design-system`; do not implement from the screenshot alone.
 - Fetch both structured design context and a screenshot before editing code. Fetch variable definitions for token-sensitive work and inspect the target repository's existing components and tokens before creating anything.
 - Build a short evidence map from Figma component/style/variable names to existing project components and `tokens.css` variables. Unmapped values are exceptions to resolve, not permission to hardcode.
 - Use `tokens/tokens.css` names for color, typography, spacing, radius, and font family.
@@ -48,7 +48,7 @@ Use when creating, editing, syncing, inspecting, or fixing Figma nodes, componen
 Load:
 
 1. `../figma-use/SKILL.md`
-2. `../one2x-figma-workflow/SKILL.md`
+2. `../o2x-figma-workflow/SKILL.md`
 3. `../figma-generate-design/SKILL.md` only for full-page, screen, modal, drawer, panel, or multi-section assembly from code or description.
 4. `../web-animation-design/SKILL.md` if motion or transition behavior is being designed.
 
@@ -61,7 +61,7 @@ Rules:
 - Bind `topLeftRadius`, `topRightRadius`, `bottomLeftRadius`, and `bottomRightRadius` to `Shape/Radius/*`.
 - Any rounded element must keep a concentric relationship with adjacent inner/outer rounded elements: `inner radius = outer radius - gap/padding`.
 - Set `cornerSmoothing = 0.6` for non-zero rounded nodes to match One2X's default corner-shape / superellipse rendering. If a component needs standard round corners instead, annotate `corner-shape: round`.
-- After writing Figma components, run the Color and Shape binding checks from `one2x-figma-workflow`.
+- After writing Figma components, run the Color and Shape binding checks from `o2x-figma-workflow`.
 
 ### Design Token Or Skill Pack Maintenance
 
@@ -69,8 +69,8 @@ Use when updating `design.md`, `tokens/`, skill docs, or the design skill pack i
 
 Load:
 
-1. `../one2x-design-system/SKILL.md`
-2. `../one2x-figma-workflow/SKILL.md` if the change affects Figma variables, components, or MCP behavior.
+1. `../o2x-design-system/SKILL.md`
+2. `../o2x-figma-workflow/SKILL.md` if the change affects Figma variables, components, or MCP behavior.
 
 Rules:
 

@@ -1,4 +1,4 @@
-# One2X Design Skill Pack
+# O2X Product Design skill
 
 面向 One2X / Medeo 团队的 Cursor Skill 打包：包含 **前端实现规范**、**Figma MCP 工作流**、**设计 Token 落盘** 与 **动效补充规则**。
 
@@ -12,10 +12,10 @@
 |------|------|
 | `design.md` | One2X 设计系统唯一正文规范。 |
 | `tokens/` | Web 侧设计 Token（颜色、字阶、间距、圆角）。 |
-| `.cursor/skills/one2x-design-stack/` | 默认总入口：按任务类型加载下面这些 skill。 |
-| `.cursor/skills/one2x-design-system/` | 前端页面实现 / Review 入口。 |
+| `.cursor/skills/o2x-product-design/` | 默认总入口：按任务类型加载下面这些 skill。 |
+| `.cursor/skills/o2x-design-system/` | 前端页面实现 / Review 入口。 |
 | `.cursor/skills/web-animation-design/` | 动效、过渡、缓动、可访问性补充。 |
-| `.cursor/skills/one2x-figma-workflow/` | 在 Figma 里用 MCP 建稿 / 改稿入口。 |
+| `.cursor/skills/o2x-figma-workflow/` | 在 Figma 里用 MCP 建稿 / 改稿入口。 |
 | `.cursor/skills/figma-use/` | 官方 `use_figma` 必读规则。 |
 | `.cursor/skills/figma-generate-design/` | 官方整页搭界面流程。 |
 
@@ -23,9 +23,9 @@
 
 Git 仓库地址：
 
-- 仓库地址：`https://github.com/championwang00/one2x-design-skill-pack`
+- 仓库地址：`https://github.com/championwang00/o2x-product-design-skill`
 - 下载方式：
-  1. 直接 `git clone https://github.com/championwang00/one2x-design-skill-pack.git`
+  1. 直接 `git clone https://github.com/championwang00/o2x-product-design-skill.git`
   2. 或在 Git 页面下载 ZIP
 
 如果这是公司内部仓库，也可以在团队文档里直接贴该仓库链接。
@@ -54,12 +54,12 @@ Git 仓库地址：
 
 - `design.md`
 - `tokens/`
-- `.cursor/skills/one2x-design-stack/`
+- `.cursor/skills/o2x-product-design/`
 - `.cursor/skills/figma-use/`
 - `.cursor/skills/figma-generate-design/`
-- `.cursor/skills/one2x-design-system/`
+- `.cursor/skills/o2x-design-system/`
 - `.cursor/skills/web-animation-design/`
-- `.cursor/skills/one2x-figma-workflow/`
+- `.cursor/skills/o2x-figma-workflow/`
 
 若对方项目目录不同，需同步调整 skill 内指向 `design.md` 的相对路径。
 
@@ -69,33 +69,33 @@ Git 仓库地址：
 
 | 你要做什么 | 建议说法 |
 |------|------|
-| 写页面 / 改页面 | “用 one2x-design-stack 实现这个页面” |
-| 页面有动效 | “用 one2x-design-stack 实现这个页面，动效也按 One2X 处理” |
-| 在 Figma 里改稿 | “用 one2x-design-stack 在 Figma 里改这个页面” |
-| 写 `use_figma` 脚本 | “用 one2x-design-stack，先按 figma-use 的规则，再帮我写这个 use_figma 脚本” |
+| 写页面 / 改页面 | “用 o2x-product-design 实现这个页面” |
+| 页面有动效 | “用 o2x-product-design 实现这个页面，动效也按 One2X 处理” |
+| 在 Figma 里改稿 | “用 o2x-product-design 在 Figma 里改这个页面” |
+| 写 `use_figma` 脚本 | “用 o2x-product-design，先按 figma-use 的规则，再帮我写这个 use_figma 脚本” |
 
 可直接复制这些示例：
 
 ```text
-用 one2x-design-stack 实现这个页面，遵循 design.md 和 tokens/tokens.css。
+用 o2x-product-design 实现这个页面，遵循 design.md 和 tokens/tokens.css。
 ```
 
 ```text
-用 one2x-design-stack 实现这个页面；如果涉及 hover、过渡、入场出场，请同时参考 web-animation-design。
+用 o2x-product-design 实现这个页面；如果涉及 hover、过渡、入场出场，请同时参考 web-animation-design。
 ```
 
 ```text
-用 one2x-design-stack 在 Figma 里改这个页面，保持 One2X 的变量、Text style 和组件用法。
+用 o2x-product-design 在 Figma 里改这个页面，保持 One2X 的变量、Text style 和组件用法。
 ```
 
 ### 3. 在什么场景用哪个 skill
 
 | 场景 | 使用 |
 |------|------|
-| 不想判断该用哪个 skill | `one2x-design-stack` |
-| 写 One2X / Medeo 前端页面 | `one2x-design-system` |
-| 页面里涉及动效、过渡、hover、入场出场 | `one2x-design-system` + `web-animation-design` |
-| 用 MCP 在 Figma 里改稿、建稿、绑变量、拼整页 | `one2x-figma-workflow` |
+| 不想判断该用哪个 skill | `o2x-product-design` |
+| 写 One2X / Medeo 前端页面 | `o2x-design-system` |
+| 页面里涉及动效、过渡、hover、入场出场 | `o2x-design-system` + `web-animation-design` |
+| 用 MCP 在 Figma 里改稿、建稿、绑变量、拼整页 | `o2x-figma-workflow` |
 | 直接写 `use_figma` 脚本 | `figma-use` |
 | 在 Figma 里从设计系统拼整页 / 多区块 | `figma-use` + `figma-generate-design` |
 
@@ -134,14 +134,14 @@ Git 仓库地址：
 - **Token 更新**：`tokens/tokens.css`
 - **Skill 更新**：`.cursor/skills/`
 
-- 更新记录：`https://github.com/championwang00/one2x-design-skill-pack/blob/main/CHANGELOG.md`
-- 提交记录：`https://github.com/championwang00/one2x-design-skill-pack/commits/main`
+- 更新记录：`https://github.com/championwang00/o2x-product-design-skill/blob/main/CHANGELOG.md`
+- 提交记录：`https://github.com/championwang00/o2x-product-design-skill/commits/main`
 
 ## 推荐发布方式
 
 首次发布建议至少做这几件事：
 
-1. 将当前内容提交并推送到 `https://github.com/championwang00/one2x-design-skill-pack`。
+1. 将当前内容提交并推送到 `https://github.com/championwang00/o2x-product-design-skill`。
 2. 打一个初始版本标签，例如 `v0.1.0`。
 3. 在 `CHANGELOG.md` 记录首发内容。
 4. 在团队群或文档里发这 4 个信息：

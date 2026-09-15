@@ -4,7 +4,7 @@
 
 **谁用**：团队共用的一份「事实来源」——你自己、同事、以及 Cursor 里的 Agent 都应对齐它；给同事拷贝仓库时带上本文件与 `tokens/`、`.cursor/skills/` 即可（详见 `.cursor/skills/README.md` §2）。
 
-**两个带 One2X 的 Cursor skill 分别干什么**（不是「DISPATCH / WORKFLOW」两套规范）：`**one2x-design-system`** 管写代码/对稿；`**one2x-figma-workflow`** 管用 MCP 在 Figma 里改稿时叠加官方 `figma-use` / `figma-generate-design` 与本文档。若你在 Figma 左侧看到 **DISPATCH**、**WORKFLOW** 之类页面名，那是设计文件里的 **Page 命名**，和本 Markdown 里的章节标题不是同一套东西；本文件只列「尺度」与节选结构，**不会**逐页解释每个业务页名。
+**两个带 One2X 的 Cursor skill 分别干什么**（不是「DISPATCH / WORKFLOW」两套规范）：`**o2x-design-system`** 管写代码/对稿；`**o2x-figma-workflow`** 管用 MCP 在 Figma 里改稿时叠加官方 `figma-use` / `figma-generate-design` 与本文档。若你在 Figma 左侧看到 **DISPATCH**、**WORKFLOW** 之类页面名，那是设计文件里的 **Page 命名**，和本 Markdown 里的章节标题不是同一套东西；本文件只列「尺度」与节选结构，**不会**逐页解释每个业务页名。
 
 **Figma 源文件**（同一 `fileKey`，任选其一打开即可）：
 
@@ -76,9 +76,9 @@ Medeo / One2X 产品界面建立在 **Material Design 3** 的组件语义之上�
   - **颜色**：图层填色/描边绑 **📖One2X 的 Color 变量**（消费稿用库变量 `import` / 面板绑定，勿自建一套重复集合）。  
   - **字阶**：正文/标题用主库 **Text style**（`title/medium`、`label/large` 等），承接 **Typescale**；勿手写零散字号当长期方案。  
   - **形状与间距**：圆角用 **Shape**；间距用 **spacing** 或 Auto layout，与设计变量一致。  
-  - **结构**：**能用组件就不用裸 Frame 冒充**——按钮、输入、列表等一律 **库组件实例**；详见 `**one2x-figma-workflow`**。
+  - **结构**：**能用组件就不用裸 Frame 冒充**——按钮、输入、列表等一律 **库组件实例**；详见 `**o2x-figma-workflow`**。
 - **前端（Web）**  
-  - **颜色与排版**：以 `**tokens/tokens.css`** 的 `**--color-*`、`--type-*`、`--space-s*`、`--shape-radius-*`、`--font-*`** 为准；**禁止**裸 hex、无 token 的裸 `font-size` / 间距（细则见 `**one2x-design-system`**）。
+  - **颜色与排版**：以 `**tokens/tokens.css`** 的 `**--color-*`、`--type-*`、`--space-s*`、`--shape-radius-*`、`--font-*`** 为准；**禁止**裸 hex、无 token 的裸 `font-size` / 间距（细则见 `**o2x-design-system`**）。
 
 ---
 
@@ -410,7 +410,7 @@ Figma（`**Shape`** · **Baseline**）圆角变量分组名为 `**Radius/*`**；
 - 按 **§5.3 / §5.4** 选择字阶；同一语义角色在同一页面内保持一致。
 - 图标统一调用 `**@one2x/o2x-icons**`（`<XxxIcon />` 或 `o2x-icons-<名>`，颜色用 `currentColor`，§6.1）。
 - 需要零宽数字时启用 `**font-feature-settings: 'zero' 1`**，与稿一致。
-- 查阅 `**tokens/README.md`** 与 `**one2x-design-system**` skill 获取实现细则。
+- 查阅 `**tokens/README.md`** 与 `**o2x-design-system**` skill 获取实现细则。
 
 ### Don't
 

@@ -1,4 +1,4 @@
-# One2X Skill Visualizer
+# O2X Product Design skill Visualizer
 
 一个本地运行的**可视化预览器**（只读）。它不是编辑器：作用是把 One2X 设计技能在讲的东西——颜色、字阶、圆角、间距、动效——直接渲染成能亲眼看、可播放的真实样例。
 

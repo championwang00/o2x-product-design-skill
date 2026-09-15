@@ -17,10 +17,10 @@
 
 | 目录 | 用途 |
 |------|------|
-| **one2x-design-stack** | **默认总入口**：按任务类型顺序加载 One2X 规范、Figma MCP、整页生成与动效 skill。 |
-| **one2x-design-system** | 写代码、对稿、Review：读根目录 **`design.md`**，对齐 Token / 字体 / 组件；不强制改 Figma。 |
-| **web-animation-design** | 过渡、动效、缓动、时长、`prefers-reduced-motion`；**与 one2x-design-system 配套**，涉及动效时一并加载。 |
-| **one2x-figma-workflow** | 用 MCP **在 Figma 里建稿/改稿**：固定 **`fileKey` = `wHNBqjzSQZM8a4DlyBIDqW`**，并叠加官方 skill + **`design.md`**。 |
+| **o2x-product-design** | **默认总入口**：按任务类型顺序加载 One2X 规范、Figma MCP、整页生成与动效 skill。 |
+| **o2x-design-system** | 写代码、对稿、Review：读根目录 **`design.md`**，对齐 Token / 字体 / 组件；不强制改 Figma。 |
+| **web-animation-design** | 过渡、动效、缓动、时长、`prefers-reduced-motion`；**与 o2x-design-system 配套**，涉及动效时一并加载。 |
+| **o2x-figma-workflow** | 用 MCP **在 Figma 里建稿/改稿**：固定 **`fileKey` = `wHNBqjzSQZM8a4DlyBIDqW`**，并叠加官方 skill + **`design.md`**。 |
 
 ### Token 命名（与 `design.md` §4 一致，避免混用）
 
@@ -39,12 +39,12 @@
 |------|------|
 | `design.md` | 规范全文（链接、`fileKey`、Design scale、Token、组件）。 |
 | `tokens/` | Web 与 Figma 对齐时用（`tokens.css`、`README.md`）。 |
-| `.cursor/skills/one2x-design-stack/` | One2X 默认总入口；同事优先调用这个。 |
+| `.cursor/skills/o2x-product-design/` | One2X 默认总入口；同事优先调用这个。 |
 | `.cursor/skills/figma-use/` | 官方，必带（若用 `use_figma`）。 |
 | `.cursor/skills/figma-generate-design/` | 经常整屏搭进 Figma 时带。 |
-| `.cursor/skills/one2x-design-system/` | One2X 规范入口。 |
-| `.cursor/skills/web-animation-design/` | 动效（与 one2x-design-system 配套）。 |
-| `.cursor/skills/one2x-figma-workflow/` | 在 Figma 里干活时的打包入口。 |
+| `.cursor/skills/o2x-design-system/` | One2X 规范入口。 |
+| `.cursor/skills/web-animation-design/` | 动效（与 o2x-design-system 配套）。 |
+| `.cursor/skills/o2x-figma-workflow/` | 在 Figma 里干活时的打包入口。 |
 
 对方需在 Cursor **启用 Figma MCP**，且账号能访问 **📖One2X Design System** 文件。
 
@@ -52,7 +52,7 @@
 
 ## 3. 安装步骤（目标仓库）
 
-1. 将上表中的 **`.cursor/skills/` 子目录** 合并到对方项目的 `.cursor/skills/`；如果只想记一个入口，优先用 **`one2x-design-stack`**。  
+1. 将上表中的 **`.cursor/skills/` 子目录** 合并到对方项目的 `.cursor/skills/`；如果只想记一个入口，优先用 **`o2x-product-design`**。  
 2. 将 **`design.md`**、`tokens/` 放到对方仓库根目录（或约定路径；若改路径，需调整 skill 内指向 `design.md` 的相对链接）。  
 3. **只维护 `design.md`（小写）**：在 macOS 默认磁盘上 **`DESIGN.md` 与 `design.md` 同一文件**，另存别名会覆盖正文。
 

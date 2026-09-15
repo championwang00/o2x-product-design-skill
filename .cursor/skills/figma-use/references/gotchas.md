@@ -526,7 +526,7 @@ TypeError: object is not extensible
 - **Do not** put a **library `INSTANCE`** (e.g. Checkboxes) directly as a child of a problematic horizontal auto-layout row; **wrap** it in a neutral **Frame** first.
 - Avoid **`primaryAxisSizingMode` + `counterAxisSizingMode` both `FIXED`** on tiny horizontal cell frames that only wrap a single **Text** if you hit extensibility errors; relax one axis to **`AUTO`** or adjust structure.
 
-See also **[one2x-figma-workflow](../../one2x-figma-workflow/SKILL.md)** § 表格 / 列表式界面.
+See also **[o2x-figma-workflow](../../o2x-figma-workflow/SKILL.md)** § 表格 / 列表式界面.
 
 ## Variable collection mode limits are plan-dependent
 

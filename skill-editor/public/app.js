@@ -1,6 +1,6 @@
 'use strict';
 
-// One2X Skill 可视化预览器（只读）
+// O2X Product Design skill 可视化预览器（只读）
 // 数据来源：仓库内 tokens.css（颜色/圆角/间距/字阶）与各 SKILL.md（技能描述）。
 
 const $ = (s, r = document) => r.querySelector(s);
@@ -181,14 +181,14 @@ function render() {
 }
 
 // 获取 / 安装：仓库链接 + 一句话安装
-const REPO_URL = 'https://github.com/championwang00/one2x-design-skill-pack';
-const CLONE_CMD = 'git clone https://github.com/championwang00/one2x-design-skill-pack.git';
+const REPO_URL = 'https://github.com/championwang00/o2x-product-design-skill';
+const CLONE_CMD = 'git clone https://github.com/championwang00/o2x-product-design-skill.git';
 
 function renderInstall() {
   const box = el(`<div class="install">
     <div class="install-main">
-      <div class="install-title">获取这套技能 · One2X Design Skill Pack</div>
-      <p class="install-desc">克隆仓库后，把 <code>.cursor/skills/</code>、<code>design.md</code>、<code>tokens/</code> 放进你的项目根目录，Cursor 里就能直接用（默认入口 <code>one2x-design-stack</code>）。</p>
+      <div class="install-title">获取这套技能 · O2X Product Design skill</div>
+      <p class="install-desc">克隆仓库后，把 <code>.cursor/skills/</code>、<code>design.md</code>、<code>tokens/</code> 放进你的项目根目录，Cursor 里就能直接用（默认入口 <code>o2x-product-design</code>）。</p>
       <div class="install-cmd">
         <code class="mono install-code">${esc(CLONE_CMD)}</code>
         <button class="copy-btn" type="button">复制</button>
@@ -880,7 +880,7 @@ const DOS = [
   'Figma 中绑定 Color / Typescale / Shape 变量；组件用库实例',
   '按 §5.3 / §5.4 选字阶；同一语义角色在同页保持一致',
   '需要零宽数字时启用 font-feature-settings: "zero" 1，与稿一致',
-  '查阅 tokens/README.md 与 one2x-design-system skill 获取实现细则',
+  '查阅 tokens/README.md 与 o2x-design-system skill 获取实现细则',
 ];
 const DONTS = [
   '不要在代码里写裸 hex（确需临时用，也应回写 token）',

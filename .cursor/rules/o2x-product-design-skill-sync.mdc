@@ -1,12 +1,12 @@
 ---
 description: Keep One2X skill updates synced across Cursor and Codex installs
-globs: .cursor/skills/one2x-*/SKILL.md
+globs: .cursor/skills/o2x-*/SKILL.md
 alwaysApply: false
 ---
 
-# One2X Skill Sync
+# O2X Product Design skill Sync
 
-When updating any project One2X skill under `.cursor/skills/one2x-*`, also check and update the matching local Codex skill under `~/.codex/skills/one2x-*`.
+When updating any project One2X skill under `.cursor/skills/o2x-*`, also check and update the matching local Codex skill under `~/.codex/skills/o2x-*`.
 
 Keep intentional path differences intact:
 
