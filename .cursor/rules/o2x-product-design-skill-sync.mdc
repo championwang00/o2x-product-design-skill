@@ -1,16 +1,13 @@
 ---
-description: Keep One2X skill updates synced across Cursor and Codex installs
+description: Maintain O2X skills in the canonical repository only
 globs: .cursor/skills/o2x-*/SKILL.md
 alwaysApply: false
 ---
 
-# O2X Product Design skill Sync
+# O2X Product Design skill — Single Source of Truth
 
-When updating any project One2X skill under `.cursor/skills/o2x-*`, also check and update the matching local Codex skill under `~/.codex/skills/o2x-*`.
-
-Keep intentional path differences intact:
-
-- Project Cursor skills may reference workspace files such as `../../../design.md`.
-- Codex skills may reference shared resources such as `../one2x-design-resources/design.md`.
-
-After editing, verify the important guidance exists in both copies.
+- Edit O2X skill instructions only in this repository under `.cursor/skills/o2x-*`.
+- Codex and Cursor global O2X entries must be symbolic links to those directories, never separately maintained copies.
+- Resolve the actual SKILL.md path before following relative references. The repository root owns `design.md` and `tokens/`.
+- Keep local compatibility aliases as links only. Do not copy content into old skill or resource directories.
+- After updates, verify global entries resolve to the canonical files; no second synchronization or content rewrite is needed.

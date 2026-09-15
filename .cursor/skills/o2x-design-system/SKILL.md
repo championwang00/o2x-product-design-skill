@@ -11,6 +11,19 @@ description: >-
 
 # O2X Design System skill
 
+## 唯一来源与路径解析
+
+本仓库是 O2X Skill、`design.md` 和 `tokens/` 的唯一维护来源。通过 Codex / Cursor 全局入口加载时，先解析当前 `SKILL.md` 的符号链接真实路径，再以真实文件所在目录解析本文所有相对路径；不可直接从全局入口目录计算 `../../../`。
+
+配套 O2X Skill 与仓库自带的 Figma、动效 Skill 按真实路径加载。额外技能（如 `design-feedback-judge`、`emil-design-engineering`）从当前环境技能目录发现，不假设它们位于仓库内。消费项目的组件与实现配置仍遵循该项目约束；产品专属差异不能自动改写仓库的品牌规范。
+
+## 自动反馈评审与技能改进
+
+执行本技能的设计、视觉调整或实现对稿任务前，从当前环境的技能目录加载 `design-feedback-judge`（如已安装），可用时按任务建立评审记录；交付前、收到用户修订意见后自动评审并给简短回执，无需用户另外要求记录。普通问答与纯文档维护不触发作品评审。多个设计技能联用只保留一份记录；已有独立视觉评审直接复用，不增加另一套打分。
+
+先修本次作品，再区分单期偏好、执行遗漏与可复用方法缺口；有依据才更新负责的技能，保存差异并验证。保持本技能的参考材料、先审后改、设计系统及操作授权要求。One2X 团队规范和已发布库不因单次反馈自动改变。
+
+
 ## When to use
 
 - User or task references **One2X**、**One2X Design System**、**📖One2X Design System**，或 Figma 文件 `wHNBqjzSQZM8a4DlyBIDqW`。

@@ -155,3 +155,9 @@ Git 仓库地址：
 - macOS 默认磁盘上 **`DESIGN.md` 与 `design.md` 视为同一文件**，请只维护 `design.md`。
 - `.cursor/skills/README.md` 更偏 **skill 分工、Token 命名摘要、安装与排错**；同事首次接触时，优先看本 README，再按需打开该文件。
 - 完整 Token 表与 Figma 对照：**`design.md`**（**Design scale**、**§4 Token**）。
+
+## 本机唯一来源（SSOT）
+
+本仓库的 `.cursor/skills/o2x-*`、`design.md`、`tokens/` 是唯一维护来源。Codex 与 Cursor 全局 O2X Skill 入口链接到仓库相同目录；旧名称与旧资源路径仅作兼容链接，不维护副本。后续直接修改本仓库并提交 Git，无需手工同步两套 Skill。
+
+加载全局 Skill 时先解析符号链接，再从真实文件位置计算相对路径。全局安装方式：将 `~/.codex/skills/` 与 `~/.cursor/skills/` 下的 `o2x-product-design`、`o2x-design-system`、`o2x-figma-workflow` 分别链接至本仓库 `.cursor/skills/` 中同名目录。已有独立目录应先移出技能加载目录备份，再建链接。
