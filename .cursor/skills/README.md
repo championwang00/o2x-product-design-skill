@@ -52,7 +52,7 @@
 
 ## 3. 安装步骤（目标仓库）
 
-1. 将上表中的 **`.cursor/skills/` 子目录** 合并到对方项目的 `.cursor/skills/`；如果只想记一个入口，优先用 **`o2x-product-design`**。  
+1. 将上表中的 **`.cursor/skills/` 子目录** 合并到对方项目的 `.cursor/skills/`；如果只想记一个入口，优先用 **`o2x-product-design`**。
 2. 将 **`design.md`**、`tokens/` 放到对方仓库根目录（或约定路径；若改路径，需调整 skill 内指向 `design.md` 的相对链接）。  
 3. **只维护 `design.md`（小写）**：在 macOS 默认磁盘上 **`DESIGN.md` 与 `design.md` 同一文件**，另存别名会覆盖正文。
 

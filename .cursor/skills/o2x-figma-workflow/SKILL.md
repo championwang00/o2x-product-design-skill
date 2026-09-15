@@ -10,7 +10,7 @@ description: >-
   token and component constraints together.
 ---
 
-# One2X × Figma 工作流（打包入口）
+# O2X Figma Workflow skill
 
 在官方 **[figma-use](../figma-use/SKILL.md)**（Plugin API 规则）与 **[figma-generate-design](../figma-generate-design/SKILL.md)**（整页从设计系统拼装）之上，**强制叠加 One2X 设计系统**，避免「会操作 Figma 但不符合 Medeo 色板与组件命名」。
 

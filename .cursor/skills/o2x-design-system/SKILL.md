@@ -9,7 +9,7 @@ description: >-
   web-animation-design (sibling skill in .cursor/skills/).
 ---
 
-# One2X Design System Skill
+# O2X Design System skill
 
 ## When to use
 
