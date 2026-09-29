@@ -70,6 +70,27 @@ Medeo / One2X 产品界面建立在 **Material Design 3** 的组件语义之上�
 | 组件  | `Components`、Medeo 各页          | 优先 **库内组件实例**，见 §6                                                                                                                                 |
 
 
+### 2.1 密度档（Density）——开工前先判定
+
+同一套 token 在不同容器里的「用法」不同。**先判定密度档，再选字阶、间距、按钮形态**；判错档位是 Agent 生成稿「看起来像网页、不像工具」的首要原因。
+
+
+| 密度档 | 适用容器 | 外边距 / 行内边距 | 行高 | 主字阶 / 次字阶 | 主操作形态 |
+| --- | --- | --- | --- | --- | --- |
+| **Default（业务页）** | 工作台页面、Dialog、Drawer、Card、表单 | `s4`–`s6` / `s3`–`s4` | 48–56 | `body/medium` / `body/small` | Filled Button 40（详见 §3.1） |
+| **Compact（工具面板）** | 托盘 / 菜单栏面板（340×480）、下拉菜单、侧栏、浮出面板、列表密集区 | **`s2`（8px）** / **`[2, 8]`** | **24（标题行）· 32（状态条）· 41–45（列表行）· 33（传输行）** | **`label/medium`（12） / `label/small`（11）** | **紧凑黑钮 24 高 `Radius/6`**，放在分组标题行右侧（§3.1） |
+
+
+Compact 档的关键规则（2026-09 由 Medeo 桌面端托盘面板定稿归纳，参考帧见 §7.5）：
+
+- **层级靠不透明度，不靠换 token**：主文 `Surface/On Surface` 100%；次要文本 `Surface/On Surface Variant` **60%**；分组标题 / 邮箱等三级信息 `On Surface Variant` **40%**；图标随文本同色、同不透明度。**不要**为了做层级把 12px 升到 14px，也不要引入第三种颜色 token。
+- **只用两档字号**：12 / 11。`title/medium`（16）只给 Dialog 与登录视图标题；`label/large`（14）只给通栏按钮与空态提示。**禁止**在 Compact 列表行里用 `label/large - prominent` 做行名。
+- **描边一律 0.5px**：容器边框、分隔线、图标按钮描边用 `Surface/Outline Variant`；可交互的 Outlined 按钮 / 输入框用 `Surface/Outline`；浮出于页面之上的 Dialog 才用 `Surface/On Surface Variant`（深一档，配 Elevation）。
+- **分组标题行 = 24 高**：`label/medium` @40% 左对齐，右侧放该分组的唯一操作（紧凑黑钮或 20px IconButton）。分组之间不用大留白，靠标题行 + 一条 `HorizontalDivider` 分段。
+- **进度条单色**：`Progress` 组件，轨道 `On Surface` 10%、进度 `On Surface` 40%、4px 高；**不用**蓝色 `Secondary Container` 做进度。
+- **状态徽标 = 库内实心图标**：`CheckCircleIcon` / `ClockLoader60Icon` / `ErrorFillIcon` 等 10px，放在 24px 文件夹图形右下角、外包一圈 `Surface Container Lowest` 白圈；不手绘圆点。
+- **头像 32 圆角 `Radius/8`**，不用圆形。
+
 **团队约定（设计稿 + 代码都要对齐变量与组件）**
 
 - **设计稿（Figma）**  
@@ -103,6 +124,19 @@ One2X 有**两个主色**，按强调层级分工，**紫色要非常克制**。
 - **网页**：黑色主按钮 `background: var(--color-surface-inverse-surface); color: var(--color-surface-inverse-on-surface)`；紫色强调 `background: var(--color-schemes-primary); color: var(--color-schemes-on-primary)`（图标同色）。
 - **为何重要**：紫色用量越少越醒目；若把紫当默认主按钮色到处用，品牌焦点被稀释，反而读不出层级。**勿**用 `Secondary Container`（蓝）替代这两个主色。
 
+**主按钮的四种形态（按容器选，颜色规则不变）**
+
+
+| 形态 | 尺寸 | 圆角 | 用在哪 | 反例 |
+| --- | --- | --- | --- | --- |
+| **紧凑黑钮** | 高 **24**，`hasStart` 图标 18 + `label/medium`，pad `[0, 8, 0, 6]` | `Radius/6` | Compact 面板的分组标题行右侧（如「Sync folders · 3 ［＋ Add file］」）；列表内唯一主操作 | ❌ 在列表中间放一个通栏 48 高黑钮 |
+| **通栏黑钮** | 高 **40**，宽 240–280，`label/large` | `Radius/12` | 空态引导（居中）、登录视图、单一行动页 | ❌ 正常列表状态下也保留通栏钮 |
+| **Dialog 双钮** | 高 **44**，两钮等宽平分（gap `s2`）：左 Outlined（`Surface/Outline` 0.5px）取消，右 Filled 黑确认 | `Radius/12` | 系统确认框（360 宽，pad `[12]`，`Radius/16`，顶部 40px Logo，标题 `title/medium` 居中，正文 `body/small` 居中） | ❌ 单个全宽确认钮；❌ 红色危险钮（危险语义只在正文与图标里表达） |
+| **行内 Outlined 对** | 高 **24**，两钮等宽，`Surface/Outline` 0.5px，`Radius/6`，左缩进对齐行内文本（pad-left 40） | 出错行下方的〔Retry〕〔Re-select〕等行级动作 | ❌ 把动作做成红色文字链塞在状态句后面 |
+
+
+第三方登录按钮是唯一例外：**Google = `Schemes/Secondary Container` 蓝 + `On Secondary Container`；Apple = `Surface/On Surface` 黑 + `Inverse On Surface`**，均 280×40 `Radius/12`、`hasStart` 品牌图标（`SocialMediaIcon`）；两者之间不再出现紫色 Primary。
+
 ---
 
 ## 4. 设计 Token（Figma Variables）
@@ -124,11 +158,35 @@ Figma 本地变量按 **Collection** 组织；下列与稿内 **Variables** 面�
 
 ### 4.1 Surface（表面色）
 
+Material 3 的 Surface 不是一条单一“越上越亮”的梯子，而是两套相关但用途不同的角色：
 
-| Token                              | 典型用途         | 参考值       |
+- **Surface Dim / Surface / Surface Bright**：页面与大分区的**底色明度范围**。Dim 更沉，Surface 默认，Bright 更亮；它们用于决定大面积底色的整体亮度。
+- **Surface Container Lowest → Highest**：容器的**强调层级**。用于 Card、Sheet、Menu、Panel、输入区块等 contained area；`Surface Container` 是默认容器色，Lowest/Low/High/Highest 用于降低或提高容器强调。
+
+不要把 `Surface Bright` 当作最高容器，也不要漏掉 `Surface Container Lowest`。两套体系可组合：页面底可用 `Surface Dim / Surface / Surface Bright`，其上的卡片/浮层再用 `Surface Container *`。
+
+**Surface 明暗范围**
+
+| Token | 典型用途 | Medeo light |
+| --- | --- | --- |
+| `Surface/Surface Dim` | 更沉的页面/分区底色，降低整体亮度 | `#e4e4e7` |
+| `Surface/Surface` | 默认页面/分区底色 | `#f4f4f5` |
+| `Surface/Surface Bright` | 更亮的页面/分区底色，适合需要更轻、更亮的大面积背景 | `#fafafa` |
+
+**Surface Container 强调层级**
+
+| Token | 典型用途 | Medeo light |
+| --- | --- | --- |
+| `Surface/Surface Container Lowest` | 最低强调容器、顶层白卡、模态底 | `#ffffff` |
+| `Surface/Surface Container Low` | 低强调容器、轻分组 | `#fafafa` |
+| `Surface/Surface Container` | 默认容器色，Card / Sheet / Menu / Panel 的常规选择 | `#f4f4f5` |
+| `Surface/Surface Container High` | 更高强调容器，强调分组或嵌套层 | `#e4e4e7` |
+| `Surface/Surface Container Highest` | 最高强调容器，最强的中性容器对比 | `#d4d4d8` |
+
+**内容与分隔**
+
+| Token                              | 典型用途         | Medeo light       |
 | ---------------------------------- | ------------ | --------- |
-| `Surface/Surface`                  | 页面/分区背景      | `#f4f4f5` |
-| `Surface/Surface Container Lowest` | 卡片、模态、顶层表面   | `#ffffff` |
 | `Surface/On Surface`               | 主文本/图标（亮色表面） | `#09090b` |
 | `Surface/On Surface Variant`       | 次要文本、未选中 Tab | `#3f3f46` |
 | `Surface/Outline`                  | 主边框、分隔       | `#d4d4d8` |
@@ -225,6 +283,18 @@ Figma（`**Shape`** · **Baseline**）圆角变量分组名为 `**Radius/*`**；
 
 新页面的 `**gap` / `padding` / `margin**` 应优先用 `**var(--space-s*)**`，避免裸写 `16px`。
 
+### 4.5.1 圆角容器标题的视觉补偿
+
+标题、label、hint、辅助说明如果位于圆角卡片、输入框、媒体框、Toolbar、Dialog surface 的上方或下方，并且表达上属于这个容器，不要只做几何左对齐。文字应按圆角稍微向内缩进，让标题和圆角形体的视觉重心对齐。
+
+- **默认规则**：向内缩进约 `radius * 0.5`，再吸附到最近的 `Space/s*`；常见上限为 `12px`，避免标题看起来脱离卡片。
+- **小圆角**：`Radius/0`、`Radius/4`、`Radius/6` 通常不需要补偿，或最多用 `Space/s1`。
+- **中等圆角**：`Radius/8`、`Radius/12` 通常用 `Space/s1`；`Radius/16` 通常用 `Space/s2`。
+- **大圆角**：`Radius/20`、`Radius/24` 通常用 `Space/s2` 到 `Space/s3`。
+- **Full radius**：不要按 `1000px` 计算；按实际高度估算，取 `min(height * 0.1, 12px)` 后吸附到 `Space/s*`。
+
+不需要补偿的情况：标题属于页面整体网格，而不是某个圆角容器；卡片内部已有明确文字锚点；多个不同圆角容器共用一个大分组标题；或 Figma 主组件已明确采用几何对齐。
+
 ### 4.6 网页侧变量（与 Figma 对齐）
 
 - **颜色**：Figma `**Color`** 共 **320** 项；网页 `**--color-*`**；**浅色 `:root`**，**深色** `prefers-color-scheme: dark` 或 `data-theme`。
@@ -304,6 +374,13 @@ Figma（`**Shape`** · **Baseline**）圆角变量分组名为 `**Radius/*`**；
 | 主按钮文案（主 CTA）                            | `label/large - prominent`                        | 默认配 `Inverse Surface`；最高强调才配 `Schemes/Primary` |
 | 次要按钮 / Tab / 输入标签                        | `label/large`                                    | 默认交互文案                 |
 | 紧凑工具条按钮 / 小 Chip                         | `label/medium`（关键操作用 `label/medium - prominent`） | 密集区域的平衡选择              |
+| **Compact 面板 · 列表行主文案**（文件夹名、文件名、账号名） | `label/medium`（12，Medium） | 不用 prominent，不升到 14 |
+| **Compact 面板 · 行内元信息**（「306 files · 38.2 GB · Up to date」、速率、百分比、邮箱） | `label/small`（11）@ `On Surface Variant` **60%**（邮箱等三级信息 40%） | 用不透明度做层级 |
+| **Compact 面板 · 分组标题**（「Sync folders · 3」「Transfer activity · Uploading · 3」「Recent · 20」） | `label/medium` @ `On Surface Variant` **40%** | 与行主文案同字号，靠 40% 退后 |
+| **Compact 面板 · 状态条文案**（「Syncing: 3 to upload」「1 errors」） | `label/medium`（错误态填色 `Schemes/Error`，条底 `Schemes/Error Container`） | 速率用 `label/small` @60% 跟在后面 |
+| **Compact 面板 · 空态提示**（「Folder not synced yet」） | `label/large` @ `On Surface Variant` 60% | 配 48px 灰文件夹图形 40% + 通栏黑钮 |
+| 登录视图 / 系统确认框标题 | `title/medium` 居中 | 正文 `body/small` @ `On Surface Variant` 居中 |
+| 紧凑黑钮 / 行内 Outlined 钮文案 | `label/medium` | 24 高按钮唯一档 |
 
 
 执行约束：
@@ -341,6 +418,7 @@ Figma（`**Shape`** · **Baseline**）圆角变量分组名为 `**Radius/*`**；
   - **组件**：`import { AddIcon } from '@one2x/o2x-icons'` → `<AddIcon />`（命名 = `componentName`，PascalName + `Icon` 后缀）。
   - **字体 className**：引入字体后用 `o2x-icons-<ComponentName>`，或字族 `font-family: 'o2x-icons'` + 对应字符（PUA 码位见 `info.json` 的 `encodedCode` / `unicode`）。
 - **找图标**：图标清单与映射在 `packages/o2x-icons/src/fonts/info.json`（`componentName` / `snakeName` / `className` / `encodedCode`），或在可视化预览「图标」区搜索后点选复制组件名。
+- **先查再画**：只要库里已有对应语义图标，就必须复用库图标；例如主题切换使用 `LightModeIcon` / `DarkModeIcon`。不要用 CSS 手画太阳、月亮、箭头等已有图标。
 - **尺寸**：常用 **18 / 20 / 24px**（随同级文字字号），点击区域参照 §9 与组件规范（如 Share 网格 64×64）。
 - **颜色**：用 `currentColor` 继承所在文本的 `On *` 颜色，**不要**给图标硬编码 hex。
 - **缺图标**：需要新图标时走 Figma 图标同步流程（`packages/o2x-icons` 的 `pnpm sync` / `sync-figma-icons`），由设计在 Figma 补充后再用，**不要**在业务代码里散放一次性 SVG。
@@ -353,6 +431,7 @@ Figma（`**Shape`** · **Baseline**）圆角变量分组名为 `**Radius/*`**；
 
 - **基础阶梯**：`Space/s0`…`s10` 对应 0 → 64px 的离散档（见 §4.5）；**优先 4 的倍数**与 `**var(--space-s*)`**，与 Auto layout `gap` / `padding` 一致。
 - **主信息区**：业务页常用 `**s4`–`s6`** 作为卡片内边距与区块间距起点；大留白用 `**s7`+**。
+- **Compact 面板**（§2.1）：容器**零内边距**，所有内容行自己带 `[顶 2, 右 8, 底 2, 左 8]`；行间 gap `s1`（2–4）；头部 `[8]`；状态条 `[6, 8]`；分组标题行 `[0, 4, 0, 8]`。**不要**把业务页的 `s4`（16）搬进 340 宽的面板——它会吃掉 10% 宽度并把行撑到 52+。
 
 ### 7.2 栅格与容器
 
@@ -363,6 +442,54 @@ Figma（`**Shape`** · **Baseline**）圆角变量分组名为 `**Radius/*`**；
 
 - **中性表面为主**：大面积 `**Surface/Surface`** / `**Surface Container Lowest`** 形成底色，再用字阶与双主色建立层级：默认主行动用黑色 `Inverse Surface`，最高强调才用 `Primary`（见 §1、§3.1）。
 - **避免**：无 token 依据的随意 `margin`、与字阶不一致的临时 `font-size`。
+
+### 7.4 辅助信息块与操作布局
+
+Prompt、Hint、Note、Code snippet 等辅助信息块如果同时包含**标签、正文与操作按钮**，不要默认做「标签 / 正文 / 操作」三栏横排。窄卡片里三栏会让标签占掉过多宽度，使正文被挤成过窄的多行。
+
+- **默认结构**：第一行放短标签（如 `PROMPT`）与右上角操作（如复制）；第二行让正文独占整行。
+- **正文优先**：正文列 `min-width: 0`，允许自然换行；长代码或命令才使用水平滚动。
+- **标签克制**：标签只承担分类，不参与正文列宽分配；不要给标签固定大列宽。
+- **操作位置**：复制、展开、更多等轻操作放在角落；不要把它夹在正文中间。若操作位于正文行右侧，正文需要给按钮预留宽度。
+- **角落操作的视觉平衡**：角落按钮到相邻两条容器边的距离应相同；例如右下角按钮的右边距与下边距都用同一个 `--prompt-inset` 控制。按钮圆角按同心关系计算，`action radius = outer radius - inset`，不要让角落按钮贴边或使用无关圆角。
+
+### 7.5 紧凑面板配方（托盘 / 菜单栏 / 浮出面板 · 定稿模板）
+
+**参考帧（唯一事实来源）**：文件 `vEJRRdbQhziklOs3apEfxi`（🌐 Medeo · Web · Responsive）页「✨ 88 · Brewing」→ section「桌面端 Beta · 同步文件夹托盘面板」→ 帧 `01 · 主视图 · mac · 浅色`（node **`6974:114850`**）；登录 `6128:90672`、空态 `7070:221796`、错误 `7070:222395`、确认框 `6128:91315`。生成任何 Compact 面板前，Agent 先 `get_design_context` / `get_metadata` 读这几帧，再按下面骨架搭。
+
+```
+Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outline Variant 0.5 INSIDE  Radius/12  smooth .6  clip
+├ header            H 49  HORIZONTAL pad[8] gap s2 alignCENTER
+│  ├ avatar 32×32 Radius/8（图片）
+│  ├ identity  VERTICAL FILL：name label/medium OnSurface · email label/small OnSurfaceVariant @40%
+│  └ IconButton 20（MoreHoriz，stroke Outline Variant 0.5，Radius/6）        ← 头部只留 ⋯；全局暂停放到状态条右侧
+├ statusBand        H 32  HORIZONTAL pad[6,8] gap 4 alignCENTER  fill Surface/Surface
+│  ├ 状态图标 16（ClockLoader20Icon / CheckCircleIcon / ErrorFillIcon，同文本色 @60%）
+│  ├ statusText label/medium OnSurfaceVariant（错误态：fill Schemes/Error Container，文字 Schemes/Error）
+│  ├ speed ×2 label/small @60%（"↑ 2.1 MB/s" "↓ 0.4 MB/s"）
+│  └ IconButton 20（Pause / Play）
+├ group · folders   VERTICAL pad[4,0,0,0] gap 2
+│  ├ captionRow H 24  pad[0,4,0,8]：label/medium @40% "Sync folders · 3" ＋ 右侧 紧凑黑钮 24（AddNewFileIcon 18 + "Add file"）
+│  └ folderRow ×n  H 41（同步中 45）HORIZONTAL pad[2,8] gap s2 alignCENTER
+│      ├ folderGlyph 24：矢量 20×18 fill Surface Container Highest + stroke State Layers/On Surface/Opacity-12 1px；右下角 10px 白圈内放实心状态图标
+│      ├ content VERTICAL FILL：name label/medium · meta label/small @60%（错误：Schemes/Error 100%）· [Progress 292×8]
+│      ├ endIcon 14（ArrowRight，hover 显示）
+│      └ IconButton 20 ⋯（hover 显示）
+│      └ 错误行下方：buttonsRow H 24 pad[0,8,0,40] gap s2 → Outlined 24 ×2（Retry / Re-select）
+├ group · transfer  VERTICAL pad[0,0,4,0]
+│  ├ captionRow "Transfer activity · Uploading · 3"
+│  └ transferRow ×n H 33 pad[4,8] gap s2：iconWrap 24 圆 fill Surface/Surface 内 ArrowUp 16 @40% · content(title 行：name + 右侧 % label/small @60%；Progress 292×8) · endIcon 14 · IconButton 20
+├ HorizontalDivider（kind=fullwidth，Outline Variant 0.5）
+└ group · recent    captionRow "Recent · 20" ＋ 右侧 IconButton 20（ChevronRight）；展开后 doneRow H 24：CheckCircleIcon 14 @40% + name label/small + 时间 label/small @40% 右对齐
+```
+
+配套视图：
+
+- **登录（G0）**：content pad[24] gap 16 居中：Logo 48（`MedeologoIcon`，`Schemes/Primary` 紫是**全稿唯一紫色**）→ `title/medium` "Log in to Medeo Drive" → Google（蓝）/ Apple（黑）280×40 → "or" 分隔（`HorizontalDivider` ×2 + `body/medium` @40%）→ 手机号 `Field` 280×40 + 禁用态确认钮（`State Layers/On Surface/Opacity-12`）；底部 footer pad[16,24] `body/small` @40% "Beta 0.1.0"。
+- **空态（G1）**：头部 + 状态条不变；列表区居中 gap 8：48px 灰文件夹图形 @40% → `label/large` @60% "Folder not synced yet" → 通栏黑钮 240×40 `Radius/12`（AddNewFileIcon + "Add sync folder"）。
+- **确认框**：360 宽，pad[12] gap 8，`Radius/16`，stroke `On Surface Variant` 0.5：Logo 40 → `title/medium` 居中 → `body/small` @OnSurfaceVariant 居中 → 双钮 44（§3.1）。
+- **深色模式**：同一骨架，帧上切 Color mode `Medeo dark`；不透明度层级不变。
+- **文案语言**：Medeo 产品稿 UI 文案默认**英文**（"Sync folders · 3"、"Up to date"、"Can't find this folder"），中文只出现在 section 标题、注释与示意卡片；PRD 中文原句先译成短英文再上稿。
 
 ---
 
@@ -411,6 +538,8 @@ Figma（`**Shape`** · **Baseline**）圆角变量分组名为 `**Radius/*`**；
 - 图标统一调用 `**@one2x/o2x-icons**`（`<XxxIcon />` 或 `o2x-icons-<名>`，颜色用 `currentColor`，§6.1）。
 - 需要零宽数字时启用 `**font-feature-settings: 'zero' 1`**，与稿一致。
 - 查阅 `**tokens/README.md`** 与 `**o2x-design-system**` skill 获取实现细则。
+- **开工先判密度档**（§2.1）：托盘 / 菜单栏 / 浮出面板 / 下拉一律 Compact——12 / 11 两档字号、8px 外边距、24 高分组标题行、24 高紧凑黑钮、不透明度做层级；先读 §7.5 参考帧再搭。
+- Compact 面板里用**库组件**：`Progress`（单色）、`HorizontalDivider`、`Spinner`、`IconButton` 20、`Button`（filled 24 / 40 / 44 三档）、`Field`、实心状态图标（`CheckCircleIcon` 等）。
 
 ### Don't
 
@@ -421,6 +550,8 @@ Figma（`**Shape`** · **Baseline**）圆角变量分组名为 `**Radius/*`**；
 - **不要**在同一屏放多个同等视觉权重的紫色 Primary 主按钮（§3.1）。
 - **不要**临时画 SVG、引第三方图标库（Material Symbols / Lucide / Iconfont 等）或用 emoji 当图标——一律走 `**@one2x/o2x-icons**`（§6.1）。
 - **不要**在超大 Figma 文件上对全文件 `**findAll`** 触发 MCP 过载（见文首 MCP 说明）。
+- **不要**把业务页密度搬进工具面板：Compact 容器里禁止 `s4` 外边距、52+ 高列表行、`label/large - prominent` 行名、通栏 48 黑钮插在列表中间、蓝色进度条、彩色圆点徽标、圆形头像、红色危险按钮（§2.1 / §3.1 / §7.5）。
+- **不要**用第三种颜色 token 做文本层级——Compact 面板只有 `On Surface` 与 `On Surface Variant` 两种，层级靠 100 / 60 / 40% 不透明度。
 
 ---
 
@@ -458,9 +589,11 @@ Figma（`**Shape`** · **Baseline**）圆角变量分组名为 `**Radius/*`**；
 - 「在 Medeo light 下做一个 Dialog：白底容器用 `Surface Container Lowest`，标题 `title/medium`，默认主按钮 **Filled** + `Surface/Inverse Surface` / `Inverse On Surface`，次要操作为 Outlined；`gap` 与 `padding` 全部用 `var(--space-s*)`，圆角用 `var(--shape-radius-12)`。」
 - 「做一列列表项：正文 `body/medium`，元信息 `body/small`，分隔线用 `Surface/Outline`；如果有主操作，默认用 `Inverse Surface` 黑色主按钮，紫色 Primary 每屏最多 0–1 个。」
 - 「营销区块 Hero：`display/large` + `font-family: var(--font-family-brand)`，副标题 `body/large`；只有最高强调 CTA 才使用 `Schemes/Primary` + `On Primary`，不要用 Secondary Container 当品牌色。」
+- 「做一个 340×480 的托盘面板（Compact 档，§2.1 / §7.5）：先读参考帧 `6974:114850`；头部 49 高（头像 32 `Radius/8` + `label/medium` 名 + `label/small` @40% 邮箱 + 20px ⋯），状态条 32 高 `Surface/Surface`，分组标题行 24 高 `label/medium` @40% 右侧放 24 高紧凑黑钮，列表行 41 高、行名 `label/medium`、元信息 `label/small` @60%，进度用单色 `Progress`，描边全部 `Outline Variant` 0.5px，文案英文。」
 
 ### 13.3 Iteration checklist
 
+0. 密度档判对了吗（§2.1）？工具面板 / 下拉 / 侧栏 = Compact：12/11 字号、8px 边距、24 高标题行与紧凑钮、不透明度层级。
 1. 颜色与间距是否均可映射到 `**--color-*`** 与 `**--space-s*`**？
 2. 是否只有一个「主层级」的 Primary CTA（§3.1）？
 3. 圆角是否用了 `**--shape-radius-***`，且未与 `Space/s*` 混用规则？
@@ -789,6 +922,7 @@ Figma（`**Shape`** · **Baseline**）圆角变量分组名为 `**Radius/*`**；
 
 | 日期         | 说明                                                                                                                                               |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 2026-09-14 | **密度档**：新增 **§2.1 Density**（Default / Compact），Compact 规则来自 Medeo 桌面端「同步文件夹」托盘面板定稿与 Agent 首版的对比复盘（首版按业务页密度生成：s4 边距、52 高行、`label/large - prominent` 行名、通栏黑钮、蓝色进度、彩色圆点徽标）；**§3.1** 增主按钮四种形态表（紧凑 24 / 通栏 40 / Dialog 双钮 44 / 行内 Outlined 对）与第三方登录钮例外；**§5.4** 增 Compact 面板字阶行（12/11 + 100/60/40% 不透明度层级）；**§7.1** 增 Compact 间距；**新增 §7.5 紧凑面板配方**（参考帧 node `6974:114850` 等 + 完整骨架 + 登录/空态/确认框/深色/英文文案约定）；§11、§13 同步 |
 | 2026-04-06 | **结构**：按 Stitch 式重组（§1 视觉气质、目录、§7–§13、附录 A Page 表等）；**附录 C**：Figma 稿图层/Property、Figma2code 最佳实践、i18n、字阶稿内、corner-shape；已去掉对外部文档表格的依赖             |
 | 2026-04-03 | Typography 增补 **§5.3 字阶语义与场景映射**、**§5.4 Medeo 常见页面举例**（原 §3.3 / §3.4），统一 `display/headline/title/body/label` 与 `prominent` 使用边界，避免 skill 与正文口径漂移 |
 | 2026-03-31 | 精简 **代码映射**（现 §10）：去除与圆角/间距/`tokens.css` 重复的映射表描述，明确 `**tokens/tokens.css`** 为实现侧单一数据源；历史名仅作兼容说明                                                 |

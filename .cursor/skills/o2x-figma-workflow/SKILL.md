@@ -75,6 +75,35 @@ description: >-
    - **整页 / 多区块** 从设计系统搭界面：再读 **`figma-generate-design`**；`skillNames` 含 `figma-generate-design`（并与 `figma-use` 组合）。  
    - **小范围改节点 / 变量 / 组件**：`figma-use` 即可。
 3. **One2X 约束** — 同时遵循 **`design.md`**：**Color / Typescale / Shape / Typeface** 的模式与命名（见 **Design scale**）；优先 **`search_design_system`** 找库内组件与变量，避免硬编码 hex。
+4. **密度档判定（`design.md` §2.1）** — 托盘 / 菜单栏面板、下拉、侧栏、浮出面板 = **Compact**；工作台页、Dialog、表单 = **Default**。Compact 任务**必须**先读 **`design.md` §7.5 参考帧**（`get_design_context` / `get_metadata` 读 `vEJRRdbQhziklOs3apEfxi` 的 `6974:114850` 等），以它的骨架、字阶、不透明度、间距为准，再写 `use_figma`；不要凭 `design.md` 业务页默认值（`s4`、`body/medium`、通栏黑钮）去猜。
+
+## 从 PRD 到设计稿：先定「密度 + 参考帧」，再写规格
+
+2026-09 Medeo 桌面端托盘面板复盘：Agent 首版按 `design.md` 业务页默认值生成（`s4` 边距、52 高行、`label/large - prominent` 行名、列表中间通栏 48 黑钮、蓝色 `Secondary Container` 进度条、手绘彩色圆点徽标、圆形头像、中文文案），与设计师定稿差异很大；定稿改为 Compact 档（8px 边距、41 高行、12/11 两档字号 + 100/60/40% 不透明度层级、24 高紧凑黑钮放在分组标题行右侧、单色 `Progress`、库内实心图标做 10px 徽标、`Radius/8` 头像、英文文案）。因此**规格文档（design-spec）的开头必须写明**：
+
+1. 密度档（Default / Compact）与依据；
+2. 参考帧 node id（Compact 默认用 `design.md` §7.5 列的帧；业务页用同产品线最近定稿）；
+3. 字阶只列该档允许的档位；间距只列该档的 pad / gap；主按钮只列该档的形态（`design.md` §3.1 四形态表）；
+4. 文案语言（Medeo 产品稿 = 英文 UI 文案，中文注释）。
+
+规格里任何与参考帧冲突的数值，以参考帧为准。
+
+### Compact 面板可直接 import 的库组件（已发布 · key 实测有效 · 2026-09）
+
+| 组件 | key | 用法 |
+|---|---|---|
+| `Button` | `ae97e03b7ac64076ededd9c9f889b9c7b566f9da` | `kind=filled` + `hasStart=true`；紧凑 24 / 通栏 40 / Dialog 44 三档靠 resize，颜色按 §3.1 |
+| `IconButton` | `e2a8e288cff83d127ab57921f603ea5e54757f5d` | 20×20，`kind=standard`，加 `Outline Variant` 0.5 描边 `Radius/6` |
+| `Progress` | `a42fce5a35eaa5d80592a34a44432d8389783312` | `value=*`，292×8，单色 |
+| `HorizontalDivider` | `f25cd1aea64926ec0a9cb6ab9d6efef889c5fb48` | `kind=fullwidth`，`Outline Variant` 0.5 |
+| `Spinner` | `f583068c70bbe47362b593fc463c04bc5eaf8596` | 18×18，loadingLayer |
+| `Field` | `670fbd31b38dbacd3e75ace49109404c2f7d3301` | 280×40 `Radius/12` |
+| `SocialMediaIcon` | `8889d890f4f446461ec5d8f4bbf393cdaf744be6` | `Name=Google/Apple`，登录钮 `hasStart` |
+| `MedeologoIcon` | `033256a0dfb5b155c1eac088afcf485f51feeecd` | 48（登录）/ 40（确认框） |
+| `CheckCircleIcon` / `ClockLoader20Icon` / `ClockLoader60Icon` / `ErrorFillIcon` | `3d404bbc…`, `32d9fc06…`, `74252dd5…`, `dc244627…` | 16 状态条 / 10 徽标；实心图标做状态，不手绘 |
+| `ArrowUpIcon` / `ArrowRightIcon` / `ArrowForwardIcon` | `52d664b5…`, `dc81b9c4…`, `d581ff78…` | 传输方向 16 / 行尾 14 |
+
+`importComponentByKeyAsync` 找不到时先 `search_design_system` 核 key，再判断是否真的未发布；上表组件 2026-09 已确认可导入，**不要**因为一次失败就改成手绘。
 
 ## 变量：唯一事实来源（禁止在消费稿里「抄一本」）
 

@@ -85,13 +85,17 @@ description: >-
    - **低强调容器**：`Schemes/<Role> Container` 只作为对应角色的柔和容器；其上文字 / 图标只能用 `Schemes/On <Role> Container`。
    - **禁止跨配对**：不要把 `On Primary` 放在 `Surface`、`Primary Container` 或 `Secondary` 上；不要把 `On Primary Container` 放在 `Primary` 上；其他 Role 同理。
    - **One2X 双主色**：默认主按钮仍用 `Surface/Inverse Surface` + `Inverse On Surface`；`Schemes/Primary` + `On Primary` 只给最高强调的品牌动作，每屏 0–1 个。`Secondary` / `Secondary Container` 不能替代主品牌 CTA。
+2.2 **Surface 两套层级（强制，见 `design.md` §4.1）**：不要把所有 Surface 当成一条梯子。
+   - **页面/大分区底色明度**：用 `Surface/Surface Dim`、`Surface/Surface`、`Surface/Surface Bright`。Dim 更沉，Surface 默认，Bright 更亮。
+   - **容器强调层级**：用 `Surface/Surface Container Lowest` → `Low` → `Container` → `High` → `Highest`。用于 Card、Sheet、Menu、Panel、输入区块等 contained area；`Surface Container` 是常规默认，Lowest/Low 降低强调，High/Highest 提高强调。
+   - **禁止混用**：不要把 `Surface Bright` 当作最高容器；不要从 `Surface Container Low` 开始漏掉 `Surface Container Lowest`；嵌套容器靠 Container 层级 + `Outline Variant` / `On Surface Variant` 0.5px 分隔。
 3. **描边（默认）**：低强调容器、卡片、输入框、列表分隔和图标容器的描边，优先用 **`Surface/On Surface Variant`**（代码侧 `--color-surface-on-surface-variant`）+ **`0.5px`**。只有需要更弱层级、禁用态、分隔线层级或设计稿明确指定时，才改用 `Outline` / `Outline Variant` / 1px。
 4. **Figma 组件写入（强制）——「不是只看数值，要看变量绑定」**
    - 写入或更新 One2X 组件时，Auto Layout 的 **`padding*` / `itemSpacing`** 必须绑定 Figma **`Shape/Space/s*`** 变量；四角半径必须绑定 **`Shape/Radius/*`** 变量。  
    - 只把数值设成 8、12、16、999 等，不算完成；右侧面板要能看到变量绑定。胶囊圆角用 **`Radius/Full`**，不要保留裸 `999px`。  
    - 具体 `use_figma` 绑定方式和验收脚本见 **[`o2x-figma-workflow`](../o2x-figma-workflow/SKILL.md)** 的 **Shape 绑定检查**。
 5. **组件语义（代码侧也要「组件化」）**：优先使用 **与设计系统对齐的 UI 原语**（项目里已有的 Button、Field、封装好的区块），**不要**为每个页面手写一整块无复用的「假组件」。按钮层级（Filled vs Outlined vs IconButton）、菜单 **0 Density**、列表项变体以 Figma 为准；**主行动按钮（双主色，见 `design.md` §3.1）**：**默认**用 **Filled** + **`Surface/Inverse Surface`**（`--color-surface-inverse-surface`）+ **`Inverse On Surface`**（`--color-surface-inverse-on-surface`）的**黑色**主按钮；**只有最高强调**那一个才升级到 **`Schemes/Primary`**（`--color-schemes-primary`）+ **`On Primary`**（紫色，每屏 0–1 个，**非常克制**）。
-5.1 **图标（强制，见 `design.md` §6.1）**：所有图标统一调用 One2X 图标库 **`@one2x/o2x-icons`**（medeo-fe `packages/o2x-icons`，260 个字体图标）——组件 **`<XxxIcon />`** 或字体 className **`o2x-icons-<名>`**，颜色用 **`currentColor`**，常用 **18/20/24px**。**禁止**临时画 SVG、引第三方图标库（Material Symbols / Lucide / Iconfont 等）或用 emoji 占位；缺图标走 `packages/o2x-icons` 的 Figma 同步流程（`pnpm sync`）补充后再用。图标名清单见 `info.json`。
+5.1 **图标（强制，见 `design.md` §6.1）**：所有图标统一调用 One2X 图标库 **`@one2x/o2x-icons`**（medeo-fe `packages/o2x-icons`，260 个字体图标）——组件 **`<XxxIcon />`** 或字体 className **`o2x-icons-<名>`**，颜色用 **`currentColor`**，常用 **18/20/24px**。实现任何语义图标前都先查 `info.json` / 可视化预览「图标」区：主题切换用 **`LightModeIcon` / `DarkModeIcon`**，仪表盘用 `DashboardIcon`，搜索用 `SearchIcon` 等；只要库里已有，就必须复用。**禁止**临时画 SVG、用 CSS 拼图标、引第三方图标库（Material Symbols / Lucide / Iconfont 等）或用 emoji 占位；缺图标走 `packages/o2x-icons` 的 Figma 同步流程（`pnpm sync`）补充后再用。
 6. **实现**：映射到 **`tokens/tokens.css`** 已有变量；禁止无约定地硬编码与设计冲突的值。
 7. **冲突处理**：按上方“映射与冲突优先级”裁决；不得用一句“Figma 为源”跳过 One2X 组件与 token 语义。
 8. **Figma MCP（设计稿实现时强制）**：使用 `get_design_context`、`get_screenshot`、`get_variable_defs`、`search_design_system`（One2X `fileKey`: `wHNBqjzSQZM8a4DlyBIDqW`）。只有不以 Figma 为输入的纯代码任务才可跳过。
@@ -148,6 +152,16 @@ description: >-
 - 多个相邻容器圆角不同，且标题控制一整个区域时，标题应对齐区域内容网格。
 - 设计稿已明确使用几何对齐，或 Figma 主组件已有固定变量绑定。
 
+### 辅助信息块内部布局
+
+Prompt、Hint、Note、Code snippet 等辅助信息块如果同时包含标签、正文与操作按钮，不要默认做三栏横排。窄卡片里三栏会让左侧标签占掉过多宽度，正文被挤成很窄的多行。
+
+- 默认做两行：第一行左侧短标签、右上角轻操作（复制 / 展开 / 更多）；第二行正文独占整行。
+- 正文区域 `min-width: 0`，允许自然换行；只有长代码、命令或不可断开的 token 才使用水平滚动。
+- 标签只承担分类提示，不要给标签固定大列宽，也不要让标签参与正文列宽分配。
+- 复制按钮这类轻操作放在角落，不要夹在正文中间；若操作位于正文行右侧，正文需要给按钮预留宽度。
+- 角落按钮到相邻两条容器边的距离必须一致（用同一个 inset token 控制）。例如右下角按钮的右边距与下边距相同；并按同心圆角计算：`action radius = outer radius - inset`。不要让角落按钮贴边，也不要给它一个与外框无关的圆角。
+
 ### 圆角同心关系
 
 任何元素只要使用圆角，就要检查它与内层、外层相邻圆角元素的同心关系。圆角元素嵌套时，内层不要直接复用外层圆角；为了让角落间距看起来均匀，使用同心圆角：
@@ -185,6 +199,15 @@ description: >-
 - `label/*`：交互标签（Button、Tab、Chip、Field label）；不要用于正文段落。
 - `*-prominent`：同语义加权（主 CTA/关键操作）；避免整屏普遍使用导致层级失真。
 
+### Geist Mono 数字与千分位逗号
+
+- 计数、积分、时长等数字采用 Geist Mono 时，默认保持整串 `letter-spacing: 0`，不要为修正逗号而压缩所有数字间距。
+- 使用千分位逗号时，将逗号包成独立元素，只对逗号做光学间距调整：收紧左侧数字到逗号的空隙，同时单独保留逗号到右侧数字的呼吸空间。必须同时检查逗号两侧，不能只看整串宽度。
+- 间距值需按字号与实际 Geist Mono 字形目测校准。Medeo 顶栏 12px 的参考值为逗号 `left: -2px`、`margin-right: 1px`；此值是光学补偿，不作为所有字号的通用 token。
+- 使用该项目仅提供 400 字重的 Geist Mono 时，数字设 `font-weight: 400`，不要依赖浏览器合成 500/600。
+- Geist Mono 默认使用斜杠零；需要无斜杠 `0` 时，使用 `font-feature-settings: 'ss09' 1`。不要同时启用 `font-variant-numeric: slashed-zero` 或 OpenType `zero` 特性（`'zero' 1`），否则会重新显示斜杠。
+- 检查最终承载数字的元素，而不只检查外层标签：滚动数字、格式化数字等子组件可能自行设置 `font-variant-numeric: slashed-zero` 和 `'zero' 1`，覆盖父级。此时在使用场景的子组件根节点显式设置 `font-variant-numeric: tabular-nums; font-feature-settings: 'tnum' 1, 'zero' 0, 'ss09' 1;`，再用浏览器计算样式确认 `zero` 为 `0`、没有 `slashed-zero`。
+
 ### Medeo 组件/页面快速映射
 
 - 营销 Hero：`display/large` 或 `display/medium`。
@@ -192,6 +215,12 @@ description: >-
 - Dialog/Drawer 标题：`title/medium`；小区块标题：`title/small`。
 - 正文与说明：`body/medium`；辅助注释/时间戳：`body/small` 或 `body/extra small`。
 - 交互文案默认：`label/large`；主 CTA：`label/large - prominent`；紧凑工具条：`label/medium`。
+
+## Menu Bar 锚点弹窗
+
+- Menu Bar 中由图标按钮或头像触发的弹窗统一使用 100ms 展开、100ms 退出，按按钮所在边缘设置 `transform-origin`，从触发位置缩放与淡入，不做额外位移。
+- 定位与缩放不能写在同一个 `transform` 上；定位使用 `top` / `left` 等坐标，弹窗自身只动画 `scale` 与 `opacity`，避免展开起点反向或位置跳动。
+- 相邻入口切换时立即隐藏前一个弹窗，再显示新弹窗；指针从按钮移入其弹窗时保持打开。`prefers-reduced-motion: reduce` 下取消过渡。
 
 ## Out of scope
 
