@@ -287,7 +287,7 @@ Figma（`**Shape`** · **Baseline**）圆角变量分组名为 `**Radius/*`**；
 | `Space/s10` | 64px | `**--space-s10**` |
 
 
-新页面的 `**gap` / `padding` / `margin**` 应优先用 `**var(--space-s*)**`，避免裸写 `16px`。**例外**：Compact 区的 1–3px 光学微调（如工具栏控件 gap 2px、角标 inset 2px、表头与置顶灰底 1px）不在 `Space/s*` 档内，可以写字面值，但要就近注释来源。**量法**：间距与对齐都按**可视边缘**量，不按热区或盒子（热区 24、可视 20 时，「距 4px」要扣掉 2px 内缩）；`margin` 与父容器 `gap` 会叠加，改完量实际值。
+**间距与圆角尽可能用变量（强制）**：`gap` / `padding` / `margin` / `inset` 以及角标这类位置偏移，值落在 `Space/s*` 档上就一律用 `**var(--space-s*)**`（Medeo 代码 `var(--Space-S-n, Npx)`，带 px 兜底），不裸写 `16px`；负值写 `calc(-1 * var(--Space-S-1, 4px))`，`calc()` 里的档位值也换成变量（如 `calc(100% + var(--Space-S-1, 4px))`）。圆角同理，见 §4.4 / §4.6。**只有**不在档位上、也没有推导关系的 1–3px 光学微调（如工具栏控件 gap 2px、角标 inset 2px、表头与置顶灰底 1px）才写字面值，并就近注释来源；不要为凑变量写 `calc(var(--Space-S-1) / 2)` 这类表达式。**量法**：间距与对齐都按**可视边缘**量，不按热区或盒子（热区 24、可视 20 时，「距 4px」要扣掉 2px 内缩）；`margin` 与父容器 `gap` 会叠加，改完量实际值。
 
 ### 4.5.1 圆角容器标题的视觉补偿
 
@@ -304,10 +304,15 @@ Figma（`**Shape`** · **Baseline**）圆角变量分组名为 `**Radius/*`**；
 ### 4.6 网页侧变量（与 Figma 对齐）
 
 - **颜色**：Figma `**Color`** 共 **320** 项；网页 `**--color-*`**；**浅色 `:root`**，**深色** `prefers-color-scheme: dark` 或 `data-theme`。
+- **颜色一律用随明暗主题切换的 token（强制）**：文字、图标、填充、描边、hover / 按下蒙层、阴影颜色、渐变色、TS 里的颜色常量，除非有明确声明，都用会在深色模式重新取值的语义 token（`Surface/*`、`Schemes/*`、`State Layers/*`；Medeo 代码 `var(--Surface-On-Surface-Variant, #3f3f46)`、`var(--State-Layers-On-Surface-Opacity-08, rgba(9, 9, 11, 0.08))`），不写裸 hex / `rgba()` / `white`。`var()` 里的 fallback 值不算违规。先确认 token 在深色主题下确实重新定义过（不随主题切换的色板变量不算）。
+  - **半透明蒙层按所在底色选角色**：普通表面叠 `On Surface` / `On Surface Variant` 的 Opacity 档；`Inverse Surface` 实底按钮叠 `Inverse On Surface` 的档（深色主题下 Inverse Surface 是浅紫，写死白色蒙层会看不见）。
+  - **阴影**：颜色用 `State Layers/Shadow` 的 Opacity 档（如 `0 4px 16px var(--State-Layers-Shadow-Opacity-12, …)`），只保留几何值字面。
+  - **SVG 填色**：presentation attribute 里不能写 `var()`，用 `currentColor`，由元素的 CSS `color` 取 token。
+  - **明确声明的例外**：压在图片 / 视频上、两种主题都要一样的遮罩与白字、视频黑边、品牌渐变，保留字面值并在同一行注释声明原因（medeo-fe 用 `theme-chrome: allow — 原因`）；`mask-image` 的渐变色只起透明度作用，不算颜色。
 - **圆角**：Figma `**Shape`** · `**Radius/*`**；网页 `**--shape-radius-***`。`tokens.css` 中 `**--shape-corner-***` 仅为与旧高度档/旧 `**Corner/***` 名对照的别名，新稿以 `**Radius/{px}**` 与 `**--shape-radius-{px}**` 为准（§4.4）。
 - **字阶 / 字族**：`**--font-family-*`**、`**--type-*`**，或组合类 `**.o2x-type-***`（见 `tokens.css`）。
 - **间距**：Figma `**Shape`** · `**Space/s*`**；网页 `**--space-s***`（§4.5）；**勿**与 `**Radius/{px}`** 的「名=像素」规则混用。
-- **Medeo 代码（medeo-fe）**：变量来自 `apps/medeo-web/src/web/components/theme/variables.readonly.css`（Web），命名为 `--Surface-*`、`--Schemes-*`、`--State-Layers-*`、`--Radius-N`，与本仓库 `tokens.css` 的 `--color-*` / `--shape-radius-*` 对应同一批 Figma 变量（如 `Surface/Outline` → `--Surface-Outline`），但不同名。在支持 `corner-shape` 的浏览器里，`--Radius-N` 按 superellipse 补偿放大约 1.27 倍（`--Radius-4` → 5px、`--Radius-6` → 8px、`--Radius-8` → 10px；附录 C.7），**名中数字 ≠ 计算值**。同心计算时内外层用同一种写法：外层用 token，内层写 `calc(var(--Radius-8) - 2px)`；外层是字面 px，内层也用 px。核对时读浏览器计算值。
+- **Medeo 代码（medeo-fe）**：变量来自 `apps/medeo-web/src/web/components/theme/variables.readonly.css`（Web），命名为 `--Surface-*`、`--Schemes-*`、`--State-Layers-*`、`--Radius-N`，与本仓库 `tokens.css` 的 `--color-*` / `--shape-radius-*` 对应同一批 Figma 变量（如 `Surface/Outline` → `--Surface-Outline`），但不同名。在支持 `corner-shape` 的浏览器里，`--Radius-N` 按 superellipse 补偿放大约 1.27 倍（`--Radius-4` → 5px、`--Radius-6` → 8px、`--Radius-8` → 10px；附录 C.7），**名中数字 ≠ 计算值**。圆角**尽可能用变量**：值落在 `Radius/*` 档上的一律写 `var(--Radius-N, Npx)`（胶囊 `var(--Radius-Full, 1000px)`），同心的内层写 `calc(var(--Radius-8, 8px) - 2px)`，与外层引用同一个变量；只有外层确实不在档位上时，内外层才都用字面 px。间距变量 `--Space-S-0`…`--Space-S-10`（0、4、8、12、16、20、24、32、40、48、64px）是固定值，不放大。核对时读浏览器计算值。
 
 全文变量表见 `**tokens/tokens.css`**、`**tokens/README.md**`。
 
@@ -530,7 +535,7 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 
 #### 弹出菜单与触发按钮
 
-- **全页一套**：所有下拉 / 更多 / 右键 / Tab 菜单共用同一套紧凑规格与一组面板 token（数值见下表，面板规则见 §8）；菜单项圆角 = 面板圆角 − 容器 padding（§4.4），全页一致（Medeo 现状未按此统一，待定）。
+- **全页一套**：所有下拉 / 更多 / 右键 / Tab 菜单共用同一套紧凑规格与一组面板 token（数值见下表，面板规则见 §8）；菜单项圆角 = 面板圆角 − 容器 padding（§4.4），写成 `calc(var(--Radius-8, 8px) - 2px)` 引用面板的同一个变量，全页一致。
 - **位置**：出现在触发按钮下方，距按钮**可视边缘** 4px；热区 24、可视 20 时，距热区 2px。
 - **图标轴线对齐**：由图标按钮（如 ⋯）打开、首列带图标的菜单，首列图标中心与按钮图标中心同轴。`bottom-start` 时 `crossAxis = 按钮宽 / 2 − 首图标中心距菜单左缘`；Medeo 首图标中心距菜单左缘 15.5px（边框 0.5 + 容器 padding 2 + 菜单项左 padding 6 + 图标半宽 7），20px 按钮得 −5.5。菜单被推回视口时可以放弃对齐。
 - **触发按钮**：点开后回到 default，展开只用 `aria-expanded` 表达（§4.3）；纯图标按钮配库 `Tooltip`，菜单展开时不显示（§6）。
@@ -554,9 +559,9 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 | 内容起点（标题、表头、封面、缩略图） | `x = 12px`（列表视图实测；网格视图未单独复量） |
 | 顶栏首个 Tab 的 logo 左缘 | 应对齐内容起点；内容起点在 8px 时已对齐，移到 12px 后**未复量** |
 | 置顶灰底 | 距视口左右 4px；列表视图可见内边距左 / 下 8px；灰底内视图切换距灰底右缘 2px，右缘与工具栏视图切换对齐 |
-| 工具栏 | 按钮 24×24、图标 18px；`gap` 2px；圆角 4px（现为字面 px；`--Radius-4` 计算为 5px，设计师说的「4」指计算值还是 token 待定），分段选中块 3px；搜索槽收起 24px、展开 200px |
-| 弹出菜单 | 容器 padding 2px、min-width 96px（随内容撑开）；项高 24、padding `0 8px 0 6px`、`label/medium`、图标 14、图文间距 4；面板 0.5px `Outline Variant` + `Surface Container Lowest` + `0 4px 16px rgba(9,9,11,.12)`（阴影 token 待定，见 §8） + `--Radius-8`（计算值 10px）；距触发按钮可视边缘 4px |
-| 卡片角标 ⋯ | 可视 20×20、热区 24×24，图标 16px，距卡片外轮廓 2px，圆角 6px（8 − 2） |
+| 工具栏 | 按钮 24×24、图标 18px；`gap` 2px；圆角 `var(--Radius-4, 4px)`（设计师定：尽可能用变量；支持 `corner-shape` 时计算为 5px），分段选中块 `calc(var(--Radius-4, 4px) - 1px)`；搜索槽收起 24px、展开 200px |
+| 弹出菜单 | 容器 padding 2px、min-width 96px（随内容撑开）；项高 24、padding `0 8px 0 6px`、`label/medium`、图标 14、图文间距 4；面板 0.5px `Outline Variant` + `Surface Container Lowest` + `0 4px 16px` 阴影（颜色用 `State Layers/Shadow` Opacity 12 档；选哪一档几何待定，见 §8） + `--Radius-8`（计算值 10px）；距触发按钮可视边缘 4px |
+| 卡片角标 ⋯ | 可视 20×20、热区 24×24，图标 16px，距卡片外轮廓 2px，圆角 `calc(卡片外轮廓圆角变量 − 2px)`（卡片 8 时为 8 − 2） |
 | 从属间距 | 设计师指定 **1px**：分区标题栏 → 置顶灰底、Pinned 标题行 → 内容、列表表头（Name）→ 置顶灰底。Createspace 现状：前两处误做成 4px（待改回 1px），表头 → 灰底已是 1px |
 | 作品封面图 | 圆角 4px，落在图片本体上 |
 | 骨架扫光 | 1.6s 一轮，`linear` |
@@ -619,7 +624,7 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 
 ### Don't
 
-- **不要**在代码中写裸 **hex**（除非稿与 token 明确尚未覆盖的临时情况，且应回写 token）。
+- **不要**在代码中写裸 **hex** / `rgba()` / `white`（含蒙层、阴影、TS 颜色常量）：一律用随明暗主题切换的 token（§4.6）；确需恒定颜色（图片上的遮罩与白字、视频黑边、品牌渐变）时在同一行注释声明原因；稿与 token 尚未覆盖的临时情况也要注释并回写 token。
 - **不要**用 `**Schemes/Secondary Container`** 充当主品牌 CTA 色（§4.2）。
 - **不要**把 `**Radius/*` 的 px 命名规则**与 `**Space/s*`** 阶梯混淆（§4.4–§4.5）。
 - **不要**把紫色 `**Schemes/Primary`** 当默认主按钮色到处用：默认主按钮用 `**Inverse Surface`**（黑），紫色只给最高强调，每屏 0–1 个（§3.1）；可拖拽分栏线（resizer）这类辅助 affordance 也不用紫色，用 `**Surface/Outline**`。
@@ -679,7 +684,7 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 0. 密度档判对了吗（§2.1）？工具面板 / 下拉 / 侧栏 = Compact：12/11 字号、8px 边距、24 高标题行与紧凑钮、不透明度层级。工作台列表页不是整页 Default：工具栏、弹出菜单、置顶面板和页面边距按 Compact 收紧（§7.6）。
 1. 颜色与间距是否均可映射到 `**--color-*`** 与 `**--space-s*`**？
 2. 是否只有一个「主层级」的 Primary CTA（§3.1）？
-3. 圆角是否用了 `**--shape-radius-***`，且未与 `Space/s*` 混用规则？嵌套圆角是否与外轮廓同心（外轮廓以可见描边为准，§4.4）？token 与字面 px 有没有混算（Medeo `--Radius-8` 计算值为 10px，§4.6）？
+3. 间距与圆角的档位值是否都用了变量（含负值、`calc()` 里的项、同心内层，§4.5 / §4.6），只剩注释过的 1–3px 光学微调是字面值？圆角是否用了 `**--shape-radius-***`，且未与 `Space/s*` 混用规则？嵌套圆角是否与外轮廓同心（外轮廓以可见描边为准，§4.4）？token 与字面 px 有没有混算（Medeo `--Radius-8` 计算值为 10px，§4.6）？
 4. 字阶是否落在 **§5.3** 的语义档位，而非临时 `font-size`？
 5. Figma 侧是否优先 **实例化库组件**，而非手绘 Frame？
 6. 图标是否全部来自 `**@one2x/o2x-icons**`，无临时 SVG / 第三方图标 / emoji（§6.1）？

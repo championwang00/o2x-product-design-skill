@@ -70,7 +70,7 @@ description: >-
 - [ ] 已获取目标节点的 `get_design_context` 与 `get_screenshot`；截断内容已拆分读取。
 - [ ] token 敏感实现已检查 `get_variable_defs`，并完成 Figma 到项目的组件/token 映射。
 - [ ] 已复用项目组件和 One2X 语义 token；新增 primitive、variant 或 token 有明确理由。
-- [ ] 没有用裸 hex、任意字号/行高/间距/圆角替代已有 token；例外均有注释或交付说明。
+- [ ] 没有用裸 hex / `rgba()`、任意字号/行高/间距/圆角替代已有 token；颜色都随明暗主题切换，已在深色模式下看过一遍；例外均有注释或交付说明。
 - [ ] 默认、hover、active、focus、disabled、loading 等设计中存在的状态已实现；点开菜单后触发按钮回到 default（展开只用 `aria-expanded` 表达）；状态切换不改变盒子尺寸；同页 loading 用同一种骨架（`design.md` §4.3、§7.6）。
 - [ ] 响应式行为来自 Figma constraints/Auto Layout 与项目断点，不是只匹配单张静态截图。
 - [ ] 已在目标 viewport 实际渲染并对比参考图；布局、排版、颜色、资产和圆角描边无明显偏差。对齐与间距按**可视边缘**实测（不按热区或盒子），改动后在所有分区、所有视图（网格 / 列表）下复量，不只看刚改的元素；组件变体实际生效的尺寸、颜色、圆角读浏览器计算值。
@@ -81,7 +81,9 @@ description: >-
 1. **优先对齐 Token**：`Surface/*`；**`Shape`** 集合内 **`Radius/*`** / **`--shape-radius-*`**（名=px）、**`Space/s*`** / **`--space-s*`**（**s**=阶梯档，≠px）；字样式 **`--type-*`** 与 **`--font-family-*`**；以及 `State Layers/*`、`Schemes/*`（见 `design.md`、`tokens/tokens.css`）。
 2. **网页 / 静态页（强制）——「颜色与文字都用变量」**
    - 若仓库有 **`tokens/tokens.css`**，**颜色**一律 **`var(--color-…)`**；**字号/行高/字间距**一律 **`var(--type-…)`**（及 **`--font-family-*`**）；**间距** **`--space-s*`**、**圆角** **`--shape-radius-*`**（或项目中等效 token 名）。  
-   - **禁止**：裸 hex、任意 `font-size: 14px` / `margin: 12px` 等与 token 无关的魔法数，除非 **`design.md` 写明特例**。  
+   - **禁止**：裸 hex、任意 `font-size: 14px` / `margin: 12px` 等与 token 无关的魔法数，除非 **`design.md` 写明特例**。
+   - **颜色一律用随明暗主题切换的 token（强制）**：文字、图标、填充、描边、蒙层、阴影颜色、TS 颜色常量都用深色模式下会重新取值的语义 token（Medeo：`var(--Surface-*, #fallback)`、`var(--State-Layers-*-Opacity-NN, rgba(...))`），不写裸 hex / `rgba()` / `white`；`Inverse Surface` 按钮上的蒙层用 `Inverse On Surface` 档；只有图片 / 视频上的遮罩与白字、视频黑边、品牌渐变可保留字面值，并在同一行注释声明原因（`design.md` §4.6）。
+   - **间距与圆角尽可能用变量**：值落在档位上就用变量（Medeo 代码：`var(--Space-S-n, Npx)`、`var(--Radius-N, Npx)`），负值写 `calc(-1 * var(…))`，同心内层写 `calc(var(--Radius-8, 8px) - 2px)`；只有不在档位上的 1–3px 光学微调写字面值并注释（`design.md` §4.5、§4.6）。  
    - 与 **`design.md` § Design scale「团队约定」**、**`o2x-figma-workflow`** 中「设计稿全变量」**对表**：设计侧用 Figma 变量 + Text style，代码侧用 **`tokens.css`**。
 2.1 **Material 颜色角色配对（强制，见 `design.md` §4.2）**：`Schemes/*` 必须按 **Role / On Role / Container / On Container** 成对使用。
    - **高强调底**：`Schemes/<Role>` 只作为对应角色的高强调色面；其上文字 / 图标只能用 `Schemes/On <Role>`。
@@ -200,7 +202,7 @@ Prompt、Hint、Note、Code snippet 等辅助信息块如果同时包含标签�
 - **外层半径以用户看到的轮廓为准**：卡片 hover 时有贴边描边（如 `outline-offset: -1px`）的，按这条描边的半径计算内层元素，不按内部封面或盒子计算。
 - **单独改嵌套元素的圆角时，先查同心**：给定数值与同心值不一致时，先指出差异并建议同心值（Medeo：卡片角标按钮先定 4px，与卡片 hover 外框同心后是 8 − 2 = 6px）。
 - **圆角要落在可见像素上**：方形框里放非方形图片时，不要把 `img` 撑满再用 `object-fit: contain`，那样圆角只落在透明盒子上。让 `img` 按自身比例显示（`width/height: auto`，`max-width/max-height: 100%`，父框尺寸确定），圆角作用在图片本体上。
-- **Token 与字面 px 不要混算**：Medeo `--Radius-N` 的计算值不等于名中数字（如 `--Radius-8` → 10px，换算见 `design.md` §4.6）。同心计算时内外层用同一种写法（外层 token → 内层 `calc(var(--Radius-8) - 2px)`；外层字面 px → 内层 px），核对时读浏览器计算值。
+- **Token 与字面 px 不要混算**：Medeo `--Radius-N` 的计算值不等于名中数字（如 `--Radius-8` → 10px，换算见 `design.md` §4.6）。外层尽量用变量，内层写 `calc(var(--Radius-8, 8px) - 2px)` 引用同一个变量；只有外层确实不在档位上时内外层才都用字面 px。核对时读浏览器计算值。
 
 ## Typography 使用语义（实现侧速查）
 
