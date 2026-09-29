@@ -23,6 +23,8 @@ description: >-
 
 先修本次作品，再区分单期偏好、执行遗漏与可复用方法缺口；有依据才更新负责的技能，保存差异并验证。保持本技能的参考材料、先审后改、设计系统及操作授权要求。One2X 团队规范和已发布库不因单次反馈自动改变。
 
+用户要求把反馈提炼进规范时，同时审查现有正文能否被这次提炼改进：收紧模糊的规则，改掉已被推翻的旧表述，补上缺失的交叉引用，把放错位置或重复的段落归位合并，并把新检查补进 `design.md` §11 Do / Don't、§13.3 与本文「完成验收」。规则正文写进 `design.md`，本文只留执行要点和指向；不要只在末尾追加新段落。
+
 
 ## When to use
 
@@ -30,6 +32,7 @@ description: >-
 - 需要与设计稿一致的 **颜色、圆角、间距、字体、按钮/图标按钮/菜单/列表** 行为。
 - 从 Figma MCP 导出代码后，需要收敛到项目技术栈并保持视觉一致。
 - **动效 / 过渡 / 入场出场 / hover 微交互 / 动效 Review**：除本 skill 外，**必读** **[web-animation-design](../web-animation-design/SKILL.md)**（Emil Kowalski / animations.dev 体系：缓动、时长、`prefers-reduced-motion`、仅 animating `transform`/`opacity` 等）。**层次**：视觉与 Token 仍服从 **`design.md`** 与 **`tokens.css`**；动效语义与可访问性按 **web-animation-design**。
+- **工作台列表页**（分区标题、工具栏、网格 / 列表切换、置顶灰底面板、hover 操作、弹出菜单、骨架加载）的对齐与交互细节：见下文「密集工作区页面（执行要点）」与 `design.md` §7.6。
 - **要在 Figma 里改稿 / 用 `use_figma` 写入**时：改用打包入口 **[o2x-figma-workflow](../o2x-figma-workflow/SKILL.md)**（先 `figma-use`，整页再 `figma-generate-design`，并固定 One2X `fileKey`）。
 
 ## Required: read the canonical spec
@@ -37,7 +40,7 @@ description: >-
 1. **打开并遵循** 工作区根目录下的 [`design.md`](../../../design.md)（相对本文件：`../..` 到 `.cursor`，再 `..` 到工作区根）。
 2. 若 `design.md` 路径不同，在用户工作区根目录查找 **`design.md`** 文件并以其为准。
 
-全文规范（Token 表、组件清单、Share/VideoShareDialog 模式、代码映射）均在 `design.md` 中；本 skill 只保留执行要点。
+全文规范（Token 表、组件清单、布局配方——§7.5 紧凑面板、§7.6 密集工作区页面及 Medeo 参考值、Share/VideoShareDialog 模式、代码映射）均在 `design.md` 中；本 skill 只保留执行要点。页面级数值表和长规格写进 `design.md`，这里只留检查点和指向。
 
 ## Figma 到代码：强制工作流
 
@@ -60,7 +63,7 @@ description: >-
 3. **项目实现约定**：现有组件 API、路由、状态、响应式和可访问性模式。
 4. **局部补偿**：只在前三者不能表达设计时使用，并记录原因。
 
-若 Figma 数值与已命名 One2X token 不一致，先判断是实例变体、过期设计还是缺失 token。不要静默取最近值，也不要直接硬编码。必要时采用设计稿值完成视觉修复，同时明确指出应同步更新的 `design.md` / `tokens.css` / Figma 库。
+若 Figma 数值与已命名 One2X token 不一致，先判断是实例变体、过期设计还是缺失 token。不要静默取最近值，也不要直接硬编码。必要时采用设计稿值完成视觉修复，同时明确指出应同步更新的 `design.md` / `tokens.css` / Figma 库。走查中设计师直接给出的数值（如「间距 1px」）属于第 2 级「明确设计意图」：照做，不吸附到最近的 token 档；没听清先复述确认，不要换成同类元素的现有值。不在 `Space/s*` 档内的 1–3px 光学微调，代码里就近注释来源（`design.md` §4.5）。
 
 ### 完成验收
 
@@ -68,9 +71,9 @@ description: >-
 - [ ] token 敏感实现已检查 `get_variable_defs`，并完成 Figma 到项目的组件/token 映射。
 - [ ] 已复用项目组件和 One2X 语义 token；新增 primitive、variant 或 token 有明确理由。
 - [ ] 没有用裸 hex、任意字号/行高/间距/圆角替代已有 token；例外均有注释或交付说明。
-- [ ] 默认、hover、active、focus、disabled、loading 等设计中存在的状态已实现。
+- [ ] 默认、hover、active、focus、disabled、loading 等设计中存在的状态已实现；点开菜单后触发按钮回到 default（展开只用 `aria-expanded` 表达）；状态切换不改变盒子尺寸；同页 loading 用同一种骨架（`design.md` §4.3、§7.6）。
 - [ ] 响应式行为来自 Figma constraints/Auto Layout 与项目断点，不是只匹配单张静态截图。
-- [ ] 已在目标 viewport 实际渲染并对比参考图；布局、排版、颜色、资产和圆角描边无明显偏差。
+- [ ] 已在目标 viewport 实际渲染并对比参考图；布局、排版、颜色、资产和圆角描边无明显偏差。对齐与间距按**可视边缘**实测（不按热区或盒子），改动后在所有分区、所有视图（网格 / 列表）下复量，不只看刚改的元素；组件变体实际生效的尺寸、颜色、圆角读浏览器计算值。
 - [ ] 构建、类型检查和相关测试通过；无法执行的检查已明确说明。
 
 ## Agent workflow
@@ -87,28 +90,34 @@ description: >-
    - **One2X 双主色**：默认主按钮仍用 `Surface/Inverse Surface` + `Inverse On Surface`；`Schemes/Primary` + `On Primary` 只给最高强调的品牌动作，每屏 0–1 个。`Secondary` / `Secondary Container` 不能替代主品牌 CTA。
 2.2 **Surface 两套层级（强制，见 `design.md` §4.1）**：不要把所有 Surface 当成一条梯子。
    - **页面/大分区底色明度**：用 `Surface/Surface Dim`、`Surface/Surface`、`Surface/Surface Bright`。Dim 更沉，Surface 默认，Bright 更亮。
-   - **容器强调层级**：用 `Surface/Surface Container Lowest` → `Low` → `Container` → `High` → `Highest`。用于 Card、Sheet、Menu、Panel、输入区块等 contained area；`Surface Container` 是常规默认，Lowest/Low 降低强调，High/Highest 提高强调。
+   - **容器强调层级**：用 `Surface/Surface Container Lowest` → `Low` → `Container` → `High` → `Highest`。用于 Card、Sheet、Menu、Panel、输入区块等 contained area；`Surface Container` 是常规默认，Lowest/Low 降低强调，High/Highest 提高强调。浮出菜单 / 下拉面板例外，用 `Surface Container Lowest`（`design.md` §4.1、§8）。
    - **禁止混用**：不要把 `Surface Bright` 当作最高容器；不要从 `Surface Container Low` 开始漏掉 `Surface Container Lowest`；嵌套容器靠 Container 层级 + `Outline Variant` / `On Surface Variant` 0.5px 分隔。
-3. **描边（默认）**：低强调容器、卡片、输入框、列表分隔和图标容器的描边，优先用 **`Surface/On Surface Variant`**（代码侧 `--color-surface-on-surface-variant`）+ **`0.5px`**。只有需要更弱层级、禁用态、分隔线层级或设计稿明确指定时，才改用 `Outline` / `Outline Variant` / 1px。
+3. **描边（默认）**：低强调容器、卡片、输入框、列表分隔和图标容器的描边，优先用 **`Surface/On Surface Variant`**（代码侧 `--color-surface-on-surface-variant`）+ **`0.5px`**。只有需要更弱层级、禁用态、分隔线层级或设计稿明确指定时，才改用 `Outline` / `Outline Variant` / 1px。Compact 档（弹出菜单、下拉、托盘面板）的容器边框与分隔线改用 `Outline Variant`（`design.md` §2.1）。
 4. **Figma 组件写入（强制）——「不是只看数值，要看变量绑定」**
    - 写入或更新 One2X 组件时，Auto Layout 的 **`padding*` / `itemSpacing`** 必须绑定 Figma **`Shape/Space/s*`** 变量；四角半径必须绑定 **`Shape/Radius/*`** 变量。  
    - 只把数值设成 8、12、16、999 等，不算完成；右侧面板要能看到变量绑定。胶囊圆角用 **`Radius/Full`**，不要保留裸 `999px`。  
    - 具体 `use_figma` 绑定方式和验收脚本见 **[`o2x-figma-workflow`](../o2x-figma-workflow/SKILL.md)** 的 **Shape 绑定检查**。
 5. **组件语义（代码侧也要「组件化」）**：优先使用 **与设计系统对齐的 UI 原语**（项目里已有的 Button、Field、封装好的区块），**不要**为每个页面手写一整块无复用的「假组件」。按钮层级（Filled vs Outlined vs IconButton）、菜单 **0 Density**、列表项变体以 Figma 为准；**主行动按钮（双主色，见 `design.md` §3.1）**：**默认**用 **Filled** + **`Surface/Inverse Surface`**（`--color-surface-inverse-surface`）+ **`Inverse On Surface`**（`--color-surface-inverse-on-surface`）的**黑色**主按钮；**只有最高强调**那一个才升级到 **`Schemes/Primary`**（`--color-schemes-primary`）+ **`On Primary`**（紫色，每屏 0–1 个，**非常克制**）。
-5.1 **图标（强制，见 `design.md` §6.1）**：所有图标统一调用 One2X 图标库 **`@one2x/o2x-icons`**（medeo-fe `packages/o2x-icons`，260 个字体图标）——组件 **`<XxxIcon />`** 或字体 className **`o2x-icons-<名>`**，颜色用 **`currentColor`**，常用 **18/20/24px**。实现任何语义图标前都先查 `info.json` / 可视化预览「图标」区：主题切换用 **`LightModeIcon` / `DarkModeIcon`**，仪表盘用 `DashboardIcon`，搜索用 `SearchIcon` 等；只要库里已有，就必须复用。**禁止**临时画 SVG、用 CSS 拼图标、引第三方图标库（Material Symbols / Lucide / Iconfont 等）或用 emoji 占位；缺图标走 `packages/o2x-icons` 的 Figma 同步流程（`pnpm sync`）补充后再用。
+5.1 **图标（强制，见 `design.md` §6.1）**：所有图标统一调用 One2X 图标库 **`@one2x/o2x-icons`**（medeo-fe `packages/o2x-icons`，字体图标，数量以 `info.json` 为准）——组件 **`<XxxIcon />`** 或字体 className **`o2x-icons-<名>`**，颜色用 **`currentColor`**，常用 **18/20/24px**（Compact 参考：工具栏 18、卡片角标 16、菜单项 14）。实现任何语义图标前都先查 `info.json` / 可视化预览「图标」区：主题切换用 **`LightModeIcon` / `DarkModeIcon`**，仪表盘用 `DashboardIcon`，搜索用 `SearchIcon` 等；只要库里已有，就必须复用。**禁止**临时画 SVG、用 CSS 拼图标、引第三方图标库（Material Symbols / Lucide / Iconfont 等）或用 emoji 占位。**设计指定的图标名库里没有时，不拿语义相近的图标顶替**（指定 `TableEyeIcon` 就不用 `VisibilityIcon`）：先查 One2X Figma 图标页（node `60839:470`）是否已有、只是没同步，按 `design.md` §6.1「缺图标」同步（有 `FIGMA_TOKEN` 用 `pnpm sync`，没有则按包 README 手动补）。
+5.2 **先查设计系统组件与变体（强制，见 `design.md` §6）**：写 Tooltip、按钮、图标之前，先找 `@one2x/o2x-design` 里现成的组件和变体，不自写同类组件，也不把一个变体改造成另一个变体的样子。Medeo 例子：Tooltip 用库 `Tooltip`；浮在封面上的轻按钮用 `kind="text"` 浅色方案加浅底，不自创深色毛玻璃底；实底按钮用 `kind="filled"`，不用 `kind="text"` 再涂黑。
+   - **变体会覆盖你写的值**：`IconButton size="small"` 把图标压到 14px；组件默认前景是 `On Surface`，不继承父级颜色。交付前在浏览器里读图标尺寸和颜色的计算值。
+   - **只保留一层状态底色**：组件自带 state layer 又在外层叠了 hover 底时，只留一层，圆角跟随按钮外形（`design.md` §4.3）。
+   - **状态层要在实际底色上看得出**：反色实底按 `design.md` §4.3「特殊表面例外」提高档位，并在浏览器里比对亮度。
 6. **实现**：映射到 **`tokens/tokens.css`** 已有变量；禁止无约定地硬编码与设计冲突的值。
 7. **冲突处理**：按上方“映射与冲突优先级”裁决；不得用一句“Figma 为源”跳过 One2X 组件与 token 语义。
 8. **Figma MCP（设计稿实现时强制）**：使用 `get_design_context`、`get_screenshot`、`get_variable_defs`、`search_design_system`（One2X `fileKey`: `wHNBqjzSQZM8a4DlyBIDqW`）。只有不以 Figma 为输入的纯代码任务才可跳过。
-9. **动效**（有则执行）：阅读 **[web-animation-design](../web-animation-design/SKILL.md)**；需要细节时见同目录 **[PRACTICAL-TIPS.md](../web-animation-design/PRACTICAL-TIPS.md)**。Review 动效问题时按该 skill 要求使用 **Before / After 表格**输出。动效不替代 Token：例如 `transition` 的 `color` / `background-color` 仍用 **`var(--color-…)`**。
+9. **动效**（有则执行）：阅读 **[web-animation-design](../web-animation-design/SKILL.md)**；需要细节时见同目录 **[PRACTICAL-TIPS.md](../web-animation-design/PRACTICAL-TIPS.md)**。Review 动效问题时按该 skill 要求使用 **Before / After 表格**输出。动效不替代 Token：例如 `transition` 的 `color` / `background-color` 仍用 **`var(--color-…)`**。库组件自带的动效与延迟（如 `Tooltip` 的偏移与冷 / 暖延迟）直接沿用，不另定数值。
+10. **走查微调（设计师选中元素提意见时）**：样式类反馈（菜单规格、外框阴影、按钮默认态、骨架、图标颜色）同步到同页所有同类元素，不等逐个指出，且只在本页范围内覆盖、不改共享组件在其它页面的样式；位置类反馈只动被点名的元素本身（不连带移动它所在的面板或布局），若因此偏离共同起点线，交付时说明并询问是否整体同步。只说「大一点 / 小一点」时小步调整，并报出改前 → 改后的数值。
 
 ## 描边 / Stroke
 
 描边默认是轻边界，不是装饰线。除非组件规范或设计稿另有说明：
 
-- 颜色优先用 **`Surface/On Surface Variant`**；代码侧用 `var(--color-surface-on-surface-variant)`。
+- 颜色优先用 **`Surface/On Surface Variant`**；代码侧用 `var(--color-surface-on-surface-variant)`。**Compact 档例外**（`design.md` §2.1）：弹出菜单、下拉、托盘面板的容器边框与分隔线用 `Surface/Outline Variant`，可交互的 Outlined 按钮 / 输入框用 `Surface/Outline`。
 - 宽度优先用 **`0.5px`**；Figma 写入时设置 `strokeWeight = 0.5`，并把 `strokes` 的 paint 绑定到对应 Color 变量。
 - 对容器类节点优先用 `strokeAlign: inside`，避免描边改变外部几何尺寸。
 - 如果 0.5px 在目标渲染环境过淡或不可见，可以升到 1px，但要有明确原因；不要把 1px 当默认值。
+- **可拖拽分栏线（resizer）用中性色**：hover、键盘聚焦、拖动中显示的线用 `Surface/Outline`，不用 `Schemes/Primary`；品牌紫只留给最高强调（`design.md` §3.1）。
 
 ```css
 .surface-card {
@@ -118,7 +127,7 @@ description: >-
 
 ## 视觉补偿 / Optical Alignment
 
-几何对齐不总是视觉对齐。遇到标题、label、hint、辅助说明与圆角矩形（Card、Input、Select、Media frame、Toolbar、Dialog surface）相邻时，不要只把文字左边缘和容器外边缘做 `x` 值相等；要根据圆角做少量内缩，让文字看起来和圆角形体的视觉重心对齐。
+几何对齐不总是视觉对齐。遇到标题、label、hint、辅助说明与圆角矩形（Card、Input、Select、Media frame、Toolbar、Dialog surface）相邻时，不要只把文字左边缘和容器外边缘做 `x` 值相等；要根据圆角做少量内缩，让文字看起来和圆角形体的视觉重心对齐。对齐以**肉眼可见的内容边缘**为准（文字、封面、缩略图、可视按钮底），不以带内边距的卡片外框、按钮热区或容器盒子为准：卡片自带 4px 内边距时，标题对齐封面左缘，而不是卡片外框。
 
 ### 圆角矩形外部文字
 
@@ -151,6 +160,7 @@ description: >-
 - 卡片本身已经有同一列的内部文字锚点，应优先对齐内部内容，而不是外轮廓。
 - 多个相邻容器圆角不同，且标题控制一整个区域时，标题应对齐区域内容网格。
 - 设计稿已明确使用几何对齐，或 Figma 主组件已有固定变量绑定。
+- 页面有统一左起点线时（如工作台列表页）：分区标题、Pinned、列表表头都对齐这条线，不按置顶灰底的圆角另做内缩（`design.md` §7.2、§7.6）。
 
 ### 辅助信息块内部布局
 
@@ -160,7 +170,7 @@ Prompt、Hint、Note、Code snippet 等辅助信息块如果同时包含标签�
 - 正文区域 `min-width: 0`，允许自然换行；只有长代码、命令或不可断开的 token 才使用水平滚动。
 - 标签只承担分类提示，不要给标签固定大列宽，也不要让标签参与正文列宽分配。
 - 复制按钮这类轻操作放在角落，不要夹在正文中间；若操作位于正文行右侧，正文需要给按钮预留宽度。
-- 角落按钮到相邻两条容器边的距离必须一致（用同一个 inset token 控制）。例如右下角按钮的右边距与下边距相同；并按同心圆角计算：`action radius = outer radius - inset`。不要让角落按钮贴边，也不要给它一个与外框无关的圆角。
+- 角落按钮到相邻两条容器边的距离必须一致（用同一个 inset token 控制）。例如右下角按钮的右边距与下边距相同；并按同心圆角计算：`action radius = outer radius - inset`。不要让角落按钮贴边（「不贴边」指两条边都留出相等、可见的间距，不要求大留白；密集网格卡片的 hover 角标可收到约 2px，见 `design.md` §7.6），也不要给它一个与外框无关的圆角。
 
 ### 圆角同心关系
 
@@ -183,10 +193,14 @@ Prompt、Hint、Note、Code snippet 等辅助信息块如果同时包含标签�
 
 执行要求：
 
-- 内层图片、媒体框、按钮组、输入框、浮层内容区等，只要贴近外层圆角容器，都按同心圆角计算。
+- 内层图片、媒体框、按钮组、输入框、浮层内容区、菜单项、分段控件选中块、卡片角标按钮等，只要贴近外层圆角容器，都按同心圆角计算（Medeo 参考：分段控件外框 4px、内距 1px → 选中块 3px；菜单项圆角 = 面板圆角 − 容器 padding）。
 - 外层包裹层若只是为了裁切内容，可以只在外层设置圆角并使用 `overflow: hidden` / `clip`，避免重复设置不一致的内层圆角。
 - 多层嵌套时逐层计算，不要把最外层 radius 直接传给所有子元素。
 - Figma 写入时同样要检查：外层 radius、padding、内层 radius 三者要能解释为同心关系。
+- **外层半径以用户看到的轮廓为准**：卡片 hover 时有贴边描边（如 `outline-offset: -1px`）的，按这条描边的半径计算内层元素，不按内部封面或盒子计算。
+- **单独改嵌套元素的圆角时，先查同心**：给定数值与同心值不一致时，先指出差异并建议同心值（Medeo：卡片角标按钮先定 4px，与卡片 hover 外框同心后是 8 − 2 = 6px）。
+- **圆角要落在可见像素上**：方形框里放非方形图片时，不要把 `img` 撑满再用 `object-fit: contain`，那样圆角只落在透明盒子上。让 `img` 按自身比例显示（`width/height: auto`，`max-width/max-height: 100%`，父框尺寸确定），圆角作用在图片本体上。
+- **Token 与字面 px 不要混算**：Medeo `--Radius-N` 的计算值不等于名中数字（如 `--Radius-8` → 10px，换算见 `design.md` §4.6）。同心计算时内外层用同一种写法（外层 token → 内层 `calc(var(--Radius-8) - 2px)`；外层字面 px → 内层 px），核对时读浏览器计算值。
 
 ## Typography 使用语义（实现侧速查）
 
@@ -214,15 +228,32 @@ Prompt、Hint、Note、Code snippet 等辅助信息块如果同时包含标签�
 - 页面主标题：`headline/medium`（强章节可用 `headline/large`）。
 - Dialog/Drawer 标题：`title/medium`；小区块标题：`title/small`。
 - 正文与说明：`body/medium`；辅助注释/时间戳：`body/small` 或 `body/extra small`。
-- 交互文案默认：`label/large`；主 CTA：`label/large - prominent`；紧凑工具条：`label/medium`。
+- 交互文案默认：`label/large`；主 CTA：`label/large - prominent`；紧凑工具条、弹出菜单项：`label/medium`。
 
 ## Menu Bar 锚点弹窗
 
 - Menu Bar 中由图标按钮或头像触发的弹窗统一使用 100ms 展开、100ms 退出，按按钮所在边缘设置 `transform-origin`，从触发位置缩放与淡入，不做额外位移。
 - 定位与缩放不能写在同一个 `transform` 上；定位使用 `top` / `left` 等坐标，弹窗自身只动画 `scale` 与 `opacity`，避免展开起点反向或位置跳动。
 - 相邻入口切换时立即隐藏前一个弹窗，再显示新弹窗；指针从按钮移入其弹窗时保持打开。`prefers-reduced-motion: reduce` 下取消过渡。
+- Menu Bar 里的列表型菜单与图标按钮，同样遵守下文「密集工作区页面（执行要点）」里的弹出菜单、触发按钮回到 default 与 Tooltip 规则（正文见 `design.md` §4.3、§6、§8）；积分卡这类不是菜单的悬浮卡片，只按本节的定位和动效处理。
+
+## 密集工作区页面（执行要点）
+
+工作台列表页：分区标题、工具栏、网格 / 列表切换、置顶灰底面板、hover 操作、弹出菜单、骨架加载。规则正文与 Medeo Createspace 参考值见 `design.md` §7.6；其中菜单、触发按钮与 Tooltip 的规则对所有页面都适用（正文在 `design.md` §4.3、§6、§8）。
+
+- **点开菜单后，触发按钮回到 default（强制）**：图标按钮和 Sort / Filter / Group 这类文字下拉按钮都不保留 selected / pressed 底色，展开只用 `aria-expanded` 表达；模式开关（Select）和分段控件的当前项例外。
+- **整页一条左起点线**：分区标题、Pinned、表头、封面、缩略图在所有分区、网格 / 列表两种视图下落在同一 `x`，按肉眼可见的内容左缘量；整体平移改共享滚动容器的 padding，所有起点一起动，已约定的留白（灰底距视口）不能丢；工具栏、灰底推近视口边时留小而固定的可见间距，同类控件右缘上下对齐，不出现横向滚动。
+- **工具栏从右锚定**：按内容 / 数据 / 视图分区，视图切换在最右不动；切视图、换排序、展开搜索时锚点及其右侧不动，搜索展开把左侧操作往左推。文字按钮 hug 文案，不按最长文案写死宽度。
+- **工具栏样式统一（局部覆盖）**：同一条工具栏同一 `gap`、同一圆角（分段选中块按同心），图标同尺寸，未选中前景 `On Surface Variant`、选中 `On Surface`；只在工具栏范围内覆盖，不改共享组件在别处的样式。
+- **弹出菜单**：全页一套紧凑规格（项高 24、`label/medium`、图标 14）和一组面板 token；只有直接包含菜单项的那一层有描边 / 底色 / 阴影；菜单与触发按钮的距离按**可视**边缘量（Createspace 为 4px）；首图标与 ⋯ 图标同轴（`crossAxis` 公式见 `design.md` §7.6）。
+- **纯图标按钮配库 `Tooltip`**：沿用组件默认（上方、4px、500 / 100ms），带文字的按钮和菜单展开时不显示；列表 / 卡片里批量出现的行内按钮不逐个挂实例，改用共享的单个提示层。
+- **hover 操作不占位**：按钮绝对定位叠在内容右端，内容用 `mask-image` 渐隐让位（只在按钮可见时加），不盖带底色的遮罩；它的任一菜单打开期间按钮保持显示。
+- **置顶灰底面板**：内边距按可见内容量（左、下相等）；完整包住内部控件，加宽后确认没被祖先 `overflow` 裁掉；标题在文档流里独占一行；窄面板设最小宽度，放不下时默认显示标题、hover 或聚焦时换成控件。
+- **从属间距极小（Createspace 定为 1px）**：标题栏与灰底、标题行与内容、表头与灰底读作一组；`margin` 与容器 `gap` 会叠加，改完量实际值。
+- **整页一套扫光骨架**：每个异步区域都有形状匹配的占位；加载中不显示默认封面（默认封面只表示确认没有封面）。
 
 ## Out of scope
 
 - 不替代产品 PRD 或无障碍专项审计；a11y 在遵循设计系统基础上按平台规范补强。
+- 产品信息架构决定（如哪个 Tab 作首页、入口迁到哪个菜单）不写进本 skill，放 PRD 或导航文档。
 - 不自动同步 Figma；大版本变更需人工或流水线更新 `design.md`。
