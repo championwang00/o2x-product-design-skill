@@ -84,7 +84,7 @@ description: >-
    - 若仓库有 **`tokens/tokens.css`**，**颜色**一律 **`var(--color-…)`**；**字号/行高/字间距**一律 **`var(--type-…)`**（及 **`--font-family-*`**）；**间距** **`--space-s*`**、**圆角** **`--shape-radius-*`**（或项目中等效 token 名）。  
    - **禁止**：裸 hex、任意 `font-size: 14px` / `margin: 12px` 等与 token 无关的魔法数，除非 **`design.md` 写明特例**。
    - **颜色一律用随明暗主题切换的 token（强制）**：文字、图标、填充、描边、蒙层、阴影颜色、TS 颜色常量都用深色模式下会重新取值的语义 token（Medeo：`var(--Surface-*, #fallback)`、`var(--State-Layers-*-Opacity-NN, rgba(...))`），不写裸 hex / `rgba()` / `white`；`Inverse Surface` 按钮上的蒙层用 `Inverse On Surface` 档；只有图片 / 视频上的遮罩与白字、视频黑边、品牌渐变可保留字面值，并在同一行注释声明原因（`design.md` §4.6）。
-   - **间距与圆角尽可能用变量**：值落在档位上就用变量（Medeo 代码：`var(--Space-S-n, Npx)`、`var(--Radius-N, Npx)`），负值写 `calc(-1 * var(…))`，同心内层写 `calc(var(--Radius-8, 8px) - 2px)`；只有不在档位上的 1–3px 光学微调写字面值并注释（`design.md` §4.5、§4.6）。  
+   - **间距与圆角尽可能用变量**：值落在档位上就用变量（Medeo 代码：`var(--Space-S-n, Npx)`、`var(--Radius-N, Npx)`），负值写 `calc(-1 * var(…))`，同心内层写 `calc(var(--Radius-8, 8px) - 2px)`；只有不在档位上的 1–3px 光学微调，以及设计指定确切渲染 px、`--Radius-N` 补偿后会偏离的圆角（连同其同心内层）写字面值并注释（`design.md` §4.5、§4.6）。  
    - 与 **`design.md` § Design scale「团队约定」**、**`o2x-figma-workflow`** 中「设计稿全变量」**对表**：设计侧用 Figma 变量 + Text style，代码侧用 **`tokens.css`**。
 2.1 **Material 颜色角色配对（强制，见 `design.md` §4.2）**：`Schemes/*` 必须按 **Role / On Role / Container / On Container** 成对使用。
    - **高强调底**：`Schemes/<Role>` 只作为对应角色的高强调色面；其上文字 / 图标只能用 `Schemes/On <Role>`。
@@ -219,7 +219,7 @@ Prompt、Hint、Note、Code snippet 等辅助信息块如果同时包含标签�
 - **单独改嵌套元素的圆角时，先查同心**：给定数值与同心值不一致时，先指出差异并建议同心值（Medeo：卡片 hover 外框 6px，角标 inset 2px → 4px，勾选框 inset 3px → 3px）。反过来，外框圆角一改，贴着它的内层（角标、勾选框、缩略图、菜单项）全部一起复算。
 - **控件同心，封面可由设计指定**：内容主体（封面、图片）可以按设计给出比同心值更大的圆角（Createspace 卡片 6、内边距 4，设计定封面 4px 而不是 2px），照做并注释说明是有意不同心（`design.md` §4.4）。
 - **圆角要落在可见像素上**：方形框里放非方形图片时，不要把 `img` 撑满再用 `object-fit: contain`，那样圆角只落在透明盒子上。让 `img` 按自身比例显示（`width/height: auto`，`max-width/max-height: 100%`，父框尺寸确定），圆角作用在图片本体上。
-- **Token 与字面 px 不要混算**：Medeo `--Radius-N` 的计算值不等于名中数字（如 `--Radius-8` → 10px，换算见 `design.md` §4.6）。外层尽量用变量，内层写 `calc(var(--Radius-8, 8px) - 2px)` 引用同一个变量；只有外层确实不在档位上时内外层才都用字面 px（Medeo 没有计算为 6px 的 `--Radius-N`：6px 的菜单面板、卡片与列表行外框写字面值，内层 4 / 3 / 2px 同样写字面值）。核对时读浏览器计算值。
+- **Token 与字面 px 不要混算**：Medeo `--Radius-N` 的计算值不等于名中数字（4→5、6→8、8→10，`design.md` §4.6）。默认外层用变量，内层写 `calc(var(--Radius-8, 8px) - 2px)` 引用同一个变量；设计师指定了确切渲染 px、补偿后会偏离时，外层写字面 px 并注释，同心内层也写字面值（Medeo 工具栏 4px → 分段选中块 3px；菜单面板、卡片与列表行外框 6px → 内层 4 / 3 / 2px），不拿字面 px 去减变量。核对时读浏览器计算值。
 
 ## Typography 使用语义（实现侧速查）
 
@@ -263,7 +263,7 @@ Prompt、Hint、Note、Code snippet 等辅助信息块如果同时包含标签�
 - **点开菜单后，触发按钮回到 default（强制）**：图标按钮和 Sort / Filter / Group 这类文字下拉按钮都不保留 selected / pressed 底色，展开只用 `aria-expanded` 表达；模式开关（Select）和分段控件的当前项例外。
 - **整页一条左起点线**：分区标题、Pinned、表头、封面、缩略图在所有分区、网格 / 列表两种视图下落在同一 `x`，按肉眼可见的内容左缘量；整体平移改共享滚动容器的 padding，所有起点一起动，已约定的留白（灰底距视口）不能丢；工具栏、灰底推近视口边时留小而固定的可见间距，同类控件右缘上下对齐，不出现横向滚动。
 - **工具栏从右锚定**：按内容 / 数据 / 视图分区，视图切换在最右不动；切视图、换排序、展开搜索时锚点及其右侧不动，搜索展开把左侧操作往左推。文字按钮 hug 文案，不按最长文案写死宽度。
-- **工具栏样式统一（局部覆盖）**：同一条工具栏同一 `gap`、同一圆角（分段选中块按同心），图标同尺寸，未选中前景 `On Surface Variant`、选中 `On Surface`；只在工具栏范围内覆盖，不改共享组件在别处的样式。
+- **工具栏样式统一（局部覆盖）**：同一条工具栏同一 `gap`、同一圆角（Medeo 字面 4px，分段选中块同心 3px），图标同尺寸，未选中前景 `On Surface Variant`、选中 `On Surface`；只在工具栏范围内覆盖，不改共享组件在别处的样式。
 - **弹出菜单**：全页一套紧凑规格（项高 24、`label/medium`、图标 14）和一组面板 token；只有直接包含菜单项的那一层有描边 / 底色 / 阴影；菜单与触发按钮的距离按**可视**边缘量（Createspace 为 4px）；首列是图标时与按钮图标同轴（`crossAxis` 公式见 `design.md` §7.6），首列是文字时文字左缘对齐按钮图标左缘；距视口至少 4px；打开期间菜单位置固定（`design.md` §6）。
 - **纯图标按钮配库 `Tooltip`**：沿用组件默认（上方、4px、500 / 100ms），带文字的按钮和菜单展开时不显示；列表 / 卡片里批量出现的行内按钮不逐个挂实例，改用共享的单个提示层。
 - **hover 操作不占位**：按钮绝对定位叠在内容右端，内容用 `mask-image` 渐隐让位（只在按钮可见时加），不盖带底色的遮罩；它的任一菜单打开期间按钮保持显示。

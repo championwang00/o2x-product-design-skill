@@ -289,7 +289,7 @@ Figma（`**Shape`** · **Baseline**）圆角变量分组名为 `**Radius/*`**；
 | `Space/s10` | 64px | `**--space-s10**` |
 
 
-**间距与圆角尽可能用变量（强制）**：`gap` / `padding` / `margin` / `inset` 以及角标这类位置偏移，值落在 `Space/s*` 档上就一律用 `**var(--space-s*)**`（Medeo 代码 `var(--Space-S-n, Npx)`，带 px 兜底），不裸写 `16px`；负值写 `calc(-1 * var(--Space-S-1, 4px))`，`calc()` 里的档位值也换成变量（如 `calc(100% + var(--Space-S-1, 4px))`）。圆角同理，见 §4.4 / §4.6。**只有**不在档位上、也没有推导关系的 1–3px 光学微调（如工具栏控件 gap 2px、角标 inset 2px、表头与置顶灰底 1px）才写字面值，并就近注释来源；不要为凑变量写 `calc(var(--Space-S-1) / 2)` 这类表达式。**量法**：间距与对齐都按**可视边缘**量，不按热区或盒子（热区 24、可视 20 时，「距 4px」要扣掉 2px 内缩）；`margin` 与父容器 `gap` 会叠加，改完量实际值。
+**间距与圆角尽可能用变量（强制）**：`gap` / `padding` / `margin` / `inset` 以及角标这类位置偏移，值落在 `Space/s*` 档上就一律用 `**var(--space-s*)**`（Medeo 代码 `var(--Space-S-n, Npx)`，带 px 兜底），不裸写 `16px`；负值写 `calc(-1 * var(--Space-S-1, 4px))`，`calc()` 里的档位值也换成变量（如 `calc(100% + var(--Space-S-1, 4px))`）。圆角同理（设计指定确切渲染 px、`--Radius-N` 补偿后会偏离时写字面值，见 §4.4 / §4.6）。**只有**不在档位上、也没有推导关系的 1–3px 光学微调（如工具栏控件 gap 2px、角标 inset 2px、表头与置顶灰底 1px）才写字面值，并就近注释来源；不要为凑变量写 `calc(var(--Space-S-1) / 2)` 这类表达式。**量法**：间距与对齐都按**可视边缘**量，不按热区或盒子（热区 24、可视 20 时，「距 4px」要扣掉 2px 内缩）；`margin` 与父容器 `gap` 会叠加，改完量实际值。
 
 ### 4.5.1 圆角容器标题的视觉补偿
 
@@ -314,7 +314,7 @@ Figma（`**Shape`** · **Baseline**）圆角变量分组名为 `**Radius/*`**；
 - **圆角**：Figma `**Shape`** · `**Radius/*`**；网页 `**--shape-radius-***`。`tokens.css` 中 `**--shape-corner-***` 仅为与旧高度档/旧 `**Corner/***` 名对照的别名，新稿以 `**Radius/{px}**` 与 `**--shape-radius-{px}**` 为准（§4.4）。
 - **字阶 / 字族**：`**--font-family-*`**、`**--type-*`**，或组合类 `**.o2x-type-***`（见 `tokens.css`）。
 - **间距**：Figma `**Shape`** · `**Space/s*`**；网页 `**--space-s***`（§4.5）；**勿**与 `**Radius/{px}`** 的「名=像素」规则混用。
-- **Medeo 代码（medeo-fe）**：变量来自 `apps/medeo-web/src/web/components/theme/variables.readonly.css`（Web），命名为 `--Surface-*`、`--Schemes-*`、`--State-Layers-*`、`--Radius-N`，与本仓库 `tokens.css` 的 `--color-*` / `--shape-radius-*` 对应同一批 Figma 变量（如 `Surface/Outline` → `--Surface-Outline`），但不同名。在支持 `corner-shape` 的浏览器里，`--Radius-N` 按 superellipse 补偿放大约 1.27 倍（`--Radius-4` → 5px、`--Radius-6` → 8px、`--Radius-8` → 10px；附录 C.7），**名中数字 ≠ 计算值**。圆角**尽可能用变量**：值落在 `Radius/*` 档上的一律写 `var(--Radius-N, Npx)`（胶囊 `var(--Radius-Full, 1000px)`），同心的内层写 `calc(var(--Radius-8, 8px) - 2px)`，与外层引用同一个变量；只有外层确实不在档位上时，内外层才都用字面 px：没有哪个 `--Radius-N` 的计算值是 6px（4→5、6→8），设计要求 6px 的外框（Medeo 弹出菜单面板、网格卡片与列表行的 hover 外框）写字面 `6px` 并注释原因，其同心内层（4 / 3 / 2px）也写字面值。间距变量 `--Space-S-0`…`--Space-S-10`（0、4、8、12、16、20、24、32、40、48、64px）是固定值，不放大。核对时读浏览器计算值。
+- **Medeo 代码（medeo-fe）**：变量来自 `apps/medeo-web/src/web/components/theme/variables.readonly.css`（Web），命名为 `--Surface-*`、`--Schemes-*`、`--State-Layers-*`、`--Radius-N`，与本仓库 `tokens.css` 的 `--color-*` / `--shape-radius-*` 对应同一批 Figma 变量（如 `Surface/Outline` → `--Surface-Outline`），但不同名。在支持 `corner-shape` 的浏览器里，`--Radius-N` 按 superellipse 补偿放大约 1.27 倍（`--Radius-4` → 5px、`--Radius-6` → 8px、`--Radius-8` → 10px；附录 C.7），**名中数字 ≠ 计算值**。圆角**尽可能用变量**：值落在 `Radius/*` 档上一律写 `var(--Radius-N, Npx)`（胶囊 `var(--Radius-Full, 1000px)`），同心的内层写 `calc(var(--Radius-8, 8px) - 2px)`，与外层引用同一个变量。**例外是设计师指定了确切的渲染 px**，而 `--Radius-N` 的补偿（4→5、6→8、8→10）会渲染成别的值：这时写字面 px 并就近注释原因（Medeo：工具栏 4px；弹出菜单面板、网格卡片与列表行的 hover 外框 6px，也没有哪个 `--Radius-N` 算出 6px），贴着它的同心内层也写字面值（分段选中块 3px；菜单项与角标 4px，勾选框网格 3px、列表 2px），不拿字面 px 去减变量。间距变量 `--Space-S-0`…`--Space-S-10`（0、4、8、12、16、20、24、32、40、48、64px）是固定值，不放大。核对时读浏览器计算值。
 
 全文变量表见 `**tokens/tokens.css`**、`**tokens/README.md**`。
 
@@ -593,7 +593,7 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 | 内容起点（标题、表头、封面、缩略图） | `x = 12px`（列表视图实测；网格视图未单独复量） |
 | 顶栏首个 Tab 的 logo 左缘 | 应对齐内容起点；内容起点在 8px 时已对齐，移到 12px 后**未复量** |
 | 置顶灰底 | 距视口左右 4px；列表视图可见内边距左 / 下 8px；灰底内视图切换距灰底右缘 2px，右缘与工具栏视图切换对齐 |
-| 工具栏 | 按钮 24×24、图标 18px；`gap` 2px；圆角 `var(--Radius-4, 4px)`（设计师定：尽可能用变量；支持 `corner-shape` 时计算为 5px），分段选中块 `calc(var(--Radius-4, 4px) - 1px)`；搜索槽收起 24px、展开 200px |
+| 工具栏 | 按钮 24×24、图标 18px；`gap` 2px；圆角 4px（字面值：设计指定渲染 4px，`--Radius-4` 补偿后是 5px，§4.6；Createspace 工具栏与编辑器素材面板标题栏统一），分段选中块 3px（4 − 1 同心，字面值）；搜索槽收起 24px、展开 200px |
 | 弹出菜单 | 容器 padding 2px、min-width 96px（随内容撑开）；项高 24、padding `0 8px 0 6px`、`label/medium`、图标 14、图文间距 4；面板 0.5px `Outline Variant` + `Surface Container Lowest` + `0 4px 16px` 阴影（颜色用 `State Layers/Shadow` Opacity 12 档；选哪一档几何待定，见 §8） + 圆角 6px（字面值，§4.6），菜单项 4px（6 − 2 同心）；距触发按钮可视边缘 4px、距视口左右至少 4px |
 | 卡片角标 ⋯ | 可视 20×20、热区 24×24，图标 16px，距卡片外轮廓 2px，圆角 4px（卡片外框 6 − 2） |
 | 网格卡片 / 列表行 hover 外框 | 圆角 6px（字面值，§4.6），1px `Schemes/Primary` outline、`outline-offset: -1px`；网格封面 4px（设计指定，非同心），列表缩略图 4px |
@@ -729,7 +729,7 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 0. 密度档判对了吗（§2.1）？工具面板 / 下拉 / 侧栏 = Compact：12/11 字号、8px 边距、24 高标题行与紧凑钮、不透明度层级。工作台列表页不是整页 Default：工具栏、弹出菜单、置顶面板和页面边距按 Compact 收紧（§7.6）。
 1. 颜色与间距是否均可映射到 `**--color-*`** 与 `**--space-s*`**？
 2. 是否只有一个「主层级」的 Primary CTA（§3.1）？
-3. 间距与圆角的档位值是否都用了变量（含负值、`calc()` 里的项、同心内层，§4.5 / §4.6），只剩注释过的 1–3px 光学微调是字面值？圆角是否用了 `**--shape-radius-***`，且未与 `Space/s*` 混用规则？嵌套圆角是否与外轮廓同心（外轮廓以可见描边为准，§4.4）？token 与字面 px 有没有混算（Medeo `--Radius-8` 计算值为 10px，§4.6）？
+3. 间距与圆角的档位值是否都用了变量（含负值、`calc()` 里的项、同心内层，§4.5 / §4.6），只剩注释过的 1–3px 光学微调，以及设计指定渲染 px 的圆角与其同心内层是字面值？圆角是否用了 `**--shape-radius-***`，且未与 `Space/s*` 混用规则？嵌套圆角是否与外轮廓同心（外轮廓以可见描边为准，§4.4）？token 与字面 px 有没有混算（Medeo `--Radius-8` 计算值为 10px，§4.6）？
 4. 字阶是否落在 **§5.3** 的语义档位，而非临时 `font-size`？
 5. Figma 侧是否优先 **实例化库组件**，而非手绘 Frame？
 6. 图标是否全部来自 `**@one2x/o2x-icons**`，无临时 SVG / 第三方图标 / emoji（§6.1）？
@@ -1065,7 +1065,7 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 
 | 日期         | 说明                                                                                                                                               |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| 2026-09-30 | **Medeo Createspace / 编辑器素材面板 UI polish 复盘**：**§4.3** 增「生效中 ≠ 展开」（筛选 / 分组生效用 Primary 08）、多选只靠勾选框表达；**§4.4** 更新 Medeo 同心实例（外框 6px 一组），增「控件严格同心，内容主体可由设计指定」；**§4.6** 增 6px 无对应 `--Radius-N` 时写字面值；**§6** 菜单水平对齐 / 打开期间固定 / 分组标题、勾选框统一规格、单行输入垂直居中、标签溢出点占位、进度条最小填充、同排按钮一致；**§7.6** 增列表 hover 外框距视口相等、网格内容贴顶、面板分组标题对齐、列表 ⋯ 居中等距、保持 hover 显隐，新增「横向滚动行」「选择模式」「分组与空状态」，参考值表改菜单与角标圆角并补外框 / 勾选框 / 选择工具组 / 横向滚动 / 命令框；**§11** 修正斜杠零写法（Manrope `zero` 与 Geist Mono `ss09` 分开）并补 Do / Don't；**§13.3** 增 11–13 |
+| 2026-09-30 | **Medeo Createspace / 编辑器素材面板 UI polish 复盘**：**§4.3** 增「生效中 ≠ 展开」（筛选 / 分组生效用 Primary 08）、多选只靠勾选框表达；**§4.4** 更新 Medeo 同心实例（外框 6px 一组），增「控件严格同心，内容主体可由设计指定」；**§4.6** 增设计指定确切渲染 px、`--Radius-N` 补偿后会偏离时写字面值（工具栏 4px、外框 6px，同心内层同样字面）；**§6** 菜单水平对齐 / 打开期间固定 / 分组标题、勾选框统一规格、单行输入垂直居中、标签溢出点占位、进度条最小填充、同排按钮一致；**§7.6** 增列表 hover 外框距视口相等、网格内容贴顶、面板分组标题对齐、列表 ⋯ 居中等距、保持 hover 显隐，新增「横向滚动行」「选择模式」「分组与空状态」，参考值表把工具栏圆角改为字面 4px（分段选中块 3px，与编辑器素材面板标题栏统一）、改菜单与角标圆角并补外框 / 勾选框 / 选择工具组 / 横向滚动 / 命令框；**§11** 修正斜杠零写法（Manrope `zero` 与 Geist Mono `ss09` 分开）并补 Do / Don't；**§13.3** 增 11–13 |
 | 2026-09-29 | **密集工作区页面**（来自 Medeo Createspace 工作台列表页走查复盘）：**新增 §7.6**（工具栏分区与从右锚定、hover 操作与 mask 渐隐、弹出菜单几何、置顶灰底面板、整页扫光骨架 + Medeo 参考值表）；**§7.2** 增单一左起点线、靠边但不贴边；**§4.3** 增只留一层状态底色、展开不算状态、状态不改尺寸、反色底档位可见；**§4.4** 增同心嵌套；**§4.5** 增 1–3px 光学微调与按可视边缘量；**§4.6** 增 Medeo 变量命名与 `--Radius-N` 补偿换算；**§2.1** 密度按区域判定（含密集工作台的页面边距例外）；**§2.2** 团队约定独立成节并补组件条款；**§4.1** 浮出菜单底色改为 `Surface Container Lowest`，补控件前景与 resizer 用途；**§6 / §6.1** 增组件先查库、Tooltip、Button kind、IconButton 变体、图标尺寸与缺图标同步流程；**§8** 同页浮层一档外观、单层面板；**§10** 修正主行动按钮颜色与 §3.1 的矛盾；§3、§3.1、§4.5.1、§5.4、§7.1、§7.4、§9、§11、§12、§13、附录 C.5 / C.7 同步 |
 | 2026-09-14 | **密度档**：新增 **§2.1 Density**（Default / Compact），Compact 规则来自 Medeo 桌面端「同步文件夹」托盘面板定稿与 Agent 首版的对比复盘（首版按业务页密度生成：s4 边距、52 高行、`label/large - prominent` 行名、通栏黑钮、蓝色进度、彩色圆点徽标）；**§3.1** 增主按钮四种形态表（紧凑 24 / 通栏 40 / Dialog 双钮 44 / 行内 Outlined 对）与第三方登录钮例外；**§5.4** 增 Compact 面板字阶行（12/11 + 100/60/40% 不透明度层级）；**§7.1** 增 Compact 间距；**新增 §7.5 紧凑面板配方**（参考帧 node `6974:114850` 等 + 完整骨架 + 登录/空态/确认框/深色/英文文案约定）；§11、§13 同步 |
 | 2026-04-06 | **结构**：按 Stitch 式重组（§1 视觉气质、目录、§7–§13、附录 A Page 表等）；**附录 C**：Figma 稿图层/Property、Figma2code 最佳实践、i18n、字阶稿内、corner-shape；已去掉对外部文档表格的依赖             |

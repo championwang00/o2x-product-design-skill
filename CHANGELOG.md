@@ -4,6 +4,7 @@ All notable changes to this skill pack should be recorded in this file.
 
 ## Unreleased
 
+- 2026-09-30 `design.md` / `o2x-design-system` / `o2x-polish-distill`：Medeo 工具栏圆角改为字面 4px（Createspace 工具栏与编辑器素材面板标题栏统一，分段选中块 3px = 4 − 1 同心），§7.6 参考值表同步；§4.6 写字面值的条件从「没有计算为 6px 的 `--Radius-N`」推广为「设计师指定确切渲染 px、`--Radius-N` 补偿（4→5、6→8、8→10）后会偏离时写字面 px 并注释，同心内层也写字面值，其余仍用变量」，§4.5、§13.3 与 o2x-design-system 对应条目同步；o2x-polish-distill 第 6 步改为项目只放指向规范仓库的指针 skill（medeo-fe 的 `one2x-design-system`、`one2x-figma-workflow` 已改），发现独立快照时汇报差异、经用户同意按该项目提交流程改成指针，项目根 `design.md` / `tokens/` 快照在汇报中点名并给建议
 - 2026-09-30 新增 `o2x-polish-distill`：把走查 / UI polish 会话的调整和走查习惯提炼进 `design.md` 与 `o2x-design-system`，附会话原话抽取脚本（含压缩前与中途插入的消息）和各 skill 库入口链接检查脚本；`o2x-product-design` 增对应路由，README 与单一来源规则把全局入口扩展到 `~/.claude/skills`、`~/.agents/skills`
 - 2026-09-30 `design.md` / `o2x-design-system`：提炼 Medeo Createspace 与编辑器素材面板 UI polish 复盘——§4.3 生效中的筛选 / 分组用 Primary 08、多选只靠勾选框表达；§4.4 / §4.6 外框 6px 一组的同心实例、控件严格同心而封面可由设计指定、无对应 `--Radius-N` 时写字面值；§6 菜单水平对齐 / 打开期间固定 / 分组标题、勾选框统一规格、单行输入垂直居中、标签溢出点占位、进度条最小填充、同排按钮一致；§7.6 新增横向滚动行、选择模式、分组与空状态，补列表外框距视口相等、网格内容贴顶、分组标题对齐、列表 ⋯ 居中等距、保持 hover 显隐，参考值表更新菜单与角标圆角并补外框 / 勾选框 / 选择工具组 / 横向滚动 / 命令框；§11 修正斜杠零写法（Manrope `zero` 与 Geist Mono `ss09` 分开）；§13.3 增 11–13；o2x-design-system 新增「走查协作方式」，补描边被裁时改 ring、密集工作区执行要点与完成验收（来源：Medeo Createspace / 编辑器素材面板走查）
 
