@@ -29,7 +29,7 @@ Use this as the default entry for One2X / Medeo design work. It is an orchestrat
 Path resolution:
 
 - If this skill is installed inside a project, `../../../design.md` means that project's root `design.md`.
-- If this skill is loaded globally through a symlink under `~/.cursor/skills` or `~/.codex/skills`, resolve the symlink target first and use the cloned skill pack root that contains `.cursor/skills/o2x-product-design/`.
+- If this skill is loaded globally through a symlink under `~/.claude/skills`, `~/.codex/skills`, `~/.cursor/skills` or `~/.agents/skills`, resolve the symlink target first and use the cloned skill pack root that contains `.cursor/skills/o2x-product-design/`.
 - If the target project also has its own `design.md` / `tokens/`, prefer the target project for implementation details and use the skill pack copy as the One2X baseline.
 
 Motion supplement: when `emil-design-engineering` is installed, load it from the environment skill catalog alongside the bundled `web-animation-design`.
@@ -78,6 +78,21 @@ Rules:
 - Set `cornerSmoothing = 0.6` for non-zero rounded nodes to match One2X's default corner-shape / superellipse rendering. If a component needs standard round corners instead, annotate `corner-shape: round`.
 - After writing Figma components, run the Color and Shape binding checks from `o2x-figma-workflow`.
 
+### Distill A Polish Session Into The Design Skill
+
+Use when the user asks to distill, consolidate or sync the UI adjustments from a design review / UI polish session into the design skill or `design.md` (e.g. "提炼会话中的调整", "把这次的 UI 调整整合到 design skill", "同步到各种库"), or right after a long session of "selected element + tweak" feedback.
+
+Load:
+
+1. `../o2x-polish-distill/SKILL.md`
+2. `../o2x-design-system/SKILL.md`
+
+Rules:
+
+- Frontend visuals and interaction only; skip backend, API, i18n pipeline, tracking and deployment items.
+- Record the final decision, not intermediate attempts; verify values from code or computed styles.
+- Revise existing text instead of appending; keep rule bodies in `design.md` and execution points in `o2x-design-system`.
+
 ### Design Token Or Skill Pack Maintenance
 
 Use when updating `design.md`, `tokens/`, skill docs, or the design skill pack itself.
@@ -105,6 +120,7 @@ These should route here:
 - "design token"
 - "tool call UI"
 - "make this follow One2X"
+- "提炼会话中的调整 / 整合到 design skill"
 
 ## Completion Checks
 

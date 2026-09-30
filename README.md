@@ -16,6 +16,7 @@
 | `.cursor/skills/o2x-design-system/` | 前端页面实现 / Review 入口。 |
 | `.cursor/skills/web-animation-design/` | 动效、过渡、缓动、可访问性补充。 |
 | `.cursor/skills/o2x-figma-workflow/` | 在 Figma 里用 MCP 建稿 / 改稿入口。 |
+| `.cursor/skills/o2x-polish-distill/` | 走查 / UI polish 会话结束后，把调整提炼进 `design.md` 与 `o2x-design-system`，并同步各 skill 库入口。 |
 | `.cursor/skills/figma-use/` | 官方 `use_figma` 必读规则。 |
 | `.cursor/skills/figma-generate-design/` | 官方整页搭界面流程。 |
 
@@ -98,6 +99,7 @@ Git 仓库地址：
 | 用 MCP 在 Figma 里改稿、建稿、绑变量、拼整页 | `o2x-figma-workflow` |
 | 直接写 `use_figma` 脚本 | `figma-use` |
 | 在 Figma 里从设计系统拼整页 / 多区块 | `figma-use` + `figma-generate-design` |
+| 走查结束，把这次的调整沉淀进规范 | `o2x-polish-distill` |
 
 ### 4. 默认规则
 
@@ -160,4 +162,4 @@ Git 仓库地址：
 
 本仓库的 `.cursor/skills/o2x-*`、`design.md`、`tokens/` 是唯一维护来源。Codex 与 Cursor 全局 O2X Skill 入口链接到仓库相同目录；旧名称与旧资源路径仅作兼容链接，不维护副本。后续直接修改本仓库并提交 Git，无需手工同步两套 Skill。
 
-加载全局 Skill 时先解析符号链接，再从真实文件位置计算相对路径。全局安装方式：将 `~/.codex/skills/` 与 `~/.cursor/skills/` 下的 `o2x-product-design`、`o2x-design-system`、`o2x-figma-workflow` 分别链接至本仓库 `.cursor/skills/` 中同名目录。已有独立目录应先移出技能加载目录备份，再建链接。
+加载全局 Skill 时先解析符号链接，再从真实文件位置计算相对路径。全局安装方式：将 `~/.claude/skills/`、`~/.codex/skills/`、`~/.cursor/skills/`、`~/.agents/skills/` 下的 `o2x-product-design`、`o2x-design-system`、`o2x-figma-workflow`、`o2x-polish-distill` 分别链接至本仓库 `.cursor/skills/` 中同名目录；可运行 `.cursor/skills/o2x-polish-distill/scripts/link_global_skills.sh`（加 `--fix` 补建缺失链接）检查。已有独立目录应先移出技能加载目录备份，再建链接。项目仓库里自带的副本（如 medeo-fe `.agents/skills/one2x-design-system`）是独立快照，按该项目的提交流程更新。

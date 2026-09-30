@@ -236,6 +236,8 @@ Material 3 的 Surface 不是一条单一“越上越亮”的梯子，而是两
 - **只留一层状态底色**：组件自带 state layer（如 `IconButton` 内层方角那层）又在外层叠了 hover 底时，只保留一层，圆角跟随按钮外形；两层叠加会比同排文字按钮更深，还会露出直角（Medeo 工具栏保留外层圆角层、关掉内层）。
 - **展开不算状态**：点开菜单 / 弹层后，触发按钮回到 default，不保留 selected / pressed 底色，只有真实 hover 或按下才叠蒙层；展开用 `aria-expanded` 表达，`:focus-visible` 照常显示。例外：模式开关（如 Select 模式）与分段控件的当前项保留选中样式。
 - **状态不改尺寸**：状态切换只改颜色与蒙层。只在选中态出现的边框，要在默认态预留同宽透明边框，或改用 `outline` / inset `box-shadow`，否则相邻元素会跳动（Medeo 顶栏 Tab 曾因 0.5px 选中边框在切换时跳动）。
+- **生效中 ≠ 展开**：筛选条件、按类型分组这类「条件正在生效」的持续状态，触发按钮用 `State Layers/Primary` Opacity-08 底 + `Schemes/Primary` 图标（Medeo `var(--State-Layers-Primary-Opacity-08, …)` + `var(--Schemes-Primary, …)`），和「菜单展开回到 default」、工具栏「选中用 `On Surface`」区分开，用户一眼能看出列表正被过滤。它是低强调的状态指示，不算 §3.1 的紫色主按钮。同一处所有能「生效」的按钮（筛选、分组）用同一套，不只改被点名的那个（Medeo 编辑器素材面板已用；Createspace 工具栏的 Filter / Group 文字按钮仍是中性选中底，待同步）。
+- **多选中的条目只靠勾选框表达**：选择模式下被选中的卡片 / 列表行不加紫色外框、不加底色，只让勾选框进入选中态；外框和底色留给 hover，否则满屏选中时整页都是紫框。勾选框规格见 §6。
 
 ### 4.4 圆角（Shape 集合）
 
@@ -261,7 +263,7 @@ Figma（`**Shape`** · **Baseline**）圆角变量分组名为 `**Radius/*`**；
 | `Radius/Full` | `--shape-radius-full` | 全圆角（胶囊；`tokens.css` 中为 `1000px`） |
 
 
-**同心嵌套**：内层圆角 = 外层圆角 − 两者间距（padding / inset），间距大于外层圆角时内层归零，多层逐层计算。外层以用户看到的轮廓为准，hover 时贴边的描边也算（Medeo：卡片 8px、角标 inset 2px → 角标 6px）。圆角要落在可见像素上：方框里的非方形图片不要撑满再 `object-fit: contain`，否则圆角只落在透明盒子上。Medeo 代码里 `--Radius-N` 的计算值不等于名中数字，见 §4.6；执行细则见 `**o2x-design-system**`「圆角同心关系」。
+**同心嵌套**：内层圆角 = 外层圆角 − 两者间距（padding / inset），间距大于外层圆角时内层归零，多层逐层计算。外层以用户看到的轮廓为准，hover 时贴边的描边也算（Medeo Createspace：网格卡片与列表行的 hover 外框 6px → 卡片角标、列表缩略图、列表 ⋯ inset 2px 为 4px，网格勾选框 inset 3px 为 3px，列表勾选框 inset 4px 为 2px；弹出菜单面板 6px → 菜单项 4px；编辑器时间轴 clip 6px，内部元素按同心算）。**控件严格同心，内容主体可由设计指定**：角标、勾选框、缩略图、菜单项这类控件按公式算；封面 / 图片属于内容主体，设计可以指定比同心值更大的圆角（Createspace 卡片 6、内边距 4，同心算出 2，设计定封面 4px），照设计值做并在代码注释里写明是有意不同心。改外框圆角时，把所有贴着它的内层一起复算。圆角要落在可见像素上：方框里的非方形图片不要撑满再 `object-fit: contain`，否则圆角只落在透明盒子上。Medeo 代码里 `--Radius-N` 的计算值不等于名中数字，见 §4.6；执行细则见 `**o2x-design-system**`「圆角同心关系」。
 
 **历史**：此前稿内曾用 `**Corner/*`** 前缀（与上表同一套 px / Full）；已统一为 `**Radius/*`**。旧高度档名对照仍见 `**tokens.css**` 里 `**--shape-corner-***` 别名。另见旧稿中的 `dimensions/radius/rounded-sm` 等，以节点绑定为准。
 
@@ -312,7 +314,7 @@ Figma（`**Shape`** · **Baseline**）圆角变量分组名为 `**Radius/*`**；
 - **圆角**：Figma `**Shape`** · `**Radius/*`**；网页 `**--shape-radius-***`。`tokens.css` 中 `**--shape-corner-***` 仅为与旧高度档/旧 `**Corner/***` 名对照的别名，新稿以 `**Radius/{px}**` 与 `**--shape-radius-{px}**` 为准（§4.4）。
 - **字阶 / 字族**：`**--font-family-*`**、`**--type-*`**，或组合类 `**.o2x-type-***`（见 `tokens.css`）。
 - **间距**：Figma `**Shape`** · `**Space/s*`**；网页 `**--space-s***`（§4.5）；**勿**与 `**Radius/{px}`** 的「名=像素」规则混用。
-- **Medeo 代码（medeo-fe）**：变量来自 `apps/medeo-web/src/web/components/theme/variables.readonly.css`（Web），命名为 `--Surface-*`、`--Schemes-*`、`--State-Layers-*`、`--Radius-N`，与本仓库 `tokens.css` 的 `--color-*` / `--shape-radius-*` 对应同一批 Figma 变量（如 `Surface/Outline` → `--Surface-Outline`），但不同名。在支持 `corner-shape` 的浏览器里，`--Radius-N` 按 superellipse 补偿放大约 1.27 倍（`--Radius-4` → 5px、`--Radius-6` → 8px、`--Radius-8` → 10px；附录 C.7），**名中数字 ≠ 计算值**。圆角**尽可能用变量**：值落在 `Radius/*` 档上的一律写 `var(--Radius-N, Npx)`（胶囊 `var(--Radius-Full, 1000px)`），同心的内层写 `calc(var(--Radius-8, 8px) - 2px)`，与外层引用同一个变量；只有外层确实不在档位上时，内外层才都用字面 px。间距变量 `--Space-S-0`…`--Space-S-10`（0、4、8、12、16、20、24、32、40、48、64px）是固定值，不放大。核对时读浏览器计算值。
+- **Medeo 代码（medeo-fe）**：变量来自 `apps/medeo-web/src/web/components/theme/variables.readonly.css`（Web），命名为 `--Surface-*`、`--Schemes-*`、`--State-Layers-*`、`--Radius-N`，与本仓库 `tokens.css` 的 `--color-*` / `--shape-radius-*` 对应同一批 Figma 变量（如 `Surface/Outline` → `--Surface-Outline`），但不同名。在支持 `corner-shape` 的浏览器里，`--Radius-N` 按 superellipse 补偿放大约 1.27 倍（`--Radius-4` → 5px、`--Radius-6` → 8px、`--Radius-8` → 10px；附录 C.7），**名中数字 ≠ 计算值**。圆角**尽可能用变量**：值落在 `Radius/*` 档上的一律写 `var(--Radius-N, Npx)`（胶囊 `var(--Radius-Full, 1000px)`），同心的内层写 `calc(var(--Radius-8, 8px) - 2px)`，与外层引用同一个变量；只有外层确实不在档位上时，内外层才都用字面 px：没有哪个 `--Radius-N` 的计算值是 6px（4→5、6→8），设计要求 6px 的外框（Medeo 弹出菜单面板、网格卡片与列表行的 hover 外框）写字面 `6px` 并注释原因，其同心内层（4 / 3 / 2px）也写字面值。间距变量 `--Space-S-0`…`--Space-S-10`（0、4、8、12、16、20、24、32、40、48、64px）是固定值，不放大。核对时读浏览器计算值。
 
 全文变量表见 `**tokens/tokens.css`**、`**tokens/README.md**`。
 
@@ -413,14 +415,20 @@ Figma（`**Shape`** · **Baseline**）圆角变量分组名为 `**Radius/*`**；
 - **操作**：`Button`、`IconButton`、`IconButtonToggleable`、`InlineButton`、`ButtonBar`、`ButtonInCard`、`Clip button`、`generateButton` 等。
 - **选择**：`Radio buttons`、`FilterChip`。
 - **菜单**：`Menu`、`inlineButtonDropDownMenu`、`MoreDropDownMenu` 及各类业务 `*DropDownMenu`（密度多为 **0 Density**）。弹出菜单属 Compact 档（§2.1）：同页所有下拉 / 更多 / 右键菜单**共用一套紧凑规格和一组面板 token**，只保留一层可见面板（§8）；菜单与触发按钮的间距按按钮**可视边缘**量、同页一致（Createspace 为下方 4px）；切换型菜单项用成对图标（§6.1）。工作台页数值见 §7.6。
+  - **水平对齐**：菜单首列以图标开头时，首图标与触发按钮的图标中心同轴；首列只有文字（图标只在文字后面，如选中对勾）时，首段文字左缘对齐触发按钮图标的左缘。空间不够才被推回视口，且距视口左右至少 4px。
+  - **打开期间位置固定**：菜单里的控件（如缩放滑杆）改变了面板宽度、带动触发按钮移动时，菜单不跟着走；关闭后下次打开再重新对齐。
+  - **菜单内分组标题**：12px、与菜单项同字重、`On Surface Variant` @40%。视图选项这类控件直接放进菜单、排成一行，不在面板里另展开一行占位。
 - **列表**：`List item/List Item: 0 Density`。
-- **表单**：`Field`、`TextFieldsIcon`、`buildingBlocks/promptDialog`。
+- **表单**：`Field`、`TextFieldsIcon`、`buildingBlocks/promptDialog`。单行输入的文字垂直居中靠 `line-height` 等于输入区内容高度，不靠 padding 凑（Medeo 命令框紧凑态：14px `Body-Medium` 字号、28px 行高）；字号换档时行高仍跟输入区高度走。
+- **勾选框（Checkbox）**：同页所有勾选框（网格卡片、列表行、工具栏全选）一套样式。未选：`State Layers/Background` Opacity-90 填充 + 0.5px `State Layers/On Surface` Opacity-16 描边，描边用 `outline` + `outline-offset: -0.5px`，不用 `border`（不改变尺寸，也不会被内部裁切吃掉）；选中 / 部分选中：`Schemes/Primary` 填充 + `On Primary` 对勾 / 横杠。列表行与工具栏 16px（对勾 12px），网格卡片 18px（对勾 14px）；圆角按所在外框同心算（§4.4）。网格放卡片左上角、距 hover 外框 2px；列表行里垂直居中，左侧与上下的可视间距一致（选择模式下行左内边距相应加大）。
+- **标签溢出**：表示「还有更多」的省略点（`··`）按一个字符占位，和文字同一行、同一对齐方式参与排版，不额外把文字往一侧挤（否则整组看起来没居中）。
+- **进度 / 容量条**：值大于 0 时至少显示 5% 的填充，避免看起来是空的。
 - **结构与导航**：`BuildingBlocks/TopActions`、`BuidldingBlocks/ScrollButton` 等。
 - **提示**：`Tooltip`（`@one2x/o2x-design` Overlays/Floatings）。**纯图标按钮必配**；带可见文字的按钮不加，按钮自己的菜单展开时不显示。沿用组件默认行为（上方出现、偏移 4px、冷 / 暖延迟 500 / 100ms），不自写提示层。列表 / 卡片里批量出现的行内按钮不逐个挂实例（Medeo 曾因此卡死页面），改用共享的单个提示层（Medeo 卡片 ⋯ 目前未配提示）。
 
 **组件描述要点（节选）**：
 
-- **Button**：用于 Dialog、Modal、Form、Card、Toolbar 等处的可点击操作；详见 M3 Buttons。**主行动按钮遵守双主色**（§3.1）：常规主按钮用 **Filled + `Surface/Inverse Surface` + `Inverse On Surface`**；只有最高强调的那一个才用 **Filled + `Schemes/Primary` + `On Primary`**，每屏 0–1 个。Tonal / Container 按钮遵守 §4.2 的 Material 配对规则。
+- **Button**：用于 Dialog、Modal、Form、Card、Toolbar 等处的可点击操作；详见 M3 Buttons。**主行动按钮遵守双主色**（§3.1）：常规主按钮用 **Filled + `Surface/Inverse Surface` + `Inverse On Surface`**；只有最高强调的那一个才用 **Filled + `Schemes/Primary` + `On Primary`**，每屏 0–1 个。Tonal / Container 按钮遵守 §4.2 的 Material 配对规则。同一排并列的按钮高度、圆角一致，不叠 inner shadow（Medeo 编辑器顶栏 Share / Export：24 高、4px 圆角）。
 - **IconButton**：紧凑操作；可成组或单独使用。自带 state layer，外层另有 hover 底时只留一层；点开菜单后回到 default 态（§4.3）。`size="small"` 会把图标压到 14px；组件默认前景是 `On Surface`，不继承父级颜色；和同排按钮不一致时在所在容器范围内覆盖，并读计算值核对。
 - **Outlined IconButton**：中等强调，常与 Filled 搭配表示替代操作。
 - **Button / IconButton `kind` 按底色明暗选**：实底按钮（含黑色 `Inverse Surface` 主按钮）用 `kind="filled"`（§3.1）；浮在封面或图片上的轻按钮用 `kind="text"` 的浅色方案，再垫一层浅底（Medeo 卡片 ⋯：`Surface/Background` 约 90%、图标 `On Surface Variant`、hover 8% / 按下 12%），不自创深色毛玻璃底或渐变 scrim。
@@ -518,6 +526,9 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 - **置顶列表与主列表共用列几何**：行范围、行内边距、缩略图位置和各列 `x` 一致，置顶区只是多一层灰底。
 - **顶栏首个 Tab 的 logo 左缘也在这条线上**：调 Tab 左右内边距实现，保持左右平衡，不只加大一侧；内容起点变了要复量 logo。
 - **整体平移**：文字、封面、缩略图、列表图标一起动，两种视图都复核；灰底距视口这类已约定的留白不能因平移丢掉。
+- **列表 hover 外框距视口左右相等**：列表行的紫色 hover 外框到可视区域左、右边缘的距离一致；右边明显更宽时加大列表可用宽度，不缩左边。
+- **网格卡片内容贴顶**：网格行比卡片内容高时，多出的空间留在文字下方；封面到卡片外框的上、左、右间距一致，不把卡片内容垂直居中。
+- **面板内分组标题对齐面板标题**：如编辑器素材面板的「视觉 / BGM」分组标题，文字左缘对齐面板标题「素材」的文字左缘，网格和列表两种视图都要复量；展开箭头与分组文字同色（文字带不透明度时箭头也带）。
 
 #### 工具栏
 
@@ -530,12 +541,13 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 
 - **不常驻留白**：Tab、列表行、表头都不为只在 hover 时出现的 ⋯ 加宽或预留占位列，按钮用绝对定位叠在内容右端。末列本身有富余（如日期列）时可以直接叠放，但要确认更长的语言不会伸进按钮下方（附录 C.5.4）。
 - **渐隐用 `mask-image` 作用在内容本身**，不盖带底色的遮罩；只在按钮可见（hover、键盘聚焦、菜单打开）时加。以按钮可视左缘为基准：文字在它外侧 3–6px 处已完全透明，渐隐带约 20–30px。
-- **卡片角标 ⋯**：外观按 `kind="text"` 浅色方案加浅底（§6），不自创深色毛玻璃底或渐变 scrim；到卡片外轮廓（含 hover 描边）上、右两边等距，圆角与外轮廓同心（§7.4）。列表行里的 ⋯ 不套用这套规格。
+- **卡片角标 ⋯**：外观按 `kind="text"` 浅色方案加浅底（§6），不自创深色毛玻璃底或渐变 scrim；到卡片外轮廓（含 hover 描边）上、右两边等距，圆角与外轮廓同心（§7.4）。列表行里的 ⋯ 不套用这套外观：它在行内垂直居中，到行 hover 外框的上、下、右可视间距相等（Createspace 20px 按钮在 24 高行内，三边 2px），不要贴右上角定位。
+- **保持 hover 才出现**：控制栏、置顶区视图切换、横向翻页箭头这类 hover 操作不要改成常驻。合并别人的改动或调样式后，确认它们默认仍隐藏，并让浏览器测试覆盖「默认隐藏、hover / 聚焦出现」。
 - **菜单打开期间保持可见**：hover 按钮或整排 hover 工具栏，只要它的任一菜单开着就保持显示，鼠标移进菜单不算离开。新增菜单都要接入这个条件。
 
 #### 弹出菜单与触发按钮
 
-- **全页一套**：所有下拉 / 更多 / 右键 / Tab 菜单共用同一套紧凑规格与一组面板 token（数值见下表，面板规则见 §8）；菜单项圆角 = 面板圆角 − 容器 padding（§4.4），写成 `calc(var(--Radius-8, 8px) - 2px)` 引用面板的同一个变量，全页一致。
+- **全页一套**：所有下拉 / 更多 / 右键 / Tab 菜单共用同一套紧凑规格与一组面板 token（数值见下表，面板规则见 §8）；菜单项圆角 = 面板圆角 − 容器 padding（§4.4），全页一致（Createspace 面板 6px、菜单项 4px，都是字面值，原因见 §4.6）。
 - **位置**：出现在触发按钮下方，距按钮**可视边缘** 4px；热区 24、可视 20 时，距热区 2px。
 - **图标轴线对齐**：由图标按钮（如 ⋯）打开、首列带图标的菜单，首列图标中心与按钮图标中心同轴。`bottom-start` 时 `crossAxis = 按钮宽 / 2 − 首图标中心距菜单左缘`；Medeo 首图标中心距菜单左缘 15.5px（边框 0.5 + 容器 padding 2 + 菜单项左 padding 6 + 图标半宽 7），20px 按钮得 −5.5。菜单被推回视口时可以放弃对齐。
 - **触发按钮**：点开后回到 default，展开只用 `aria-expanded` 表达（§4.3）；纯图标按钮配库 `Tooltip`，菜单展开时不显示（§6）。
@@ -546,6 +558,28 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 - **完整包住内部控件**：灰底里的控件与外部同类控件右缘对齐，同时留可见内边距，不截断、不贴边；加宽后在画面上确认没有被祖先元素的 `overflow` 裁掉。同页多块灰底左缘对齐，距视口同一个小间距。
 - **标题在文档流里独占一行**（24 高，同 §2.1 分组标题行），内容整体下移；没有置顶内容时不占这一行。不需要收起的子分区标题做成静态文本：不带 chevron、不可点击、默认光标。
 - **窄面板**：设最小宽度，最窄也能完整放下头部必需控件（如视图切换）；放不下「标题 + 控件」并排时默认只显示标题，hover 或键盘聚焦面板（`:focus-within`）时标题原位淡出、控件淡入（Medeo 参考 100ms）；宽度够时并排，不做互换。
+
+#### 横向滚动行
+
+- **两端渐隐**：左右各一条约 64px 的渐隐遮罩，只在该方向还能滚动时淡入，滚到头就消失。
+- **裁切点贴边**：内容的消失点左侧贴近相邻置顶面板的右缘（留约 4px），右侧贴视口右缘，不停在面板内边距处。做法是把滚动容器向外扩出面板内边距，再用 padding 把首张卡片推回起点线。
+- **翻页箭头**：hover 或区域内聚焦才出现，贴近左右边缘。点击按约 80% 可视宽度（最少 120px）翻页，用约 240ms ease-out 的横向滚动动画，看得出在滚动但要快；滚轮、触摸打断动画；`prefers-reduced-motion` 下直接到位（动效细则见 web-animation-design）。
+
+#### 选择模式
+
+- **原位展开**：点「选择」后，Select 按钮在工具栏原位展开成工具组：全选 → 批量操作（删除；回收站里是恢复与永久删除）→ 分隔线 → 取消，不另起浮在内容上的底部操作条。展开时宽度从 0 撑开（`grid-template-columns: 0fr → 1fr`，约 200ms ease-out），把左侧按钮往前推，符合工具栏从右锚定。
+- **功能区块**：工具组整体一块灰底（`Surface/Background`，内距 2px，圆角 6px，内部按钮 4px 同心），按钮沿用工具栏 24 高 ghost 样式。选择模式期间工具栏常显，不受 hover 显隐影响。
+- **同一时间只激活一个区域**：同页多个分区（创作 / 素材）只有一个处于选择模式，进入一个就退出另一个并清空它的选中项。
+- **不冲突就不收起别的浮层**：工具组在工具栏里，底部命令框等浮层照常显示。
+- **全选按钮**：勾选框三态（空 / 横杠部分选中 / 对勾全选）。空或部分选中时点击 = 全选，已全选时点击 = 清空（清空另有「取消」、Esc、点空白，所以部分选中时不拿这个按钮清空，免得一点就丢掉已挑的项）。文案固定「全选（总数）」，有选中时后接「· 已选择 N 项」（灰，约 60%），不在两种文案之间切换；搜索中改为「全选搜索结果（N）」。计数用 Geist Mono 等宽、`ss09` 无斜杠 0（执行要点见 `o2x-design-system` Typography）。
+- **全选是一种状态**：记「全选 + 排除项」而不是一份固定 id 列表，之后滚动加载的新条目自动选中，取消勾选的记入排除；点空白清空时一并退出全选状态。要把未加载的条目也一起删，需要后端按条件批量操作；没有时只作用于已加载条目，并在文案里写明。
+- **Shift 连选**：点一项作锚点，Shift 点另一项把中间整段加入选中；Shift 点击时阻止拉出文字选区。
+- **批量删除的确认框写明数量**（「确定要删除选中的 N 个素材吗？」），只选一个时沿用单项文案。
+- 选中条目的表达与勾选框规格见 §4.3、§6。
+
+#### 分组与空状态
+
+- **按类型分组时，空分组整组不显示**：连分组标题一起隐藏，不放「暂无背景音乐」这类占位；所有分组都为空时显示整个面板的空状态。
 
 #### 加载骨架
 
@@ -560,8 +594,14 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 | 顶栏首个 Tab 的 logo 左缘 | 应对齐内容起点；内容起点在 8px 时已对齐，移到 12px 后**未复量** |
 | 置顶灰底 | 距视口左右 4px；列表视图可见内边距左 / 下 8px；灰底内视图切换距灰底右缘 2px，右缘与工具栏视图切换对齐 |
 | 工具栏 | 按钮 24×24、图标 18px；`gap` 2px；圆角 `var(--Radius-4, 4px)`（设计师定：尽可能用变量；支持 `corner-shape` 时计算为 5px），分段选中块 `calc(var(--Radius-4, 4px) - 1px)`；搜索槽收起 24px、展开 200px |
-| 弹出菜单 | 容器 padding 2px、min-width 96px（随内容撑开）；项高 24、padding `0 8px 0 6px`、`label/medium`、图标 14、图文间距 4；面板 0.5px `Outline Variant` + `Surface Container Lowest` + `0 4px 16px` 阴影（颜色用 `State Layers/Shadow` Opacity 12 档；选哪一档几何待定，见 §8） + `--Radius-8`（计算值 10px）；距触发按钮可视边缘 4px |
-| 卡片角标 ⋯ | 可视 20×20、热区 24×24，图标 16px，距卡片外轮廓 2px，圆角 `calc(卡片外轮廓圆角变量 − 2px)`（卡片 8 时为 8 − 2） |
+| 弹出菜单 | 容器 padding 2px、min-width 96px（随内容撑开）；项高 24、padding `0 8px 0 6px`、`label/medium`、图标 14、图文间距 4；面板 0.5px `Outline Variant` + `Surface Container Lowest` + `0 4px 16px` 阴影（颜色用 `State Layers/Shadow` Opacity 12 档；选哪一档几何待定，见 §8） + 圆角 6px（字面值，§4.6），菜单项 4px（6 − 2 同心）；距触发按钮可视边缘 4px、距视口左右至少 4px |
+| 卡片角标 ⋯ | 可视 20×20、热区 24×24，图标 16px，距卡片外轮廓 2px，圆角 4px（卡片外框 6 − 2） |
+| 网格卡片 / 列表行 hover 外框 | 圆角 6px（字面值，§4.6），1px `Schemes/Primary` outline、`outline-offset: -1px`；网格封面 4px（设计指定，非同心），列表缩略图 4px |
+| 列表行 ⋯ | 20×20，在 24 高行内垂直居中，距外框上 / 下 / 右各 2px，圆角 4px |
+| 勾选框 | 未选 `Background` 90% + 0.5px `On Surface` 16% outline；选中 `Primary` + 白勾。列表 / 全选 16px、圆角 2px（行 6 − 内缩 4）；网格 18px、圆角 3px，距卡片边 3px（外框内 2px） |
+| 选择工具组 | 灰底 `Surface/Background`、内距 2px、圆角 6px；展开 200ms；计数 Geist Mono + `ss09` |
+| 横向滚动行 | 渐隐 64px；翻页 80% 可视宽（最少 120px），240ms ease-out |
+| 命令框（Createspace 收起态） | 首页原尺寸 640×66 → Createspace 约 2/3（427×44），发送钮 42 → 28，文字 14px `Body-Medium`、行高 28px；两个方向切换都有过渡；占位文案固定「Create anything...」 |
 | 从属间距 | 设计师指定 **1px**：分区标题栏 → 置顶灰底、Pinned 标题行 → 内容、列表表头（Name）→ 置顶灰底。Createspace 现状：前两处误做成 4px（待改回 1px），表头 → 灰底已是 1px |
 | 作品封面图 | 圆角 4px，落在图片本体上 |
 | 骨架扫光 | 1.6s 一轮，`linear` |
@@ -614,13 +654,16 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 - 在 Figma 中绑定 **Color / Typescale / Shape** 变量；组件用 **库实例**。
 - 按 **§5.3 / §5.4** 选择字阶；同一语义角色在同一页面内保持一致。
 - 图标统一调用 `**@one2x/o2x-icons**`（`<XxxIcon />` 或 `o2x-icons-<名>`，颜色用 `currentColor`，§6.1）。
-- 需要零宽数字时启用 `**font-feature-settings: 'zero' 1`**，与稿一致。
+- Manrope 字阶按稿启用斜杠零（`**font-feature-settings: 'zero' 1`**）；Geist Mono 数字要无斜杠 0 时用 `'ss09' 1`，且不要同时开 `zero` / `slashed-zero`（执行要点见 `**o2x-design-system**` Typography）。
 - 查阅 `**tokens/README.md`** 与 `**o2x-design-system**` skill 获取实现细则。
 - **开工先判密度档**（§2.1）：托盘 / 菜单栏 / 浮出面板 / 下拉一律 Compact——12 / 11 两档字号、8px 外边距、24 高分组标题行、24 高紧凑黑钮、不透明度做层级；先读 §7.5 参考帧再搭。
 - Compact 面板里用**库组件**：`Progress`（单色）、`HorizontalDivider`、`Spinner`、`IconButton` 20、`Button`（filled 24 / 40 / 44 三档）、`Field`、实心状态图标（`CheckCircleIcon` 等）。
 - 对齐与间距按**可视边缘**量（文字、封面、可视按钮底），不量卡片外框、热区或盒子；改完一处，在所有分区、所有视图下复量（§4.5、§7.2）。
 - **点开菜单后，触发按钮回到 default 态**（强制，§4.3）；模式开关与分段控件的当前项例外。
-- 对某类元素定下的样式（菜单规格、面板外观、按钮默认态、骨架、图标颜色）**同步到同页所有同类元素**，不等逐个指出。
+- 对某类元素定下的样式（菜单规格、面板外观、按钮默认态、骨架、图标颜色、勾选框、圆角）**同步到同页所有同类元素**，不等逐个指出。
+- 勾选框全页一套：未选 `Background` 90% + 0.5px `On Surface` 16% 的 `outline`，选中 `Primary`；多选中的条目只靠勾选框表达（§4.3、§6）。
+- 筛选 / 分组生效时用 `Primary` 08% 底 + `Primary` 图标，和菜单展开的 default 态区分（§4.3）。
+- 多选用 Select 按钮原位展开的工具组，同页只激活一个分区；全选按钮部分选中时补全、全选时清空（§7.6）。
 
 ### Don't
 
@@ -634,6 +677,8 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 - **不要**在超大 Figma 文件上对全文件 `**findAll`** 触发 MCP 过载（见文首 MCP 说明）。
 - **不要**把业务页密度搬进工具面板：Compact 容器里禁止 `s4` 外边距、52+ 高列表行、`label/large - prominent` 行名、通栏 48 黑钮插在列表中间、蓝色进度条、彩色圆点徽标、圆形头像、红色危险按钮（§2.1 / §3.1 / §7.5）。
 - **不要**用第三种颜色 token 做文本层级——Compact 面板只有 `On Surface` 与 `On Surface Variant` 两种，层级靠 100 / 60 / 40% 不透明度。
+- **不要**用浮在内容上的底部操作条做多选工具，也不要给选中条目加紫色外框或底色（§4.3、§7.6）。
+- **不要**把 hover 才出现的操作改成常驻，也不要在分组视图里展示空分组的「暂无…」占位（§7.6）。
 - **不要**为只在 hover 时出现的按钮常驻留白或预留占位列（叠放在内容上，用 `mask-image` 渐隐让位，§7.6）；**不要**为防跳动按最长文案写死文字按钮宽度（hug 优先，附录 C.5.1）。
 
 ---
@@ -691,7 +736,10 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 7. 左起点线：所有分区、网格 / 列表两种视图下，标题、表头、封面、缩略图是否落在同一 `x`？间距是否按可视边缘量（§4.5、§7.2）？改完一处是否复量了整页（起点线、操作区右缘、灰底留白）？
 8. 菜单与触发按钮：点开菜单后触发按钮是否回到 default（§4.3）？菜单与按钮的距离是否按**可视**边缘量、同页一致，是否只有一层面板（§6、§8）？hover 才出现的操作在菜单打开期间是否保持显示？状态切换是否改变了盒子尺寸？
 9. 库组件与变体：Tooltip、按钮、图标是否用了库里现成的组件与变体？变体默认的尺寸 / 颜色（如 `IconButton size="small"` 的 14px 图标、组件默认的 `On Surface` 前景）是否读计算值核对过（§6）？
-10. 同类样式是否已同步到同页所有同类元素（菜单、按钮默认态、骨架、图标颜色）？
+10. 同类样式是否已同步到同页所有同类元素（菜单、按钮默认态、骨架、图标颜色、勾选框、圆角）？
+11. 选择模式：Select 是否原位展开、同页只有一个分区在选择模式？全选三态与「全选（N）· 已选择 M 项」文案、Shift 连选、全选后新加载的条目也选中？选中条目是否只靠勾选框表达（§4.3、§7.6）？
+12. 勾选框：网格 / 列表 / 全选是否同一套样式？圆角是否与所在外框同心，四周可视间距是否一致（§4.4、§6）？
+13. 横向滚动行：两端渐隐是否随可滚方向出现？裁切点是否贴相邻面板与视口？翻页箭头是否 hover 才出现、翻页有快速过渡（§7.6）？
 
 ---
 
@@ -1017,6 +1065,7 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 
 | 日期         | 说明                                                                                                                                               |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 2026-09-30 | **Medeo Createspace / 编辑器素材面板 UI polish 复盘**：**§4.3** 增「生效中 ≠ 展开」（筛选 / 分组生效用 Primary 08）、多选只靠勾选框表达；**§4.4** 更新 Medeo 同心实例（外框 6px 一组），增「控件严格同心，内容主体可由设计指定」；**§4.6** 增 6px 无对应 `--Radius-N` 时写字面值；**§6** 菜单水平对齐 / 打开期间固定 / 分组标题、勾选框统一规格、单行输入垂直居中、标签溢出点占位、进度条最小填充、同排按钮一致；**§7.6** 增列表 hover 外框距视口相等、网格内容贴顶、面板分组标题对齐、列表 ⋯ 居中等距、保持 hover 显隐，新增「横向滚动行」「选择模式」「分组与空状态」，参考值表改菜单与角标圆角并补外框 / 勾选框 / 选择工具组 / 横向滚动 / 命令框；**§11** 修正斜杠零写法（Manrope `zero` 与 Geist Mono `ss09` 分开）并补 Do / Don't；**§13.3** 增 11–13 |
 | 2026-09-29 | **密集工作区页面**（来自 Medeo Createspace 工作台列表页走查复盘）：**新增 §7.6**（工具栏分区与从右锚定、hover 操作与 mask 渐隐、弹出菜单几何、置顶灰底面板、整页扫光骨架 + Medeo 参考值表）；**§7.2** 增单一左起点线、靠边但不贴边；**§4.3** 增只留一层状态底色、展开不算状态、状态不改尺寸、反色底档位可见；**§4.4** 增同心嵌套；**§4.5** 增 1–3px 光学微调与按可视边缘量；**§4.6** 增 Medeo 变量命名与 `--Radius-N` 补偿换算；**§2.1** 密度按区域判定（含密集工作台的页面边距例外）；**§2.2** 团队约定独立成节并补组件条款；**§4.1** 浮出菜单底色改为 `Surface Container Lowest`，补控件前景与 resizer 用途；**§6 / §6.1** 增组件先查库、Tooltip、Button kind、IconButton 变体、图标尺寸与缺图标同步流程；**§8** 同页浮层一档外观、单层面板；**§10** 修正主行动按钮颜色与 §3.1 的矛盾；§3、§3.1、§4.5.1、§5.4、§7.1、§7.4、§9、§11、§12、§13、附录 C.5 / C.7 同步 |
 | 2026-09-14 | **密度档**：新增 **§2.1 Density**（Default / Compact），Compact 规则来自 Medeo 桌面端「同步文件夹」托盘面板定稿与 Agent 首版的对比复盘（首版按业务页密度生成：s4 边距、52 高行、`label/large - prominent` 行名、通栏黑钮、蓝色进度、彩色圆点徽标）；**§3.1** 增主按钮四种形态表（紧凑 24 / 通栏 40 / Dialog 双钮 44 / 行内 Outlined 对）与第三方登录钮例外；**§5.4** 增 Compact 面板字阶行（12/11 + 100/60/40% 不透明度层级）；**§7.1** 增 Compact 间距；**新增 §7.5 紧凑面板配方**（参考帧 node `6974:114850` 等 + 完整骨架 + 登录/空态/确认框/深色/英文文案约定）；§11、§13 同步 |
 | 2026-04-06 | **结构**：按 Stitch 式重组（§1 视觉气质、目录、§7–§13、附录 A Page 表等）；**附录 C**：Figma 稿图层/Property、Figma2code 最佳实践、i18n、字阶稿内、corner-shape；已去掉对外部文档表格的依赖             |

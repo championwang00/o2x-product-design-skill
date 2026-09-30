@@ -21,6 +21,7 @@
 | **o2x-design-system** | 写代码、对稿、Review：读根目录 **`design.md`**，对齐 Token / 字体 / 组件；不强制改 Figma。 |
 | **web-animation-design** | 过渡、动效、缓动、时长、`prefers-reduced-motion`；**与 o2x-design-system 配套**，涉及动效时一并加载。 |
 | **o2x-figma-workflow** | 用 MCP **在 Figma 里建稿/改稿**：固定 **`fileKey` = `wHNBqjzSQZM8a4DlyBIDqW`**，并叠加官方 skill + **`design.md`**。 |
+| **o2x-polish-distill** | 走查 / UI polish 会话结束后，把用户的调整和走查习惯提炼进 **`design.md`** 与 **o2x-design-system**，并检查各工具 skill 库的入口链接。只处理前端。 |
 
 ### Token 命名（与 `design.md` §4 一致，避免混用）
 
@@ -45,6 +46,7 @@
 | `.cursor/skills/o2x-design-system/` | One2X 规范入口。 |
 | `.cursor/skills/web-animation-design/` | 动效（与 o2x-design-system 配套）。 |
 | `.cursor/skills/o2x-figma-workflow/` | 在 Figma 里干活时的打包入口。 |
+| `.cursor/skills/o2x-polish-distill/` | 维护规范的人需要：把走查会话提炼进规范。 |
 
 对方需在 Cursor **启用 Figma MCP**，且账号能访问 **📖One2X Design System** 文件。
 
