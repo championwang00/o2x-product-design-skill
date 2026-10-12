@@ -4,6 +4,7 @@ All notable changes to this skill pack should be recorded in this file.
 
 ## Unreleased
 
+- 2026-10-13 `design.md` / `o2x-design-system`：§7.6「状态外框与主 / 副对象」修正——副对象只指**同一区块内**同对象的另一份（置顶副本 ↔ 主列表），**不再跨区联动**（素材不点亮其所属作品，作品也不带动素材）；§13.3 第 14 项与 o2x-design-system 对应条目同步（来源：Medeo Createspace 走查）
 - 2026-10-13 `design.md` / `o2x-design-system`：新增 §7.6「状态外框与主 / 副对象」——Hold 1px、Selected 2px；主 Hold 50% / Selected 100%，副（同对象分身 + 所属作品）为主的一半（25% / 50%）；同对象按勾选来源分主副、父子单向、多状态取最强；Token `--Createspace-State-*`。推翻旧规则：§4.3 / §11 / §13.3 原「选中条目不加紫色外框」改为勾选框 + 2px 外框、不加底色；§7.6 参考值表外框行与 o2x-design-system 选择模式条目同步；§13.3 增 14（来源：Medeo Createspace 外框统一走查）
 - 2026-09-30 `design.md` / `o2x-design-system` / `o2x-polish-distill`：Medeo 工具栏圆角改为字面 4px（Createspace 工具栏与编辑器素材面板标题栏统一，分段选中块 3px = 4 − 1 同心），§7.6 参考值表同步；§4.6 写字面值的条件从「没有计算为 6px 的 `--Radius-N`」推广为「设计师指定确切渲染 px、`--Radius-N` 补偿（4→5、6→8、8→10）后会偏离时写字面 px 并注释，同心内层也写字面值，其余仍用变量」，§4.5、§13.3 与 o2x-design-system 对应条目同步；o2x-polish-distill 第 6 步改为项目只放指向规范仓库的指针 skill（medeo-fe 的 `one2x-design-system`、`one2x-figma-workflow` 已改），发现独立快照时汇报差异、经用户同意按该项目提交流程改成指针，项目根 `design.md` / `tokens/` 快照在汇报中点名并给建议
 - 2026-09-30 新增 `o2x-polish-distill`：把走查 / UI polish 会话的调整和走查习惯提炼进 `design.md` 与 `o2x-design-system`，附会话原话抽取脚本（含压缩前与中途插入的消息）和各 skill 库入口链接检查脚本；`o2x-product-design` 增对应路由，README 与单一来源规则把全局入口扩展到 `~/.claude/skills`、`~/.agents/skills`
