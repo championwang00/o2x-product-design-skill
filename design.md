@@ -424,7 +424,10 @@ Figma（`**Shape`** · **Baseline**）圆角变量分组名为 `**Radius/*`**；
 - **标签溢出**：表示「还有更多」的省略点（`··`）按一个字符占位，和文字同一行、同一对齐方式参与排版，不额外把文字往一侧挤（否则整组看起来没居中）。
 - **进度 / 容量条**：值大于 0 时至少显示 5% 的填充，避免看起来是空的。
 - **结构与导航**：`BuildingBlocks/TopActions`、`BuidldingBlocks/ScrollButton` 等。
-- **提示**：`Tooltip`（`@one2x/o2x-design` Overlays/Floatings）。**纯图标按钮必配**；带可见文字的按钮不加，按钮自己的菜单展开时不显示。沿用组件默认行为（上方出现、偏移 4px、冷 / 暖延迟 500 / 100ms），不自写提示层。列表 / 卡片里批量出现的行内按钮不逐个挂实例（Medeo 曾因此卡死页面），改用共享的单个提示层（Medeo 卡片 ⋯ 目前未配提示）。
+- **提示**：`Tooltip`（`@one2x/o2x-design` Overlays/Floatings）。**纯图标按钮必配**；带可见文字的按钮不加，按钮自己的菜单展开时不显示。沿用组件默认行为（上方出现、偏移 4px、冷态首次悬停 200ms、暖态切换 0ms、无渐入渐出），不自写提示层。列表 / 卡片里批量出现的行内按钮不逐个挂实例（Medeo 曾因此卡死页面），改用共享的单个提示层（Medeo 卡片 ⋯ 目前未配提示）。
+- **截断文本**（全局通用规则）：任何会被截断的文字——单行省略号、多行 `line-clamp`、canvas 绘制时省略或折行截掉的文字——悬停时都要能看到全文；**只在真的被截断时才出提示**，完整显示的不出。适用于所有用户内容（作品名、素材名、文件名、路径、用户名、模型名等），也适用于固定宽度槽位里的本地化文案（换成长语言时同样会被截断）。外观与时序就是库 `Tooltip`（同一套冷 / 暖激活态），默认在上方、偏移 4px。动效：冷态首个提示 125ms 入场（透明度 0→1，`scale(0.97)` 加朝触发元素方向 2px 位移收回，`cubic-bezier(0.23, 1, 0.32, 1)`，缩放原点在触发元素一侧）；暖态切换到下一条直接出现、不播动画；离开即时消失；系统「减少动态效果」时不播。单行全文一行展示（最宽 560px），超过约 60 字符或多行截断时换行（最宽 320px）。
+  - **实现**：页面只挂一个共享提示层，被截断的元素只加标记，不逐个挂 `Tooltip` 实例（批量元素逐个挂实例会卡页面，同上条）。标记放在真正裁切文字的那个元素上（有 `overflow: hidden` 的那层），不放父级或子级；省略号落在子段上（路径分段 chip）时标记整颗 chip 并声明子段。可聚焦的卡片 / 行获得键盘焦点时显示其标题全文。canvas 文字在绘制处判断是否被截，仅被截时覆盖透明热区。可编辑标题正在输入时不弹出。可见文字是缩写（邮箱只显示用户名、ID 缩短显示）时，全文提示每次悬停都出，不看是否截断。Medeo：`OverflowTooltipRegion` + `data-overflow-tooltip`（`@one2x/o2x-design`），新代码可用 `OverflowText`。
+  - **不要**用原生 `title` 当全文提示；**不要**对没被截断的文字也弹提示。只有非内容文字（装饰、动画状态文案、输入框里的值、已有展开 / 全文入口的段落）可以不加，且要写明原因。悬停本身已会弹出浮层展示内容（hover 卡片、详情 / 预览浮层、另一个 Tooltip）的元素，以及这类浮层里面的文字，都不加截断提示，避免两层叠在一起（Medeo 首页「当前热门」悬停即弹详情卡、管理后台的用户 / 套餐 hover 卡片，都不出截断提示）。实现上在共享提示层统一判断：落在 `Tooltip` 触发元素、原生 `title`、或声明了「悬停已有浮层」的容器之内就跳过，不靠逐处记得。
 
 **组件描述要点（节选）**：
 
@@ -693,6 +696,7 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 - 勾选框全页一套：未选 `Background` 90% + 0.5px `On Surface` 16% 的 `outline`，选中 `Primary`；选中条目 = 勾选框 + 2px 外框、不加底色（§4.3、§7.6）。
 - 筛选 / 分组生效时用 `Primary` 08% 底 + `Primary` 图标，和菜单展开的 default 态区分（§4.3）。
 - 多选用 Select 按钮原位展开的工具组，同页只激活一个分区；全选按钮部分选中时补全、全选时清空（§7.6）。
+- 会被截断的文字（省略号、`line-clamp`、canvas 省略）一律在被截断时悬停显示全文，标记加在裁切文字的那个元素上，共用页面唯一的提示层（§6「截断文本」）。
 
 ### Don't
 
@@ -708,6 +712,7 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 - **不要**用第三种颜色 token 做文本层级——Compact 面板只有 `On Surface` 与 `On Surface Variant` 两种，层级靠 100 / 60 / 40% 不透明度。
 - **不要**用浮在内容上的底部操作条做多选工具，也不要给选中条目加底色；外框粗细与透明度只按 §7.6「状态外框与主 / 副对象」，不自拟（§4.3）。
 - **不要**把 hover 才出现的操作改成常驻，也不要在分组视图里展示空分组的「暂无…」占位（§7.6）。
+- **不要**用原生 `title` 当全文提示，也不要给没被截断的文字弹提示或给每个截断元素单独挂 `Tooltip` 实例（§6「截断文本」）。
 - **不要**为只在 hover 时出现的按钮常驻留白或预留占位列（叠放在内容上，用 `mask-image` 渐隐让位，§7.6）；**不要**为防跳动按最长文案写死文字按钮宽度（hug 优先，附录 C.5.1）。
 
 ---
@@ -770,6 +775,7 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 12. 勾选框：网格 / 列表 / 全选是否同一套样式？圆角是否与所在外框同心，四周可视间距是否一致（§4.4、§6）？
 13. 横向滚动行：两端渐隐是否随可滚方向出现？裁切点是否贴相邻面板与视口？翻页箭头是否 hover 才出现、翻页有快速过渡（§7.6）？
 14. 状态外框：hover / 菜单打开是否 1px、选中是否 2px？主 Hold 50% / Selected 100%，副（同区块内同对象的另一份）是否为主的一半（25% / 50%）？是否只在区块内联动（素材不点亮所属作品）、同对象是否按勾选来源分主副、多状态是否只画最强的一条（§7.6）？颜色粗细是否都来自 `--Createspace-State-*` token？
+15. 截断文本：每处省略号 / `line-clamp` / canvas 截断的文字，悬停时是否显示全文、没截断时是否不出？标记是否在裁切文字的那个元素上，有没有残留原生 `title`？换成最长语言再看一遍（§6「截断文本」、附录 C.5）。
 
 ---
 
@@ -1012,20 +1018,22 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 | 组件                | maxLength (en) | overflow           | width            | lines     |
 | ----------------- | -------------- | ------------------ | ---------------- | --------- |
 | Button            | 24             | truncate + tooltip | auto, min 88px   | 1         |
-| Chips             | 20             | truncate           | auto, max 200px  | 1         |
-| Tab               | 16             | truncate           | auto             | 1         |
+| Chips             | 20             | truncate + tooltip | auto, max 200px  | 1         |
+| Tab               | 16             | truncate + tooltip | auto             | 1         |
 | Input label       | 30             | wrap               | follow container | 2         |
 | Input placeholder | 40             | truncate           | follow container | 1         |
 | Input helper text | 60             | wrap               | follow container | 2         |
-| Dialog title      | 40             | truncate           | follow container | 1         |
+| Dialog title      | 40             | truncate + tooltip | follow container | 1         |
 | Dialog body       | unlimited      | wrap               | follow container | unlimited |
 | Dialog CTA        | 24             | 同 Button           | auto, min 88px   | 1         |
 | Toast / Snackbar  | 80             | wrap               | fixed max-width  | 2         |
 | Alert             | unlimited      | wrap               | follow container | unlimited |
-| Navigation label  | 12             | truncate / wrap    | auto             | 2         |
+| Navigation label  | 12             | truncate + tooltip / wrap | auto             | 2         |
 | Tooltip           | 60             | wrap               | auto, max 240px  | unlimited |
-| Tag               | 16             | truncate           | auto, max 120px  | 1         |
-| Menu item         | 30             | truncate           | follow container | 1         |
+| Tag               | 16             | truncate + tooltip | auto, max 120px  | 1         |
+| Menu item         | 30             | truncate + tooltip | follow container | 1         |
+
+`truncate` 一律带悬停全文提示，且只在真被截断时出现（§6「截断文本」）；Input placeholder 例外（输入框获得焦点后提示即消失，不靠悬停读全文）。
 
 
 #### C.5.3 设计稿文案
@@ -1040,7 +1048,7 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 - 文本容器至少一维可自适应？  
 - 短文案组件是否 auto width？  
 - 是否标注 maxLength 与 overflow？  
-- 固定宽布局中文案区是否支持 truncate + tooltip？  
+- 固定宽布局中文案区是否支持 truncate + tooltip（仅在被截断时出现，§6）？  
 - 图标+文字是否可用 Auto Layout 预留 RTL 镜像？  
 - 多行 Alert / Toast 是否高度自适应？  
 - 含文字素材是否标 🌐？
@@ -1095,6 +1103,7 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 
 | 日期         | 说明                                                                                                                                               |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 2026-10-21 | **截断文本悬停全文**（来自 Medeo「所有截断文本 Hover 出 Tooltip」issue 全站走查）：**§6 新增「截断文本」全局规则**（只在真被截断时出、共用唯一提示层、标记在裁切元素上、canvas 热区、编辑中不弹、禁用原生 `title`、非内容文字写明原因方可不加、悬停已有浮层处不叠加、缩写文字每次悬停都出、冷态首个 125ms 入场暖态即时）；**附录 C.5.2** 截断类组件改为 `truncate + tooltip`，C.5.4、§11、§13.3 第 15 项同步；**修正** §6 Tooltip 延迟 500 / 100ms → 冷态 200ms / 暖态 0ms（与组件实现一致） |
 | 2026-10-13 | **状态外框与主 / 副对象**（来自 Medeo Createspace 外框统一走查）：**新增 §7.6「状态外框与主 / 副对象」**——Hold 1px、Selected 2px；主 Hold 50% / Selected 100%，副（同区块内同对象的另一份）为主的一半（25% / 50%），粗细相同；同对象按勾选来源分主副、父子单向、多状态取最强；Token `--Createspace-State-*`。**推翻旧规则**：§4.3 / §11 / §13.3 原「选中条目不加紫色外框」改为勾选框 + 2px 外框、不加底色；§7.6 参考值表外框行同步 |
 | 2026-09-30 | **Medeo Createspace / 编辑器素材面板 UI polish 复盘**：**§4.3** 增「生效中 ≠ 展开」（筛选 / 分组生效用 Primary 08）、多选只靠勾选框表达；**§4.4** 更新 Medeo 同心实例（外框 6px 一组），增「控件严格同心，内容主体可由设计指定」；**§4.6** 增设计指定确切渲染 px、`--Radius-N` 补偿后会偏离时写字面值（工具栏 4px、外框 6px，同心内层同样字面）；**§6** 菜单水平对齐 / 打开期间固定 / 分组标题、勾选框统一规格、单行输入垂直居中、标签溢出点占位、进度条最小填充、同排按钮一致；**§7.6** 增列表 hover 外框距视口相等、网格内容贴顶、面板分组标题对齐、列表 ⋯ 居中等距、保持 hover 显隐，新增「横向滚动行」「选择模式」「分组与空状态」，参考值表把工具栏圆角改为字面 4px（分段选中块 3px，与编辑器素材面板标题栏统一）、改菜单与角标圆角并补外框 / 勾选框 / 选择工具组 / 横向滚动 / 命令框；**§11** 修正斜杠零写法（Manrope `zero` 与 Geist Mono `ss09` 分开）并补 Do / Don't；**§13.3** 增 11–13 |
 | 2026-09-29 | **密集工作区页面**（来自 Medeo Createspace 工作台列表页走查复盘）：**新增 §7.6**（工具栏分区与从右锚定、hover 操作与 mask 渐隐、弹出菜单几何、置顶灰底面板、整页扫光骨架 + Medeo 参考值表）；**§7.2** 增单一左起点线、靠边但不贴边；**§4.3** 增只留一层状态底色、展开不算状态、状态不改尺寸、反色底档位可见；**§4.4** 增同心嵌套；**§4.5** 增 1–3px 光学微调与按可视边缘量；**§4.6** 增 Medeo 变量命名与 `--Radius-N` 补偿换算；**§2.1** 密度按区域判定（含密集工作台的页面边距例外）；**§2.2** 团队约定独立成节并补组件条款；**§4.1** 浮出菜单底色改为 `Surface Container Lowest`，补控件前景与 resizer 用途；**§6 / §6.1** 增组件先查库、Tooltip、Button kind、IconButton 变体、图标尺寸与缺图标同步流程；**§8** 同页浮层一档外观、单层面板；**§10** 修正主行动按钮颜色与 §3.1 的矛盾；§3、§3.1、§4.5.1、§5.4、§7.1、§7.4、§9、§11、§12、§13、附录 C.5 / C.7 同步 |
