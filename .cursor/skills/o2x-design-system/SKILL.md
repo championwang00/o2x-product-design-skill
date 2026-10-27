@@ -67,6 +67,8 @@ description: >-
 
 ### 完成验收
 
+- [ ] 图标分别核对图形可视尺寸、设计容器与实际命中区；未验证实际命中区时明确标注，不由截图或容器尺寸推断（`design.md` §6.1）。
+
 - [ ] 已获取目标节点的 `get_design_context` 与 `get_screenshot`；截断内容已拆分读取。
 - [ ] token 敏感实现已检查 `get_variable_defs`，并完成 Figma 到项目的组件/token 映射。
 - [ ] 已复用项目组件和 One2X 语义 token；新增 primitive、variant 或 token 有明确理由。
@@ -85,7 +87,7 @@ description: >-
    - 若仓库有 **`tokens/tokens.css`**，**颜色**一律 **`var(--color-…)`**；**字号/行高/字间距**一律 **`var(--type-…)`**（及 **`--font-family-*`**）；**间距** **`--space-s*`**、**圆角** **`--shape-radius-*`**（或项目中等效 token 名）。  
    - **禁止**：裸 hex、任意 `font-size: 14px` / `margin: 12px` 等与 token 无关的魔法数，除非 **`design.md` 写明特例**。
    - **颜色一律用随明暗主题切换的 token（强制）**：文字、图标、填充、描边、蒙层、阴影颜色、TS 颜色常量都用深色模式下会重新取值的语义 token（Medeo：`var(--Surface-*, #fallback)`、`var(--State-Layers-*-Opacity-NN, rgba(...))`），不写裸 hex / `rgba()` / `white`；`Inverse Surface` 按钮上的蒙层用 `Inverse On Surface` 档；只有图片 / 视频上的遮罩与白字、视频黑边、品牌渐变可保留字面值，并在同一行注释声明原因（`design.md` §4.6）。
-   - **间距与圆角尽可能用变量**：值落在档位上就用变量（Medeo 代码：`var(--Space-S-n, Npx)`、`var(--Radius-N, Npx)`），负值写 `calc(-1 * var(…))`，同心内层写 `calc(var(--Radius-8, 8px) - 2px)`；只有不在档位上的 1–3px 光学微调，以及设计指定确切渲染 px、`--Radius-N` 补偿后会偏离的圆角（连同其同心内层）写字面值并注释（`design.md` §4.5、§4.6）。  
+   - **间距与圆角尽可能用变量**：值落在档位上就用变量（Medeo 代码：`var(--Space-S-n, Npx)`、`var(--Radius-N, Npx)`），负值写 `calc(-1 * var(…))`，同心内层写 `calc(var(--Radius-8, 8px) - 2px)`；只有不在档位上的 1–3px 光学微调、§7.8 设计明确指定的局部值，以及设计指定确切渲染 px、`--Radius-N` 补偿后会偏离的圆角（连同其同心内层）写字面值并注释（`design.md` §4.5、§4.6）。
    - 与 **`design.md` § Design scale「团队约定」**、**`o2x-figma-workflow`** 中「设计稿全变量」**对表**：设计侧用 Figma 变量 + Text style，代码侧用 **`tokens.css`**。
 2.1 **Material 颜色角色配对（强制，见 `design.md` §4.2）**：`Schemes/*` 必须按 **Role / On Role / Container / On Container** 成对使用。
    - **高强调底**：`Schemes/<Role>` 只作为对应角色的高强调色面；其上文字 / 图标只能用 `Schemes/On <Role>`。

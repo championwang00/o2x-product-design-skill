@@ -9,7 +9,8 @@ set -u
 FIX=0
 [ "${1:-}" = "--fix" ] && FIX=1
 
-SKILLS_SRC="$(cd "$(dirname "$0")/../.." && pwd -P)"   # <repo>/.cursor/skills
+SCRIPT_DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SKILLS_SRC="$(cd "$SCRIPT_DIR/../.." && pwd -P)"   # <repo>/.cursor/skills
 NAMES=(o2x-product-design o2x-design-system o2x-figma-workflow o2x-polish-distill)
 TARGET_DIRS=("$HOME/.claude/skills" "$HOME/.codex/skills" "$HOME/.cursor/skills" "$HOME/.agents/skills")
 

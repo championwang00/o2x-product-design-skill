@@ -56,9 +56,13 @@ Rules:
 - Icons must come from the One2X icon library `@one2x/o2x-icons` (component `<XxxIcon />` or font className `o2x-icons-<Name>`, color via `currentColor`); never hand-roll SVGs, pull in third-party icon sets (Material Symbols / Lucide / Iconfont, etc.), or use emoji as icons. See `design.md` §6.1.
 - Validate the rendered result against the same Figma node at the target viewport before completion.
 
+### Read-only Comparison Or Developer Annotation
+
+For a scoped comparison, inspect the requested source and produce evidence without editing. For annotation, load `figma-use` and follow the protected-source, copy mapping and relationship checks in `o2x-figma-workflow`「只读比较 / 副本标注」. Preserve the approved scope; do not turn annotation into a redesign or a new exploration.
+
 ### Figma MCP Write Or Edit
 
-Use when creating, editing, syncing, inspecting, or fixing Figma nodes, components, variables, styles, Auto Layout, or screenshots through MCP.
+Use when creating, editing, syncing, or fixing Figma nodes, components, variables, styles, or Auto Layout through MCP. Route a read-only comparison through the preceding route.
 
 Load:
 
@@ -72,7 +76,7 @@ Rules:
 - Never call `use_figma` before loading `figma-use`.
 - Reuse published One2X variables, text styles, and components. Do not create duplicate local `One2X · Color` or `Shape` collections in consumer files.
 - Bind all `fills`, `strokes`, and text fills to published One2X `Color` variables. Low-emphasis strokes default to `Surface/On Surface Variant` at `0.5px`; use `Schemes/*` for primary, error, and other semantic roles; use palette variables only when no semantic variable exists.
-- Bind `padding*` and `itemSpacing` to `Shape/Space/s*`.
+- Bind `padding*` and `itemSpacing` to published `Shape/Space/s*` when values match. Record confirmed non-scale local exceptions by node, property, value and source; never bind a radius variable to spacing or silently change 6px to 8px. Report unknown unmapped values separately (`design.md` §4.5 / §7.8).
 - Bind `topLeftRadius`, `topRightRadius`, `bottomLeftRadius`, and `bottomRightRadius` to `Shape/Radius/*`.
 - Any rounded element must keep a concentric relationship with adjacent inner/outer rounded elements: `inner radius = outer radius - gap/padding`.
 - Set `cornerSmoothing = 0.6` for non-zero rounded nodes to match One2X's default corner-shape / superellipse rendering. If a component needs standard round corners instead, annotate `corner-shape: round`.

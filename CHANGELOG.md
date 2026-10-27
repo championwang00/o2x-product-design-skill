@@ -4,6 +4,8 @@ All notable changes to this skill pack should be recorded in this file.
 
 ## Unreleased
 
+- 收紧紧凑密度适用范围，补聊天侧栏局部参考、只读比较与副本标注关系核验，并修正全局 skill 链接检查的软链接路径解析。
+
 - 2026-10-21 `design.md` / `o2x-design-system`：新增 §6「截断文本」全局规则——所有会被截断的文字（省略号、`line-clamp`、canvas 省略）在真被截断时悬停显示全文，没截断不出；共用页面唯一提示层、标记放在裁切元素上、canvas 用热区、可编辑标题输入时不弹、禁用原生 `title`，非内容文字写明原因才可不加；悬停已有浮层（hover 卡片、详情浮层、另一个 Tooltip、原生 title）的地方不叠加，由共享提示层统一判断；可见文字是缩写时每次悬停都出；动效为冷态首个 125ms 入场（97% 缩放 + 朝触发元素 2px、强 ease-out、原点在触发侧），暖态切换即时、离开即时、减少动态效果时关闭；附录 C.5.2 组件表的 `truncate` 改为 `truncate + tooltip`（placeholder 例外），C.5.4、§11、§13.3 第 15 项与 o2x-design-system「完成验收」同步。修正旧说法：§6 与 o2x-design-system 的 Tooltip 延迟由 500 / 100ms 改为代码实际的冷态 200ms / 暖态 0ms（来源：Medeo「截断文本 Hover 出 Tooltip」issue 全站走查）
 - 2026-10-13 `design.md` / `o2x-design-system`：§7.6「状态外框与主 / 副对象」修正——副对象只指**同一区块内**同对象的另一份（置顶副本 ↔ 主列表），**不再跨区联动**（素材不点亮其所属作品，作品也不带动素材）；§13.3 第 14 项与 o2x-design-system 对应条目同步（来源：Medeo Createspace 走查）
 - 2026-10-13 `design.md` / `o2x-design-system`：新增 §7.6「状态外框与主 / 副对象」——Hold 1px、Selected 2px；主 Hold 50% / Selected 100%，副（同对象分身 + 所属作品）为主的一半（25% / 50%）；同对象按勾选来源分主副、父子单向、多状态取最强；Token `--Createspace-State-*`。推翻旧规则：§4.3 / §11 / §13.3 原「选中条目不加紫色外框」改为勾选框 + 2px 外框、不加底色；§7.6 参考值表外框行与 o2x-design-system 选择模式条目同步；§13.3 增 14（来源：Medeo Createspace 外框统一走查）

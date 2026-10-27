@@ -36,7 +36,7 @@ description: >-
 | **文字样式已挂，但「填充」上仍不显示 Color 变量**（对稿 / 检查时像「裸色」） | 字色往往写在 **文字样式** 或 **样式内嵌色** 上，图层 `fills` 未再绑 **库 Variable**；组件内文字同理由主库组件定义。 | 在 **消费稿** 中，对**非组件实例内**的 `TEXT`：在 **`setTextStyleIdAsync` 之后**，对 **`fills` 里的 `SOLID`** 使用 **`boundVariables: { color: figma.variables.createVariableAlias(await importVariableByKeyAsync(...)) }`**（与形状填色同一套 API），语义色按 **`Surface/On Surface`、`Surface/On Surface Variant`、`Schemes/Primary`** 选用。**不要**在消费稿里改 `Button`/`Field` 等内部文字（实例内 `TEXT` 跳过）。 |
 | Figma 里看起来颜色对了，但右侧面板没有变量 | 只写了 hardcoded RGB，后续主题或 token 改动不会联动。 | **所有 `fills`、`strokes`、TEXT fills 都必须绑 One2X Color 变量**。表面、文本、边框优先 `Surface/*`；主色、错误等语义状态用 `Schemes/*`；没有语义色时才用 palette。写完跑 Color 绑定检查。 |
 | Untitled 里曾出现本地 `One2X · Color` | 脚本为演示绑定而 **临时复制**语义色，**会与主库双源漂移** | 已改为 **只引用库变量**；原则见下节「团队约定」。 |
-| Auto Layout 看起来用了正确间距 / 圆角，但右侧面板没有变量 | 只把数值调成 8、12、16、999 等，并不等于绑定了设计系统变量；组件库后续改 token 时不会联动。 | 对 **`padding*`、`itemSpacing`** 绑定 **`Shape/Space/s*`**，对 **四角半径**绑定 **`Shape/Radius/*`**；`999` / 胶囊统一收敛到 **`Radius/Full`**。写完后用脚本统计 boundVariables，不能只靠截图判断。 |
+| Auto Layout 看起来用了正确间距 / 圆角，但右侧面板没有变量 | 只把数值调成 8、12、16、999 等，并不等于绑定了设计系统变量；组件库后续改 token 时不会联动。 | 对落在已发布档位的 **`padding*`、`itemSpacing`** 绑定 **`Shape/Space/s*`**；对有来源的非档位局部例外逐项登记（§4.5）；对 **四角半径**绑定 **`Shape/Radius/*`**；`999` / 胶囊统一收敛到 **`Radius/Full`**。写完后用脚本统计 boundVariables，不能只靠截图判断。 |
 | 圆角变量绑了，但看起来不像 One2X | 漏了 Figma 的 **corner smoothing**；`Radius/*` 只管半径，不管 corner-shape。 | 非 0 圆角节点默认设置 **`cornerSmoothing = 0.6`**，对应 One2X 默认 **superellipse**。若组件必须是标准 pill / 圆弧，图层描述标注 **`corner-shape: round`**。 |
 | 圆角元素看起来彼此“顶”或角落间距不均 | 内层、外层圆角没有按同心关系计算，或把同一个 radius 直接套给所有层级。 | 任何圆角元素都检查内外层同心关系：**`inner radius = outer radius - gap/padding`**；多层逐层算，贴近外层圆角的图片、媒体框、按钮组、输入框都要检查。 |
 | 描边太重或变量层级不统一 | 默认用了 1px / Outline Variant，或只写了硬编码 stroke。 | 低强调容器、卡片、输入框、列表分隔和图标容器默认 **`Surface/On Surface Variant` + `0.5px`**，`strokeAlign: inside`，并把 `strokes` paint 绑定到 One2X Color 变量。 |
@@ -49,7 +49,7 @@ description: >-
 1. **变量**  
    - **Color**：填色/描边/文字填充绑 **📖One2X 库变量**（`importVariableByKeyAsync` 或 UI 启用库后绑定）。不要只写 hardcoded RGB。低强调描边默认用 **`Surface/On Surface Variant`**，不要把 `Outline Variant` / 1px 当默认。  
    - **Typescale**：通过 **Text style** 体现；独立 `TEXT` 图层必须挂 **`title/*`、`label/*`** 等主库样式，不长期用手写 `fontSize`。  
-   - **Shape**（同一集合）：圆角必须绑 **`Radius/*`**（名=px），间距必须绑 **`Space/s*`**（与 **`--space-s*`** 对齐，**s**=阶梯≠px）。只把 Auto Layout 数值调成 token 值还不够；消费稿组件也要在右侧面板里能看到变量绑定。圆角还要检查同心关系，不能只看单个半径值。  
+   - **Shape**（同一集合）：圆角必须绑 **`Radius/*`**（名=px），间距落在已发布档位时绑定 **`Space/s*`**（与 **`--space-s*`** 对齐，**s**=阶梯≠px）；有来源的设计指定非档位局部例外记录节点、属性、值和来源，不擅自改值。只把 Auto Layout 数值调成 token 值还不够；对应档位的消费稿组件须能在右侧面板看到变量绑定；已确认例外按记录核对。圆角还要检查同心关系，不能只看单个半径值。
 2. **组件**：凡属于设计系统已覆盖的控件，**禁止**用普通 Frame/Rectangle **冒充**；用 **`search_design_system`** 取 **Button、Field、Checkboxes** 等 **实例**。  
 3. **主库文件** `wHNBqjzSQZM8a4DlyBIDqW` 内作稿：直接用本地变量与样式，无需 `import`。
 
@@ -68,6 +68,12 @@ description: >-
 | **网页 Token 落盘** | [`tokens/tokens.css`](../../../tokens/tokens.css)、[`tokens/README.md`](../../../tokens/README.md) |
 | **仅实现代码、不写 Figma** | 用 **[o2x-design-system](../o2x-design-system/SKILL.md)**，不必走本 workflow |
 
+## 只读比较 / 副本标注
+
+先确认任务是比较、标注还是新设计；只读阶段不写 Figma。标注前记录受保护源、授权写入目标、复制映射和允许改动的字段；用户正在编辑的源不改名、不回滚并发变化。保留副本 UI 尺寸、内容与实例关联，标注置于 UI 外。
+
+每个分组与连线先写明两端对象和关系：默认、备用、并列状态或来源；备用不得接成默认，状态不得被画成强制顺序，单条失效不得指成整个集合失效。逐组逐边验收它们实际连接的对象，再检查文本、遮挡、绑定和写入范围；几何不碰撞与变量绑定不能证明语义正确。外围框只包关联的独立样例与说明，不盖产品 UI。对照证据方法见 [比较与标注证据](references/comparison-evidence.md)。
+
 ## 加载顺序（必须）
 
 1. **`figma-use`** — 在任意 **`use_figma`** 调用之前阅读；传 `skillNames: "figma-use"`（或与下条组合）。
@@ -75,15 +81,15 @@ description: >-
    - **整页 / 多区块** 从设计系统搭界面：再读 **`figma-generate-design`**；`skillNames` 含 `figma-generate-design`（并与 `figma-use` 组合）。  
    - **小范围改节点 / 变量 / 组件**：`figma-use` 即可。
 3. **One2X 约束** — 同时遵循 **`design.md`**：**Color / Typescale / Shape / Typeface** 的模式与命名（见 **Design scale**）；优先 **`search_design_system`** 找库内组件与变量，避免硬编码 hex。
-4. **密度档判定（`design.md` §2.1）** — 托盘 / 菜单栏面板、下拉、侧栏、浮出面板 = **Compact**；工作台页、Dialog、表单 = **Default**。Compact 任务**必须**先读 **`design.md` §7.5 参考帧**（`get_design_context` / `get_metadata` 读 `vEJRRdbQhziklOs3apEfxi` 的 `6974:114850` 等），以它的骨架、字阶、不透明度、间距为准，再写 `use_figma`；不要凭 `design.md` 业务页默认值（`s4`、`body/medium`、通栏黑钮）去猜。
+4. **密度按区域与角色判定（`design.md` §2.1）** — 区分阅读正文、导航/元信息与工具控件；聊天正文不能因侧栏紧凑而统一缩到 12/11（§7.8）。同类托盘 / 菜单栏面板先读 §7.5 参考帧；其他容器选同产品同角色参考。
 
 ## 从 PRD 到设计稿：先定「密度 + 参考帧」，再写规格
 
 2026-09 Medeo 桌面端托盘面板复盘：Agent 首版按 `design.md` 业务页默认值生成（`s4` 边距、52 高行、`label/large - prominent` 行名、列表中间通栏 48 黑钮、蓝色 `Secondary Container` 进度条、手绘彩色圆点徽标、圆形头像、中文文案），与设计师定稿差异很大；定稿改为 Compact 档（8px 边距、41 高行、12/11 两档字号 + 100/60/40% 不透明度层级、24 高紧凑黑钮放在分组标题行右侧、单色 `Progress`、库内实心图标做 10px 徽标、`Radius/8` 头像、英文文案）。因此**规格文档（design-spec）的开头必须写明**：
 
 1. 密度档（Default / Compact）与依据；
-2. 参考帧 node id（Compact 默认用 `design.md` §7.5 列的帧；业务页用同产品线最近定稿）；
-3. 字阶只列该档允许的档位；间距只列该档的 pad / gap；主按钮只列该档的形态（`design.md` §3.1 四形态表）；
+2. 参考帧 node id（托盘类用 `design.md` §7.5；其他区域用同产品线、同角色最近定稿）；
+3. 按区域和角色列字阶、pad / gap 与按钮形态（`design.md` §3.1 / §5.4），不要把一个区域的字号强加给全部内容；
 4. 文案语言（Medeo 产品稿 = 英文 UI 文案，中文注释）。
 
 规格里任何与参考帧冲突的数值，以参考帧为准。
@@ -121,8 +127,8 @@ description: >-
 
 - 主库 **`Shape`** 集合（`VariableCollection` key：`4cd8a4e9257f11c5a4e270e284ac654d1e799545`）在**本地**含 **`Space/s0`…`Space/s10`** 与 **`Radius/*`**（圆角，名=px）；**已发布到团队库**的同一集合在消费稿中 **可能只包含部分变量**（例如仅 **`Radius/*`** 若干项而无 **`Space/s*`**）。**未出现在发布列表里的 `Space/s*`** 无法 `importVariableByKeyAsync`，Auto Layout 的 **padding / itemSpacing** 也就**不能**在消费稿里绑变量，直至主库发布流程把间距变量纳入库。
 - **核对**：在消费稿用 **`await figma.teamLibrary.getVariablesInLibraryCollectionAsync('4cd8a4e9257f11c5a4e270e284ac654d1e799545')`**，检查返回数组里是否有 **`Space/s*`** 名称。
-- **必须绑定**：消费稿侧 **`importVariableByKeyAsync`** 使用的 **key 与主库一致**。`paddingLeft` / `paddingRight` / `paddingTop` / `paddingBottom` / `itemSpacing` 绑定 **`Space/s*`**；`topLeftRadius` / `topRightRadius` / `bottomLeftRadius` / `bottomRightRadius` 绑定 **`Radius/*`**。团队库面板里**展示名**可能仍是旧式高度档标签，与主库 **`Radius/{px}`** 分组名不同，**以变量 key / 解析值为准**（见 **`design.md`** §4.4）。
-- **收敛临时值**：6px → `Radius/6` 或 `Space/s2`（按属性语义判断）；10/11px → 就近收敛到 `Space/s3`；999px / 胶囊 → `Radius/Full`。不要长期保留 `10px`、`14px`、`999px` 这类看起来接近但没有变量的值。
+- **必须绑定**：消费稿侧 **`importVariableByKeyAsync`** 使用的 **key 与主库一致**。落在已发布档位的 `paddingLeft` / `paddingRight` / `paddingTop` / `paddingBottom` / `itemSpacing` 绑定 **`Space/s*`**；有来源的非档位局部例外按节点、属性、值与来源登记，未知未绑定项仍须处理或报告；`topLeftRadius` / `topRightRadius` / `bottomLeftRadius` / `bottomRightRadius` 绑定 **`Radius/*`**。团队库面板里**展示名**可能仍是旧式高度档标签，与主库 **`Radius/{px}`** 分组名不同，**以变量 key / 解析值为准**（见 **`design.md`** §4.4）。
+- **收敛临时值与保留已确认值**：未经设计确认的临时值先与设计核对再选对应档位；圆角 6px 可用 `Radius/6`，不能拿圆角变量绑定间距。`Space/s2` 是 8px，不能把已确认的 6px 间距改成 8px；按 §4.5 / §7.8 保留该局部值，并在外部交付记录中登记节点、属性、值和来源。999px / 胶囊用 `Radius/Full`。不借此改变全局 token。
 - **Corner smoothing**：除 `design.md` C.7 明确标注 `corner-shape: round` 的标准圆弧 / pill 例外外，非 0 圆角节点设置 **`cornerSmoothing = 0.6`**，与 One2X 默认 superellipse 渲染一致。
 - **同心圆角**：任何圆角元素都要检查与内层、外层相邻圆角元素的关系。内层 radius 按 **`outer radius - gap/padding`** 计算；padding 大于 radius 时内层归零。不要把外层 radius 直接传给所有子元素。
 - **默认描边**：低强调容器、卡片、输入框、列表分隔和图标容器优先用 **`Surface/On Surface Variant`** 作为 stroke color，`strokeWeight = 0.5`，`strokeAlign = 'INSIDE'`。只有设计稿明确、禁用态、分隔层级或可见性问题时才改用 `Outline` / `Outline Variant` / 1px。
@@ -181,7 +187,7 @@ for (const node of [root, ...root.findAll(() => true)]) {
 return { autoProps, boundAutoProps, radiusProps, boundRadiusProps, roundedNodes, smoothedRadiusNodes, unboundSamples };
 ```
 
-验收标准：对新建的 One2X 组件，`autoProps === boundAutoProps`、`radiusProps === boundRadiusProps`，且 `roundedNodes === smoothedRadiusNodes`；若遇到实例内部不能改，应回到源组件绑定，不要在消费稿里硬改实例子层。
+验收时逐项核对 `unboundSamples`，分别报告已绑定、已确认的非档位间距例外、仍未映射的未知缺口；例外须在外部交付记录中列节点 ID、属性、值和设计来源，与实际值一致。除这些逐项确认的间距例外外，其余间距必须有绑定；未知缺口不能计作通过，也不能称全变量通过。圆角绑定及 smoothing 保持原要求（`radiusProps === boundRadiusProps`、`roundedNodes === smoothedRadiusNodes`），颜色检查不因间距例外放宽。遇到实例内部不能改时不要在消费稿硬改或擅改源组件，记录限制并按授权处理。
 
 ### Color 绑定检查（组件写入后必做）
 
