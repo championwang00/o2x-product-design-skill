@@ -4,6 +4,8 @@ All notable changes to this skill pack should be recorded in this file.
 
 ## Unreleased
 
+- 2026-10-29 固化收到模块上下文后的自动合并更新、索引维护、验证和三处同步流程；登记公开规范仓库、本机四类入口及 Medeo 项目指针，明确发布、指针跟随与 PR 合并状态。
+
 - 2026-10-29 新增模块上下文索引与 Chat Panel 参考；设计、开发、新增 UI 和 Review 同时读取通用规范与命中模块。区分默认/备用状态、One2X 库来源与任务写入目标，并补齐安装及维护入口。
 
 - 收紧紧凑密度适用范围，补聊天侧栏局部参考、只读比较与副本标注关系核验，并修正全局 skill 链接检查的软链接路径解析。

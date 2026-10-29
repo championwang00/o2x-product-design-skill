@@ -1,6 +1,6 @@
 ---
 name: o2x-product-design
-description: O2X Product Design skill entry for One2X/Medeo. Use for One2X design system work, Medeo UI implementation or review, Figma MCP writing, Figma variable binding, full-page Figma assembly, design tokens, typography, components, or animation. Routes the agent to the right sibling skills in order.
+description: O2X Product Design skill entry for One2X/Medeo. Use for One2X design system work, Medeo UI implementation or review, Figma MCP writing, Figma variable binding, full-page Figma assembly, design tokens, typography, components, animation, or registering/updating module design context and syncing it. Routes the agent to the right sibling skills in order.
 ---
 
 # O2X Product Design skill
@@ -96,7 +96,11 @@ Rules:
 
 - Frontend visuals and interaction only; skip backend, API, i18n pipeline, tracking and deployment items.
 - Record the final decision, not intermediate attempts; verify values from code or computed styles.
-- Revise existing text instead of appending; keep rule bodies in `design.md` and execution points in `o2x-design-system`.
+- Revise existing text instead of appending; keep general rules in `design.md`, module context in `modules/`, and execution points in `o2x-design-system`.
+
+### Register Or Update Module Context
+
+When the user supplies a new or revised module reference as design context, automatically follow [模块迭代与同步](../../../modules/README.md#收到模块上下文时自动迭代与同步): update the existing module or create one, update the index, validate, and sync the agreed canonical repository, global entries and Medeo pointer entry. Do this in the same task without waiting for another “更新索引 / 同步” request. A URL supplied only for comparison or read-only review does not authorize registering it as a new baseline.
 
 ### Design Token Or Skill Pack Maintenance
 
@@ -126,10 +130,11 @@ These should route here:
 - "tool call UI"
 - "make this follow One2X"
 - "提炼会话中的调整 / 整合到 design skill"
+- "把这个作为某模块上下文 / 更新模块参考 / 后续模块自动迭代同步"
 
 ## Completion Checks
 
 - For code: design context and screenshot were captured when Figma was the source; Figma variables/styles/components were mapped to project tokens/components; no naked color, spacing, radius, typography, or font tokens remain unless an explicit exception exists; the rendered result was visually compared with the reference.
 - For Figma: required sibling skills were loaded before tool calls, DS variables/components were reused, Color bindings and Shape bindings were verified, and rounded nodes use One2X corner smoothing.
 - For UI: affected modules were identified, their current references and relevant states were checked, and adopted default/alternative choices and unresolved differences were recorded per `modules/README.md`.
-- For docs: installation and usage instructions still point users to this stack as the default entry, including `modules/`.
+- For docs: installation and usage instructions still point users to this stack as the default entry, including `modules/`. For module updates, the index and context are updated together and each agreed sync destination has a verified status per `modules/README.md`.

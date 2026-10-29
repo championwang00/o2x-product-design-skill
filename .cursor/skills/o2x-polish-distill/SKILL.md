@@ -19,7 +19,8 @@ description: >-
 
 - **规范唯一来源**：解析本文件的真实路径（它通常是软链接），往上三级是规范仓库根目录（本机为 `~/Desktop/O2X Product Design skill`，远端 `championwang00/o2x-product-design-skill`）。
 - **写到哪里**：
-  - 规则正文：仓库根 `design.md`；
+  - 通用规则正文：仓库根 `design.md`；
+  - 模块来源、范围与状态上下文：`modules/<module>.md`，同步更新 `modules/README.md`；
   - 执行要点、检查项、走查协作方式：`.cursor/skills/o2x-design-system/SKILL.md`；
   - 动效细节：仓库内 `web-animation-design`，或者在 `design.md` 里交叉引用它；
   - 路由：新增 skill 或新任务类型时，登记到 `o2x-product-design`。
@@ -85,6 +86,8 @@ python3 scripts/extract_user_messages.py --latest ~/.claude/projects/<编码后�
 - `design.md` 附录 B 修订记录加一行。
 
 ### 6. 同步到各 skill 库
+
+模块上下文的新增或修订，直接按[模块迭代与同步](../../../modules/README.md#收到模块上下文时自动迭代与同步)更新索引并核验约定的三个同步位置，无需用户再次提醒。本节沿用该表的目的地与同步状态定义，不维护第二份目标清单。
 
 ```bash
 bash scripts/link_global_skills.sh        # 检查

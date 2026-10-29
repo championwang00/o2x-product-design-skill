@@ -160,6 +160,10 @@ Git 仓库地址：
 - `.cursor/skills/README.md` 更偏 **skill 分工、Token 命名摘要、安装与排错**；同事首次接触时，优先看本 README，再按需打开该文件。
 - 完整 Token 表与 Figma 对照：**`design.md`**（**Design scale**、**§4 Token**）。
 
+## 模块的持续迭代
+
+后续提供某模块上下文时，skill 会自动更新模块资料和索引、验证并同步公开规范仓库、本机工具入口及 Medeo 项目指针；不需另说“同步”。完整流程与目的地统一维护在[模块迭代与同步](modules/README.md#收到模块上下文时自动迭代与同步)。
+
 ## 本机唯一来源（SSOT）
 
 本仓库的 `.cursor/skills/o2x-*`、通用规范 `design.md`、模块上下文 `modules/`、`tokens/` 是唯一维护来源。Codex 与 Cursor 全局 O2X Skill 入口链接到仓库相同目录；旧名称与旧资源路径仅作兼容链接，不维护副本。后续直接修改本仓库并提交 Git，无需手工同步两套 Skill。
