@@ -7,7 +7,7 @@ description: O2X Product Design skill entry for One2X/Medeo. Use for One2X desig
 
 ## 唯一来源与路径解析
 
-本仓库是 O2X Skill、`design.md` 和 `tokens/` 的唯一维护来源。通过 Codex / Cursor 全局入口加载时，先解析当前 `SKILL.md` 的符号链接真实路径，再以真实文件所在目录解析本文所有相对路径；不可直接从全局入口目录计算 `../../../`。
+本仓库是 O2X Skill、通用规范 `design.md`、模块上下文 `modules/` 和 `tokens/` 的唯一维护来源。通过 Codex / Cursor 全局入口加载时，先解析当前 `SKILL.md` 的符号链接真实路径，再以真实文件所在目录解析本文所有相对路径；不可直接从全局入口目录计算 `../../../`。
 
 配套 O2X Skill 与仓库自带的 Figma、动效 Skill 按真实路径加载。额外技能（如 `design-feedback-judge`、`emil-design-engineering`）从当前环境技能目录发现，不假设它们位于仓库内。消费项目的组件与实现配置仍遵循该项目约束；产品专属差异不能自动改写仓库的品牌规范。
 
@@ -24,7 +24,8 @@ Use this as the default entry for One2X / Medeo design work. It is an orchestrat
 
 1. Read `../../../design.md` from the skill pack root.
 2. If the task touches implementation tokens, read `../../../tokens/README.md` from the skill pack root.
-3. Pick the route below and load the listed skills in order.
+3. Read [模块索引](../../../modules/README.md) and the context for every affected module before designing, implementing, editing or reviewing UI; this also applies to new UI with no supplied Figma URL. General guidance and matching module context are both required.
+4. Pick the route below and load the listed skills in order.
 
 Path resolution:
 
@@ -130,4 +131,5 @@ These should route here:
 
 - For code: design context and screenshot were captured when Figma was the source; Figma variables/styles/components were mapped to project tokens/components; no naked color, spacing, radius, typography, or font tokens remain unless an explicit exception exists; the rendered result was visually compared with the reference.
 - For Figma: required sibling skills were loaded before tool calls, DS variables/components were reused, Color bindings and Shape bindings were verified, and rounded nodes use One2X corner smoothing.
-- For docs: installation and usage instructions still point users to this stack as the default entry.
+- For UI: affected modules were identified, their current references and relevant states were checked, and adopted default/alternative choices and unresolved differences were recorded per `modules/README.md`.
+- For docs: installation and usage instructions still point users to this stack as the default entry, including `modules/`.

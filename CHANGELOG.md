@@ -4,6 +4,8 @@ All notable changes to this skill pack should be recorded in this file.
 
 ## Unreleased
 
+- 2026-10-29 新增模块上下文索引与 Chat Panel 参考；设计、开发、新增 UI 和 Review 同时读取通用规范与命中模块。区分默认/备用状态、One2X 库来源与任务写入目标，并补齐安装及维护入口。
+
 - 收紧紧凑密度适用范围，补聊天侧栏局部参考、只读比较与副本标注关系核验，并修正全局 skill 链接检查的软链接路径解析。
 
 - 2026-10-21 `design.md` / `o2x-design-system`：新增 §6「截断文本」全局规则——所有会被截断的文字（省略号、`line-clamp`、canvas 省略）在真被截断时悬停显示全文，没截断不出；共用页面唯一提示层、标记放在裁切元素上、canvas 用热区、可编辑标题输入时不弹、禁用原生 `title`，非内容文字写明原因才可不加；悬停已有浮层（hover 卡片、详情浮层、另一个 Tooltip、原生 title）的地方不叠加，由共享提示层统一判断；可见文字是缩写时每次悬停都出；动效为冷态首个 125ms 入场（97% 缩放 + 朝触发元素 2px、强 ease-out、原点在触发侧），暖态切换即时、离开即时、减少动态效果时关闭；附录 C.5.2 组件表的 `truncate` 改为 `truncate + tooltip`（placeholder 例外），C.5.4、§11、§13.3 第 15 项与 o2x-design-system「完成验收」同步。修正旧说法：§6 与 o2x-design-system 的 Tooltip 延迟由 500 / 100ms 改为代码实际的冷态 200ms / 暖态 0ms（来源：Medeo「截断文本 Hover 出 Tooltip」issue 全站走查）

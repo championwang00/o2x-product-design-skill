@@ -14,7 +14,7 @@ description: >-
 
 ## 唯一来源与路径解析
 
-本仓库是 O2X Skill、`design.md` 和 `tokens/` 的唯一维护来源。通过 Codex / Cursor 全局入口加载时，先解析当前 `SKILL.md` 的符号链接真实路径，再以真实文件所在目录解析本文所有相对路径；不可直接从全局入口目录计算 `../../../`。
+本仓库是 O2X Skill、通用规范 `design.md`、模块上下文 `modules/` 和 `tokens/` 的唯一维护来源。通过 Codex / Cursor 全局入口加载时，先解析当前 `SKILL.md` 的符号链接真实路径，再以真实文件所在目录解析本文所有相对路径；不可直接从全局入口目录计算 `../../../`。
 
 配套 O2X Skill 与仓库自带的 Figma、动效 Skill 按真实路径加载。额外技能（如 `design-feedback-judge`、`emil-design-engineering`）从当前环境技能目录发现，不假设它们位于仓库内。消费项目的组件与实现配置仍遵循该项目约束；产品专属差异不能自动改写仓库的品牌规范。
 
@@ -55,7 +55,7 @@ description: >-
 
 ## 与 `design.md`、设计系统的关系
 
-- **要用设计系统**：Workflow 不是「只学 Plugin API」；**[`design.md`](../../../design.md)** 就是把 One2X 设计系统写清楚的**唯一正文**（Design scale、色板/字阶/形状、组件节选、§10 对稿清单）。在 Figma 里建稿时，Agent 仍须按此文约束变量名、模式与组件选用。
+- **要用设计系统**：Workflow 不是「只学 Plugin API」；**[`design.md`](../../../design.md)** 就是把 One2X 设计系统写清楚的**通用规范正文**（Design scale、色板/字阶/形状、组件节选、§10 对稿清单）。在 Figma 里建稿时，Agent 仍须按此文约束变量名、模式与组件选用。
 - **和 `o2x-design-system` 的差别**：两者**共用同一份** `design.md` + `tokens/`；**`o2x-design-system`** 面向**写前端代码**时的对齐，**本 skill** 面向 **`use_figma` 写回 Figma** 时的对齐。不是两套规范，是**同一规范的两条落地路径**。
 - **Figma 文件 vs 文档**：📖One2X 文件里的变量/组件是**源**；`design.md` 是团队与 Agent 的**可读摘要与规则**；`tokens.css` 是**Web 落盘**。改 Figma 时以库里真实变量为准，但若与 `design.md` 冲突，应视为需同步或单独说明的例外。
 
@@ -63,7 +63,9 @@ description: >-
 
 | 项 | 值 |
 |----|-----|
-| **Figma 文件** | `fileKey`: **`wHNBqjzSQZM8a4DlyBIDqW`**（📖One2X Design System） |
+| **One2X 库来源** | `fileKey`: **`wHNBqjzSQZM8a4DlyBIDqW`**（📖One2X Design System，提供变量、样式与组件） |
+| **模块参考** | [模块索引](../../../modules/README.md) → 对应上下文；参考文件可与主库不同 |
+| **本次写入目标** | 从当前任务的授权确定；库来源与模块参考都不能自动视为写入目标 |
 | **规范全文** | 工作区根目录 [`design.md`](../../../design.md)（含 **Design scale**、Token、组件节选；**附录 C** 为 Figma 稿命名/图层/Property 与 Figma2code 最佳实践） |
 | **网页 Token 落盘** | [`tokens/tokens.css`](../../../tokens/tokens.css)、[`tokens/README.md`](../../../tokens/README.md) |
 | **仅实现代码、不写 Figma** | 用 **[o2x-design-system](../o2x-design-system/SKILL.md)**，不必走本 workflow |
@@ -75,6 +77,8 @@ description: >-
 每个分组与连线先写明两端对象和关系：默认、备用、并列状态或来源；备用不得接成默认，状态不得被画成强制顺序，单条失效不得指成整个集合失效。逐组逐边验收它们实际连接的对象，再检查文本、遮挡、绑定和写入范围；几何不碰撞与变量绑定不能证明语义正确。外围框只包关联的独立样例与说明，不盖产品 UI。对照证据方法见 [比较与标注证据](references/comparison-evidence.md)。
 
 ## 加载顺序（必须）
+
+先读 `design.md` 与[模块索引](../../../modules/README.md)，再读所有涉及模块的上下文；设计、改稿、新增 UI 及 Review 都适用。在本次规格中记录模块参考节点与采用的默认/备用方案，验收时同时对照通用规范和模块参考。
 
 1. **`figma-use`** — 在任意 **`use_figma`** 调用之前阅读；传 `skillNames: "figma-use"`（或与下条组合）。
 2. **任务类型**  

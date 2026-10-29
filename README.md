@@ -10,7 +10,8 @@
 
 | 路径 | 作用 |
 |------|------|
-| `design.md` | One2X 设计系统唯一正文规范。 |
+| `design.md` | One2X 通用设计规范。 |
+| `modules/` | [模块索引](modules/README.md)及模块上下文；[Chat Panel](modules/chat-panel.md)已登记。设计和开发 UI 时与通用规范一起读取。 |
 | `tokens/` | Web 侧设计 Token（颜色、字阶、间距、圆角）。 |
 | `.cursor/skills/o2x-product-design/` | 默认总入口：按任务类型加载下面这些 skill。 |
 | `.cursor/skills/o2x-design-system/` | 前端页面实现 / Review 入口。 |
@@ -54,6 +55,7 @@ Git 仓库地址：
 把以下内容放进目标项目：
 
 - `design.md`
+- `modules/`
 - `tokens/`
 - `.cursor/skills/o2x-product-design/`
 - `.cursor/skills/figma-use/`
@@ -160,6 +162,6 @@ Git 仓库地址：
 
 ## 本机唯一来源（SSOT）
 
-本仓库的 `.cursor/skills/o2x-*`、`design.md`、`tokens/` 是唯一维护来源。Codex 与 Cursor 全局 O2X Skill 入口链接到仓库相同目录；旧名称与旧资源路径仅作兼容链接，不维护副本。后续直接修改本仓库并提交 Git，无需手工同步两套 Skill。
+本仓库的 `.cursor/skills/o2x-*`、通用规范 `design.md`、模块上下文 `modules/`、`tokens/` 是唯一维护来源。Codex 与 Cursor 全局 O2X Skill 入口链接到仓库相同目录；旧名称与旧资源路径仅作兼容链接，不维护副本。后续直接修改本仓库并提交 Git，无需手工同步两套 Skill。
 
 加载全局 Skill 时先解析符号链接，再从真实文件位置计算相对路径。全局安装方式：将 `~/.claude/skills/`、`~/.codex/skills/`、`~/.cursor/skills/`、`~/.agents/skills/` 下的 `o2x-product-design`、`o2x-design-system`、`o2x-figma-workflow`、`o2x-polish-distill` 分别链接至本仓库 `.cursor/skills/` 中同名目录；可运行 `.cursor/skills/o2x-polish-distill/scripts/link_global_skills.sh`（加 `--fix` 补建缺失链接）检查。已有独立目录应先移出技能加载目录备份，再建链接。项目入口以目标分支的实际状态为准：medeo-fe 已采用指向规范库的精简入口，不再复制 `design.md` / `tokens/`。按用户授权的同步范围核对公开规范、本机链接和项目入口，并遵循项目分支及 PR 流程；其他项目若仍是快照，先记录差异再处理。

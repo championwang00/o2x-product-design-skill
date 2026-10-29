@@ -20,7 +20,7 @@
 | **o2x-product-design** | **默认总入口**：按任务类型顺序加载 One2X 规范、Figma MCP、整页生成与动效 skill。 |
 | **o2x-design-system** | 写代码、对稿、Review：读根目录 **`design.md`**，对齐 Token / 字体 / 组件；不强制改 Figma。 |
 | **web-animation-design** | 过渡、动效、缓动、时长、`prefers-reduced-motion`；**与 o2x-design-system 配套**，涉及动效时一并加载。 |
-| **o2x-figma-workflow** | 用 MCP **在 Figma 里建稿/改稿**：固定 **`fileKey` = `wHNBqjzSQZM8a4DlyBIDqW`**，并叠加官方 skill + **`design.md`**。 |
+| **o2x-figma-workflow** | 用 MCP **在 Figma 里建稿/改稿**：从 **`wHNBqjzSQZM8a4DlyBIDqW`** 取库组件，叠加官方 skill、**`design.md`** 与 **`modules/`**；写入目标按任务授权确定。 |
 | **o2x-polish-distill** | 走查 / UI polish 会话结束后，把用户的调整和走查习惯提炼进 **`design.md`** 与 **o2x-design-system**，并检查各工具 skill 库的入口链接。只处理前端。 |
 
 ### Token 命名（与 `design.md` §4 一致，避免混用）
@@ -40,6 +40,7 @@
 |------|------|
 | `design.md` | 规范全文（链接、`fileKey`、Design scale、Token、组件）。 |
 | `tokens/` | Web 与 Figma 对齐时用（`tokens.css`、`README.md`）。 |
+| `modules/` | 模块索引与上下文；新 UI 同样必读通用规范和命中模块。 |
 | `.cursor/skills/o2x-product-design/` | One2X 默认总入口；同事优先调用这个。 |
 | `.cursor/skills/figma-use/` | 官方，必带（若用 `use_figma`）。 |
 | `.cursor/skills/figma-generate-design/` | 经常整屏搭进 Figma 时带。 |
@@ -55,7 +56,7 @@
 ## 3. 安装步骤（目标仓库）
 
 1. 将上表中的 **`.cursor/skills/` 子目录** 合并到对方项目的 `.cursor/skills/`；如果只想记一个入口，优先用 **`o2x-product-design`**。
-2. 将 **`design.md`**、`tokens/` 放到对方仓库根目录（或约定路径；若改路径，需调整 skill 内指向 `design.md` 的相对链接）。  
+2. 将 **`design.md`**、`tokens/`、`modules/` 放到对方仓库根目录（或约定路径；若改路径，需调整 skill 内指向 `design.md` 的相对链接）。
 3. **只维护 `design.md`（小写）**：在 macOS 默认磁盘上 **`DESIGN.md` 与 `design.md` 同一文件**，另存别名会覆盖正文。
 
 ---

@@ -13,7 +13,7 @@ description: >-
 
 ## 唯一来源与路径解析
 
-本仓库是 O2X Skill、`design.md` 和 `tokens/` 的唯一维护来源。通过 Codex / Cursor 全局入口加载时，先解析当前 `SKILL.md` 的符号链接真实路径，再以真实文件所在目录解析本文所有相对路径；不可直接从全局入口目录计算 `../../../`。
+本仓库是 O2X Skill、通用规范 `design.md`、模块上下文 `modules/` 和 `tokens/` 的唯一维护来源。通过 Codex / Cursor 全局入口加载时，先解析当前 `SKILL.md` 的符号链接真实路径，再以真实文件所在目录解析本文所有相对路径；不可直接从全局入口目录计算 `../../../`。
 
 配套 O2X Skill 与仓库自带的 Figma、动效 Skill 按真实路径加载。额外技能（如 `design-feedback-judge`、`emil-design-engineering`）从当前环境技能目录发现，不假设它们位于仓库内。消费项目的组件与实现配置仍遵循该项目约束；产品专属差异不能自动改写仓库的品牌规范。
 
@@ -23,7 +23,7 @@ description: >-
 
 先修本次作品，再区分单期偏好、执行遗漏与可复用方法缺口；有依据才更新负责的技能，保存差异并验证。保持本技能的参考材料、先审后改、设计系统及操作授权要求。One2X 团队规范和已发布库不因单次反馈自动改变。
 
-用户要求把反馈提炼进规范时，同时审查现有正文能否被这次提炼改进：收紧模糊的规则，改掉已被推翻的旧表述，补上缺失的交叉引用，把放错位置或重复的段落归位合并，并把新检查补进 `design.md` §11 Do / Don't、§13.3 与本文「完成验收」。规则正文写进 `design.md`，本文只留执行要点和指向；不要只在末尾追加新段落。
+用户要求把反馈提炼进规范时，同时审查现有正文能否被这次提炼改进：收紧模糊的规则，改掉已被推翻的旧表述，补上缺失的交叉引用，把放错位置或重复的段落归位合并，并把新检查补进 `design.md` §11 Do / Don't、§13.3 与本文「完成验收」。通用规则正文写进 `design.md`，模块规则写进 `modules/`，本文只留执行要点和指向；不要只在末尾追加新段落。
 
 
 ## When to use
@@ -33,14 +33,15 @@ description: >-
 - 从 Figma MCP 导出代码后，需要收敛到项目技术栈并保持视觉一致。
 - **动效 / 过渡 / 入场出场 / hover 微交互 / 动效 Review**：除本 skill 外，**必读** **[web-animation-design](../web-animation-design/SKILL.md)**（Emil Kowalski / animations.dev 体系：缓动、时长、`prefers-reduced-motion`、仅 animating `transform`/`opacity` 等）。**层次**：视觉与 Token 仍服从 **`design.md`** 与 **`tokens.css`**；动效语义与可访问性按 **web-animation-design**。
 - **工作台列表页**（分区标题、工具栏、网格 / 列表切换、置顶灰底面板、hover 操作、弹出菜单、骨架加载）的对齐与交互细节：见下文「密集工作区页面（执行要点）」与 `design.md` §7.6。
-- **要在 Figma 里改稿 / 用 `use_figma` 写入**时：改用打包入口 **[o2x-figma-workflow](../o2x-figma-workflow/SKILL.md)**（先 `figma-use`，整页再 `figma-generate-design`，并固定 One2X `fileKey`）。
+- **要在 Figma 里改稿 / 用 `use_figma` 写入**时：改用打包入口 **[o2x-figma-workflow](../o2x-figma-workflow/SKILL.md)**（先 `figma-use`，整页再 `figma-generate-design`，使用 One2X 库来源，写入目标按任务授权）。
 
 ## Required: read the canonical spec
 
 1. **打开并遵循** 工作区根目录下的 [`design.md`](../../../design.md)（相对本文件：`../..` 到 `.cursor`，再 `..` 到工作区根）。
 2. 若 `design.md` 路径不同，在用户工作区根目录查找 **`design.md`** 文件并以其为准。
+3. 设计、实现、修改或 Review UI 前，必读规范库的[模块索引](../../../modules/README.md)及命中的模块上下文；即使用户没给 Figma URL、新增 UI 也要执行。通用规范与对应模块同时适用，按索引核对当前参考、默认/备用及项目映射。
 
-全文规范（Token 表、组件清单、布局配方——§7.5 紧凑面板、§7.6 密集工作区页面及 Medeo 参考值、Share/VideoShareDialog 模式、代码映射）均在 `design.md` 中；本 skill 只保留执行要点。页面级数值表和长规格写进 `design.md`，这里只留检查点和指向。
+通用规范与既有局部参考（Token 表、组件清单、布局配方——§7.5 紧凑面板、§7.6 密集工作区页面及 Medeo 参考值、Share/VideoShareDialog 模式、代码映射）均在 `design.md` 中；本 skill 只保留执行要点。通用规格写进 `design.md`，模块数值与长规格写进 `modules/`；已有局部参考表仅链接引用，这里只留检查点和指向。
 
 ## Figma 到代码：强制工作流
 
@@ -66,6 +67,8 @@ description: >-
 若 Figma 数值与已命名 One2X token 不一致，先判断是实例变体、过期设计还是缺失 token。不要静默取最近值，也不要直接硬编码。必要时采用设计稿值完成视觉修复，同时明确指出应同步更新的 `design.md` / `tokens.css` / Figma 库。走查中设计师直接给出的数值（如「间距 1px」）属于第 2 级「明确设计意图」：照做，不吸附到最近的 token 档；没听清先复述确认，不要换成同类元素的现有值。不在 `Space/s*` 档内的 1–3px 光学微调，代码里就近注释来源（`design.md` §4.5）。
 
 ### 完成验收
+
+- [ ] 已按[模块索引](../../../modules/README.md)读取涉及模块的上下文，记录相关参考节点、采用的默认/备用方案和未核验项；新增 UI 与同模块邻近状态的密度、字阶、间距和组件表达一致。
 
 - [ ] 图标分别核对图形可视尺寸、设计容器与实际命中区；未验证实际命中区时明确标注，不由截图或容器尺寸推断（`design.md` §6.1）。
 

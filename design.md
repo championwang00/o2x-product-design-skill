@@ -1,8 +1,8 @@
 # One2X Design System
 
-> 规范仅此文件；技能说明见 `.cursor/skills/README.md`。（macOS 上勿用 `DESIGN.md` 当第二文件名，易与 `design.md` 冲突。）
+> 通用规范在本文件；模块上下文见 [modules/README.md](modules/README.md)，技能说明见 `.cursor/skills/README.md`。（macOS 上勿用 `DESIGN.md` 当第二文件名，易与 `design.md` 冲突。）
 
-**谁用**：团队共用的一份「事实来源」——你自己、同事、以及 Cursor 里的 Agent 都应对齐它；给同事拷贝仓库时带上本文件与 `tokens/`、`.cursor/skills/` 即可（详见 `.cursor/skills/README.md` §2）。
+**谁用**：团队共用的一份「事实来源」——你自己、同事、以及 Cursor 里的 Agent 都应对齐它；给同事拷贝仓库时带上本文件与 `modules/`、`tokens/`、`.cursor/skills/` 即可（详见 `.cursor/skills/README.md` §2）。
 
 **两个带 One2X 的 Cursor skill 分别干什么**（不是「DISPATCH / WORKFLOW」两套规范）：`**o2x-design-system`** 管写代码/对稿；`**o2x-figma-workflow`** 管用 MCP 在 Figma 里改稿时叠加官方 `figma-use` / `figma-generate-design` 与本文档。若你在 Figma 左侧看到 **DISPATCH**、**WORKFLOW** 之类页面名，那是设计文件里的 **Page 命名**，和本 Markdown 里的章节标题不是同一套东西；本文件只列「尺度」与节选结构，**不会**逐页解释每个业务页名。
 
@@ -18,6 +18,10 @@
 **MCP 若 504**：勿在超大文件里全 Page `findAll`；只用变量 API 或单页查询。详见 `.cursor/skills/README.md` §5。
 
 ---
+
+## 模块上下文
+
+所有 UI 设计、实现、修改和 Review（包括新增 UI）都先读本通用规范，再按[模块索引](modules/README.md)读取涉及模块的上下文。通用规范决定共享 token、组件身份和通用行为，模块上下文决定模块内布局、角色和状态关系；不能只读其中一层。Chat Panel 入口见 [modules/chat-panel.md](modules/chat-panel.md)。
 
 ## 目录
 
@@ -644,6 +648,8 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 
 ### 7.8 聊天侧栏：局部参考（Medeo 桌面切片）
 
+模块参考、默认与备用状态、已确认交互及未确认项统一见 [Chat Panel 上下文](modules/chat-panel.md)。下面仅保留局部量测，不能替代模块上下文。
+
 以下为 2026-10 已核对的局部样例，供同类区域对照；不是通用组件尺寸。按目标内容和状态复测，真实命中区另行验证。源正文实际字重为 500，而现有 `tokens.css` 的 `--type-body-medium-weight` 为 600：两者不能直接视为等价。该切片实现保留已确认的 500，并核对和记录项目映射及来源；不为此修改全局 token 或组件默认。
 
 | 角色 | 局部参考 |
@@ -691,6 +697,8 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 ---
 
 ## 11. Do's and Don'ts
+
+- **先读通用，再读模块**：所有新增或修改的 UI 都按[模块索引](modules/README.md)加载对应上下文，避免只套通用 token 却偏离模块的布局、密度或状态。
 
 ### Do
 
@@ -772,6 +780,8 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 - 「做一个工作台列表页的工具栏和弹出菜单（§2.1 Compact 局部 / §7.6）：按内容（Add、Select）/ 数据（Search、Filter、Group、Sort）/ 视图（视图槽 + Grid｜List）分区，从右锚定；控件 24 高、`gap` 2px、圆角统一，图标 18px `On Surface Variant`，文字按钮 hug 文案；纯图标按钮配库 `Tooltip`；菜单 `Surface Container Lowest` + 0.5px `Outline Variant`，项高 24、`label/medium`、图标 14px，出现在触发按钮可视边缘下方 4px，点开后触发按钮回到 default。」
 
 ### 13.3 Iteration checklist
+
+- 已读取通用规范及[命中模块上下文](modules/README.md)，核对当前参考、默认/备用方案和未确认项；无登记模块的查证与假设已说明。
 
 0. 密度是否按区域与角色判定（§2.1 / §5.4）？托盘按 §7.5；聊天阅读正文、导航与控件分别核对（§7.8）。
 1. 颜色与间距是否均可映射到 `**--color-*`** 与 `**--space-s*`**？
