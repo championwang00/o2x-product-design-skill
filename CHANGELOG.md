@@ -4,6 +4,8 @@ All notable changes to this skill pack should be recorded in this file.
 
 ## Unreleased
 
+- 2026-10-29 Chat Panel 模块上下文补充单条引用的最新排布：放入用户消息气泡内、正文上方；与气泡外附件及完整会话 Thread 分开。
+
 - 2026-10-29 固化收到模块上下文后的自动合并更新、索引维护、验证和三处同步流程；登记公开规范仓库、本机四类入口及 Medeo 项目指针，明确发布、指针跟随与 PR 合并状态。
 
 - 2026-10-29 新增模块上下文索引与 Chat Panel 参考；设计、开发、新增 UI 和 Review 同时读取通用规范与命中模块。区分默认/备用状态、One2X 库来源与任务写入目标，并补齐安装及维护入口。
