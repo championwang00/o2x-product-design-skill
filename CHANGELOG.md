@@ -4,6 +4,10 @@ All notable changes to this skill pack should be recorded in this file.
 
 ## Unreleased
 
+- 2026-10-30 扩展 `o2x-polish-distill`：识别「升级设计 Skill」，按 Codex Astra / Sol、Claude Fable / Opus 分阶段执行，明确模型可用性与本地、远端同步状态。
+
+- 2026-10-30 提炼 Medeo PR 1766 Editor 走查（实现证据 `68116481c4`）：新增 Editor 模块、保留 relation 与四轨功能基线，局部数值独立维护；通用规范补文字稳定、整层禁用、交互遮罩与变量优先汇报，明确播放器时间字号按模块角色选择，并同步入口和验收。实现状态与视觉验收分开记录。
+
 - 2026-10-29 按设计师最新稿撤下 Chat Panel 的 Tool Use B1/B2 备用展示上下文与失效节点入口，保留现行基础工具状态。
 
 - 2026-10-29 Chat Panel 模块上下文补充单条引用的最新排布：放入用户消息气泡内、正文上方；与气泡外附件及完整会话 Thread 分开。

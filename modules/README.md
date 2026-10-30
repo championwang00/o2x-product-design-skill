@@ -4,6 +4,7 @@ UI 设计、开发、修改和 Review 的共同入口：先读通用规范 [desi
 
 | 模块 | 匹配词 / 范围 | 必读上下文 |
 | --- | --- | --- |
+| Medeo Editor | editor、配音稿、Voiceover、播放器、时间轴 / Timeline、caption / speech / video / BGM、relation、音频 fade | [editor.md](editor.md) |
 | Medeo Chat Panel | chat panel、聊天侧栏、会话面板、消息/引用、工具调用、Session/Thread、会话标题栏/导航 | [chat-panel.md](chat-panel.md) |
 
 ## 如何使用

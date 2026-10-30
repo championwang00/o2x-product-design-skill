@@ -235,7 +235,7 @@ Material 3 的 Surface 不是一条单一“越上越亮”的梯子，而是两
 
 
 - **透明度档**：hover **8%**、focus / pressed **12%**、dragged **16%**。
-- **特殊表面例外**：反色条、Error 容器等少数表面，才按需改叠对应的 `Inverse On Surface` / `On Error Container` 等；其余一律 `On Surface` + Blend。**档位要在实际底色上看得出**：`Inverse Surface` 实底上叠默认 8% 几乎看不出（Medeo 顶栏登录钮 `#09090b` 只亮到约 `#1c1b1e`），应提高档位，并在浏览器里比对亮度（Medeo 参考：hover 16%、按下 24%，Agent 定值、设计未单独确认；24% 不在 8 / 12 / 16 档内）。
+- **反色 Filled Button**：`Inverse Surface` 实底使用 `Inverse On Surface` 状态层，hover **12%**、pressed **16%**；focus 保持组件既有规范。颜色随主题切换，分别在浅色和深色中验证。其他反色条或 Error 容器按各自语义角色处理，不自动继承按钮的档位。
 - **变量位置**：仍在 `State Layers/*` 集合（如 `State Layers/On Surface/Opacity-08`、`Opacity-12`、`State Layers/On Surface Variant/*`）。
 - **Web 实现**：在底色上叠一层 `On Surface` 的半透明层，`mix-blend-mode: plus-darker`（浅）/ `plus-lighter`（深）；或用项目中等效的 `color-mix` / 专用 state token。
 - **只留一层状态底色**：组件自带 state layer（如 `IconButton` 内层方角那层）又在外层叠了 hover 底时，只保留一层，圆角跟随按钮外形；两层叠加会比同排文字按钮更深，还会露出直角（Medeo 工具栏保留外层圆角层、关掉内层）。
@@ -243,6 +243,9 @@ Material 3 的 Surface 不是一条单一“越上越亮”的梯子，而是两
 - **状态不改尺寸**：状态切换只改颜色与蒙层。只在选中态出现的边框，要在默认态预留同宽透明边框，或改用 `outline` / inset `box-shadow`，否则相邻元素会跳动（Medeo 顶栏 Tab 曾因 0.5px 选中边框在切换时跳动）。
 - **生效中 ≠ 展开**：筛选条件、按类型分组这类「条件正在生效」的持续状态，触发按钮用 `State Layers/Primary` Opacity-08 底 + `Schemes/Primary` 图标（Medeo `var(--State-Layers-Primary-Opacity-08, …)` + `var(--Schemes-Primary, …)`），和「菜单展开回到 default」、工具栏「选中用 `On Surface`」区分开，用户一眼能看出列表正被过滤。它是低强调的状态指示，不算 §3.1 的紫色主按钮。同一处所有能「生效」的按钮（筛选、分组）用同一套，不只改被点名的那个（Medeo 编辑器素材面板已用；Createspace 工具栏的 Filter / Group 文字按钮仍是中性选中底，待同步）。
 - **选中条目：勾选框 + 2px 外框，不加底色**：选择模式下被选中的卡片 / 列表行，勾选框进入选中态，同时画 **2px `Schemes/Primary` 外框**（Selected）；不加底色。hover / 菜单打开是 **1px、Primary 50%** 的 Hold 外框；主 / 副对象的透明度与关联规则见 §7.6「状态外框与主 / 副对象」。勾选框规格见 §6。
+
+- **编辑与阅读保持文字几何**：切换阅读 / 编辑时核对文字起点、字阶、行高、换行与留白；辅助控件显隐不推挤正文。禁用态按完整控件或内容层处理，保留内层固有透明度，避免图标与文字各自变灰后层级失衡；具体倍率遵循模块基线（[Editor](modules/editor.md)）。
+- **遮罩覆盖交互层**：固定操作区的渐隐遮罩同时覆盖内容和 hover / 选中 / 拖动层，否则交互时会露出被遮内容；实际叠放顺序也要验证（[Editor](modules/editor.md)）。
 
 ### 4.4 圆角（Shape 集合）
 
@@ -316,6 +319,7 @@ Figma（`**Shape`** · **Baseline**）圆角变量分组名为 `**Radius/*`**；
   - **阴影**：颜色用 `State Layers/Shadow` 的 Opacity 档（如 `0 4px 16px var(--State-Layers-Shadow-Opacity-12, …)`），只保留几何值字面。
   - **SVG 填色**：presentation attribute 里不能写 `var()`，用 `currentColor`，由元素的 CSS `color` 取 token。
   - **明确声明的例外**：压在图片 / 视频上、两种主题都要一样的遮罩与白字、视频黑边、品牌渐变，保留字面值并在同一行注释声明原因（medeo-fe 用 `theme-chrome: allow — 原因`）；`mask-image` 的渐变色只起透明度作用，不算颜色。
+- **颜色汇报先给变量**：说明语义角色、变量名与当前主题；只有实际使用字面色值时才直接报告 hex / rgba，不把一次计算色值当跨主题基线。
 - **圆角**：Figma `**Shape`** · `**Radius/*`**；网页 `**--shape-radius-***`。`tokens.css` 中 `**--shape-corner-***` 仅为与旧高度档/旧 `**Corner/***` 名对照的别名，新稿以 `**Radius/{px}**` 与 `**--shape-radius-{px}**` 为准（§4.4）。
 - **字阶 / 字族**：`**--font-family-*`**、`**--type-*`**，或组合类 `**.o2x-type-***`（见 `tokens.css`）。
 - **间距**：Figma `**Shape`** · `**Space/s*`**；网页 `**--space-s***`（§4.5）；**勿**与 `**Radius/{px}`** 的「名=像素」规则混用。
@@ -409,6 +413,8 @@ Figma（`**Shape`** · **Baseline**）圆角变量分组名为 `**Radius/*`**；
 1. 同一页面内，同一语义角色固定同一档位，避免局部“看着调”。某类元素的字阶一旦定下（如弹出菜单项改为 `label/medium`），**同步到同页所有同类元素**（排序 / 筛选下拉、卡片更多、右键、Tab 菜单），不等逐个指出。
 2. `prominent` 仅给关键操作，避免全局滥用导致主次失效。
 3. 组件内部文字优先沿用库内样式，不在实例里逐个手改。
+
+**时间字号**：按模块与语义角色选变量，不统一固定为 Label Medium；Medeo Editor 播放器的最终字号与变量见 [Editor 模块](modules/editor.md)。
 
 **网页实现（必读）**：新建页面时 `**font-family`** 须为 `**var(--font-family-plain)`** 或 `**var(--font-family-brand)**`；**字号 / 行高 / 字间距 / 字重** 须来自 `**tokens.css`** 里对应 `**--type-*`**（或直接使用 `**.o2x-type-***` 组合类），**禁止**随意写 `font-size: 14px` 等魔法数字。页面需 **加载 Manrope、Nohemi**（如 Google Fonts），否则变量仍会回退到系统字体。
 
@@ -702,6 +708,9 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 
 ### Do
 
+- 视觉对齐先锁定功能基线；编辑 / 阅读文字不跳，禁用整层保留内层 alpha，遮罩覆盖交互层；未知媒体画幅保持中性骨架，取得元数据后再定比例（§4.3、[Editor](modules/editor.md)）。
+- 颜色汇报先给语义变量；在深浅主题与真实交互中核对，明确区分实现证据和视觉验收（§4.6）。
+
 - 使用 `**tokens/tokens.css`** 中的 `**--color-*`、`--type-*`、`--space-s*`、`--shape-radius-*`、`--font-*`** 实现颜色、字阶、间距与圆角。
 - 主路径 CTA 默认用 `**Surface/Inverse Surface**`（黑）+ `**Inverse On Surface**`；**最高强调**那一个才用 `**Schemes/Primary**` + `**On Primary**`（§3.1），并与 `**label/large - prominent**` 字阶搭配。
 - 在 Figma 中绑定 **Color / Typescale / Shape** 变量；组件用 **库实例**。
@@ -734,7 +743,7 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 - **不要**用浮在内容上的底部操作条做多选工具，也不要给选中条目加底色；外框粗细与透明度只按 §7.6「状态外框与主 / 副对象」，不自拟（§4.3）。
 - **不要**把 hover 才出现的操作改成常驻，也不要在分组视图里展示空分组的「暂无…」占位（§7.6）。
 - **不要**用原生 `title` 当全文提示，也不要给没被截断的文字弹提示或给每个截断元素单独挂 `Tooltip` 实例（§6「截断文本」）。
-- **不要**为只在 hover 时出现的按钮常驻留白或预留占位列（叠放在内容上，用 `mask-image` 渐隐让位，§7.6）；**不要**为防跳动按最长文案写死文字按钮宽度（hug 优先，附录 C.5.1）。
+- **不要**为工作台内容叠放的 hover 操作（如 ⋯）常驻留白或预留占位列（用 `mask-image` 渐隐让位，§7.6）；其他模块按其布局基线处理，避免显隐推挤正文。**不要**为防跳动按最长文案写死文字按钮宽度（hug 优先，附录 C.5.1）。
 
 ---
 
@@ -799,6 +808,8 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 13. 横向滚动行：两端渐隐是否随可滚方向出现？裁切点是否贴相邻面板与视口？翻页箭头是否 hover 才出现、翻页有快速过渡（§7.6）？
 14. 状态外框：hover / 菜单打开是否 1px、选中是否 2px？主 Hold 50% / Selected 100%，副（同区块内同对象的另一份）是否为主的一半（25% / 50%）？是否只在区块内联动（素材不点亮所属作品）、同对象是否按勾选来源分主副、多状态是否只画最强的一条（§7.6）？颜色粗细是否都来自 `--Createspace-State-*` token？
 15. 截断文本：每处省略号 / `line-clamp` / canvas 截断的文字，悬停时是否显示全文、没截断时是否不出？标记是否在裁切文字的那个元素上，有没有残留原生 `title`？换成最长语言再看一遍（§6「截断文本」、附录 C.5）。
+
+16. 视觉对齐是否保留功能基线？编辑 / 阅读文字是否稳定，禁用完整层是否保留内部 alpha，遮罩是否覆盖 hover 层，未知画幅是否未猜比例？是否按模块核对局部数值，且颜色先报变量、深浅主题和真实交互分别记录证据（§4.3、§4.6、[Editor](modules/editor.md)）？
 
 ---
 
@@ -1126,6 +1137,7 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 
 | 日期         | 说明                                                                                                                                               |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 2026-10-30 | **PR 1766 Editor 走查提炼**：新增 Editor 模块局部基线与功能边界；§4 补文字几何、整层禁用、交互遮罩与变量优先汇报，§5.4 明确时间字号按模块角色选择，§11 / §13.3 同步验收。实现证据不替代视觉验收。 |
 | 2026-10-28 | **聊天侧栏与标注复盘**：收紧 Compact 适用范围，按阅读正文、导航与控件分别选字阶；新增 §7.8 局部参考，并补关联核验入口。 |
 | 2026-10-21 | **截断文本悬停全文**（来自 Medeo「所有截断文本 Hover 出 Tooltip」issue 全站走查）：**§6 新增「截断文本」全局规则**（只在真被截断时出、共用唯一提示层、标记在裁切元素上、canvas 热区、编辑中不弹、禁用原生 `title`、非内容文字写明原因方可不加、悬停已有浮层处不叠加、缩写文字每次悬停都出、冷态首个 125ms 入场暖态即时）；**附录 C.5.2** 截断类组件改为 `truncate + tooltip`，C.5.4、§11、§13.3 第 15 项同步；**修正** §6 Tooltip 延迟 500 / 100ms → 冷态 200ms / 暖态 0ms（与组件实现一致） |
 | 2026-10-13 | **状态外框与主 / 副对象**（来自 Medeo Createspace 外框统一走查）：**新增 §7.6「状态外框与主 / 副对象」**——Hold 1px、Selected 2px；主 Hold 50% / Selected 100%，副（同区块内同对象的另一份）为主的一半（25% / 50%），粗细相同；同对象按勾选来源分主副、父子单向、多状态取最强；Token `--Createspace-State-*`。**推翻旧规则**：§4.3 / §11 / §13.3 原「选中条目不加紫色外框」改为勾选框 + 2px 外框、不加底色；§7.6 参考值表外框行同步 |
