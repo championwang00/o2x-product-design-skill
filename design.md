@@ -621,6 +621,8 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 
 **Token**（Medeo 代码 SSOT `apps/medeo-web/src/web/components/theme/state-outline.css`，全局生效，随 `[data-theme]` 重声明）：`--Createspace-State-Hold-Outline-Width` 1px、`--Createspace-State-Selected-Outline-Width` 2px、`--Createspace-State-Hold-Outline` Primary 50%、`--Createspace-State-Selected-Outline` Primary 100%、`--Createspace-State-Related-Hold-Outline` Primary 25%、`--Createspace-State-Related-Selected-Outline` Primary 50%。canvas 绘制一律走统一的状态外框 painter，用 `readCanvasColors` 在绘制时读取；关联由业务通过 Host 的 `relatedState(id)` / `onHoverChange(id)` 提供。禁止在 painter 或页面里硬编码外框粗细与透明度。
 
+- **命令框 / RTE 例外**：自身状态、父子关系与同对象实例关联须独立设计，局部原则、参数与 SDK 限制见 [CommandBox / RTE 模块](modules/command-box-rte.md)。本节 Createspace 的 2px 选中框、父子不联动及单条状态优先级不适用于命令框；旧 chip 点击选中示例不再作为基线。
+
 #### 分组与空状态
 
 - **按类型分组时，空分组整组不显示**：连分组标题一起隐藏，不放「暂无背景音乐」这类占位；所有分组都为空时显示整个面板的空状态。
@@ -703,6 +705,8 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 ---
 
 ## 11. Do's and Don'ts
+
+- CommandBox 的自身状态与关联副态独立检查；不套用列表单条状态优先级，具体见 [模块规范](modules/command-box-rte.md)。
 
 - **先读通用，再读模块**：所有新增或修改的 UI 都按[模块索引](modules/README.md)加载对应上下文，避免只套通用 token 却偏离模块的布局、密度或状态。
 
@@ -789,6 +793,8 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 - 「做一个工作台列表页的工具栏和弹出菜单（§2.1 Compact 局部 / §7.6）：按内容（Add、Select）/ 数据（Search、Filter、Group、Sort）/ 视图（视图槽 + Grid｜List）分区，从右锚定；控件 24 高、`gap` 2px、圆角统一，图标 18px `On Surface Variant`，文字按钮 hug 文案；纯图标按钮配库 `Tooltip`；菜单 `Surface Container Lowest` + 0.5px `Outline Variant`，项高 24、`label/medium`、图标 14px，出现在触发按钮可视边缘下方 4px，点开后触发按钮回到 default。」
 
 ### 13.3 Iteration checklist
+
+- CommandBox / RTE 按[模块规范](modules/command-box-rte.md)核对组合状态，并区分 SDK 限制、实现值与待确认设计。
 
 - 已读取通用规范及[命中模块上下文](modules/README.md)，核对当前参考、默认/备用方案和未确认项；无登记模块的查证与假设已说明。
 
@@ -1137,6 +1143,7 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 
 | 日期         | 说明                                                                                                                                               |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 2026-11-02 | CommandBox / RTE 走查：模块独立维护自身状态、关系副态、局部参数与 SDK 限制，在 §7.6 增加模块例外入口；未确认的父子虚线与深层曲线保留待确认。 |
 | 2026-10-30 | **PR 1766 Editor 走查提炼**：新增 Editor 模块局部基线与功能边界；§4 补文字几何、整层禁用、交互遮罩与变量优先汇报，§5.4 明确时间字号按模块角色选择，§11 / §13.3 同步验收。实现证据不替代视觉验收。 |
 | 2026-10-28 | **聊天侧栏与标注复盘**：收紧 Compact 适用范围，按阅读正文、导航与控件分别选字阶；新增 §7.8 局部参考，并补关联核验入口。 |
 | 2026-10-21 | **截断文本悬停全文**（来自 Medeo「所有截断文本 Hover 出 Tooltip」issue 全站走查）：**§6 新增「截断文本」全局规则**（只在真被截断时出、共用唯一提示层、标记在裁切元素上、canvas 热区、编辑中不弹、禁用原生 `title`、非内容文字写明原因方可不加、悬停已有浮层处不叠加、缩写文字每次悬停都出、冷态首个 125ms 入场暖态即时）；**附录 C.5.2** 截断类组件改为 `truncate + tooltip`，C.5.4、§11、§13.3 第 15 项同步；**修正** §6 Tooltip 延迟 500 / 100ms → 冷态 200ms / 暖态 0ms（与组件实现一致） |

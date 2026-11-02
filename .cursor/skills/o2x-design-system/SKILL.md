@@ -37,6 +37,8 @@ description: >-
 
 - **Editor 配音稿 / 播放器 / 时间轴 / relation / fade**：必读 [Editor 模块](../../../modules/editor.md)，按模块保留功能基线与局部数值，不把参考分支的视觉对齐变成行为替换。
 
+- **CommandBox / RTE / Recipe / 文本槽 / segment**：必读 [CommandBox / RTE 模块](../../../modules/command-box-rte.md)，关联态独立建模，不套用 Createspace 的状态优先级或 2px 选中框。
+
 ## Required: read the canonical spec
 
 1. **打开并遵循** 工作区根目录下的 [`design.md`](../../../design.md)（相对本文件：`../..` 到 `.cursor`，再 `..` 到工作区根）。
@@ -69,6 +71,8 @@ description: >-
 若 Figma 数值与已命名 One2X token 不一致，先判断是实例变体、过期设计还是缺失 token。不要静默取最近值，也不要直接硬编码。必要时采用设计稿值完成视觉修复，同时明确指出应同步更新的 `design.md` / `tokens.css` / Figma 库。走查中设计师直接给出的数值（如「间距 1px」）属于第 2 级「明确设计意图」：照做，不吸附到最近的 token 档；没听清先复述确认，不要换成同类元素的现有值。不在 `Space/s*` 档内的 1–3px 光学微调，代码里就近注释来源（`design.md` §4.5）。
 
 ### 完成验收
+
+- [ ] CommandBox 按模块分别核对自身状态、关联副态和父子关系；将 SDK 未绘制能力与待确认设计明确报告。
 
 - [ ] 视觉对齐保留功能基线；编辑 / 阅读文字不跳、整层禁用保留内部 alpha、遮罩覆盖交互层、未知画幅不猜比例；模块数值按 [Editor](../../../modules/editor.md) 等对应上下文核对（`design.md` §4.3、§11、§13.3）。
 - [ ] 颜色先报变量与语义角色；深浅主题和真实交互分别核验；实现或测试通过与设计师视觉验收分开记录（`design.md` §4.6）。
