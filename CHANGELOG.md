@@ -4,6 +4,8 @@ All notable changes to this skill pack should be recorded in this file.
 
 ## Unreleased
 
+- 2026-11-04 明确逐层检查 Auto Layout 至叶子，并验证多层内容变化如何推动相邻布局。
+
 - 2026-11-04 补充 One2X 库实例优先、重复产品结构共享组件，以及直接拖动交付面板的宽度传递验收。
 
 - 2026-11-04 固化已有模块在交付画面内的复用规则，以及新建或重组 Figma UI 的嵌套 Auto Layout 和尺寸验收。更新迁移至 Chat 子页的 Chat Panel 来源节点。
