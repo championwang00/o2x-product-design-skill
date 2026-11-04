@@ -4,6 +4,8 @@ All notable changes to this skill pack should be recorded in this file.
 
 ## Unreleased
 
+- 2026-11-04 补交付范围对照检查：覆盖当前画面、索引状态、局部切片与组件样例，并按视觉类型验证同宽同状态截图。
+
 - 2026-11-04 提炼 Medeo Home 设计师定稿对比：登记 Home 模块参考，补区域密度、操作位置、阅读列宽度与共享实例更新检查。
 
 - 2026-11-04 明确逐层检查 Auto Layout 至叶子，并验证多层内容变化如何推动相邻布局。
