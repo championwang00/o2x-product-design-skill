@@ -75,6 +75,7 @@ Load:
 Rules:
 
 - Never call `use_figma` before loading `figma-use`.
+- When aligning a Figma deliverable to an approved reference, apply the scoped inventory and comparison checks in [comparison evidence](../o2x-figma-workflow/references/comparison-evidence.md) to the affected delivery states before claiming completion.
 - Search the One2X library before building controls. Use matching instances and variants. Componentize repeated product structures when no matching library component exists. Reuse published variables and text styles without duplicating local `One2X · Color` or `Shape` collections.
 - Bind all `fills`, `strokes`, and text fills to published One2X `Color` variables. Low-emphasis strokes default to `Surface/On Surface Variant` at `0.5px`; use `Schemes/*` for primary, error, and other semantic roles; use palette variables only when no semantic variable exists.
 - Bind `padding*` and `itemSpacing` to published `Shape/Space/s*` when values match. Record confirmed non-scale local exceptions by node, property, value and source; never bind a radius variable to spacing or silently change 6px to 8px. Report unknown unmapped values separately (`design.md` §4.5 / §7.8).
