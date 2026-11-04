@@ -4,6 +4,8 @@ All notable changes to this skill pack should be recorded in this file.
 
 ## Unreleased
 
+- 2026-11-04 补充 One2X 库实例优先、重复产品结构共享组件，以及直接拖动交付面板的宽度传递验收。
+
 - 2026-11-04 固化已有模块在交付画面内的复用规则，以及新建或重组 Figma UI 的嵌套 Auto Layout 和尺寸验收。更新迁移至 Chat 子页的 Chat Panel 来源节点。
 
 - 2026-11-02 复核 CommandBox / RTE 状态样本：纠正关闭与键盘删除的实际结果，区分插入光标与整段选中焦点线，并明确演示和 SDK 验收边界。

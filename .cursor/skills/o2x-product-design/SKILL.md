@@ -75,7 +75,7 @@ Load:
 Rules:
 
 - Never call `use_figma` before loading `figma-use`.
-- Reuse published One2X variables, text styles, and components. Do not create duplicate local `One2X · Color` or `Shape` collections in consumer files.
+- Search the One2X library before building controls. Use matching instances and variants. Componentize repeated product structures when no matching library component exists. Reuse published variables and text styles without duplicating local `One2X · Color` or `Shape` collections.
 - Bind all `fills`, `strokes`, and text fills to published One2X `Color` variables. Low-emphasis strokes default to `Surface/On Surface Variant` at `0.5px`; use `Schemes/*` for primary, error, and other semantic roles; use palette variables only when no semantic variable exists.
 - Bind `padding*` and `itemSpacing` to published `Shape/Space/s*` when values match. Record confirmed non-scale local exceptions by node, property, value and source; never bind a radius variable to spacing or silently change 6px to 8px. Report unknown unmapped values separately (`design.md` §4.5 / §7.8).
 - Bind `topLeftRadius`, `topRightRadius`, `bottomLeftRadius`, and `bottomRightRadius` to `Shape/Radius/*`.
