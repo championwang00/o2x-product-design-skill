@@ -81,7 +81,7 @@ Rules:
 - Bind `topLeftRadius`, `topRightRadius`, `bottomLeftRadius`, and `bottomRightRadius` to `Shape/Radius/*`.
 - Any rounded element must keep a concentric relationship with adjacent inner/outer rounded elements: `inner radius = outer radius - gap/padding`.
 - Set `cornerSmoothing = 0.6` for non-zero rounded nodes to match One2X's default corner-shape / superellipse rendering. If a component needs standard round corners instead, annotate `corner-shape: round`.
-- After writing Figma components, run the Color and Shape binding checks from `o2x-figma-workflow`.
+- Apply the module reuse and Auto Layout checks in [o2x-figma-workflow](../o2x-figma-workflow/SKILL.md#模块复用与-auto-layout-验收) to every new or restructured UI, including static designs. After writing components, also run the Color and Shape binding checks.
 
 ### Distill A Polish Session Into The Design Skill
 
@@ -136,5 +136,5 @@ These should route here:
 
 - For code: design context and screenshot were captured when Figma was the source; Figma variables/styles/components were mapped to project tokens/components; no naked color, spacing, radius, typography, or font tokens remain unless an explicit exception exists; the rendered result was visually compared with the reference.
 - For Figma: required sibling skills were loaded before tool calls, DS variables/components were reused, Color bindings and Shape bindings were verified, and rounded nodes use One2X corner smoothing.
-- For UI: affected modules were identified, their current references and relevant states were checked, and adopted default/alternative choices and unresolved differences were recorded per `modules/README.md`.
+- For UI: the final deliverable contains the mapped module regions in the applicable states. Verify against the approved source and record adaptations, exceptions and unverified items per `modules/README.md`.
 - For docs: installation and usage instructions still point users to this stack as the default entry, including `modules/`. For module updates, the index and context are updated together and each agreed sync destination has a verified status per `modules/README.md`.

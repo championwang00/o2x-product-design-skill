@@ -4,6 +4,8 @@ All notable changes to this skill pack should be recorded in this file.
 
 ## Unreleased
 
+- 2026-11-04 固化已有模块在交付画面内的复用规则，以及新建或重组 Figma UI 的嵌套 Auto Layout 和尺寸验收。更新迁移至 Chat 子页的 Chat Panel 来源节点。
+
 - 2026-11-02 复核 CommandBox / RTE 状态样本：纠正关闭与键盘删除的实际结果，区分插入光标与整段选中焦点线，并明确演示和 SDK 验收边界。
 
 - 2026-11-02 提炼 CommandBox / RTE 走查：新增模块与索引，独立记录关联状态、槽删除语义、局部视觉参数、菜单动效、SDK 限制及待确认项；在 §7.6 增加模块例外并补执行入口。
