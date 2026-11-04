@@ -4,6 +4,8 @@ All notable changes to this skill pack should be recorded in this file.
 
 ## Unreleased
 
+- 2026-11-04 补 Product Design Skill 标题组间距对照方法，记录 01–03 的同角色实测及适用边界。
+
 - 2026-11-04 更新 Product Design Skill 的 Figma 执行入口：按交付范围盘点受影响状态，并依视觉类型对照同宽同状态截图。
 
 - 2026-11-04 提炼 Medeo Home 设计师定稿对比：登记 Home 模块参考，补区域密度、操作位置、阅读列宽度与共享实例更新检查。
