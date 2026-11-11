@@ -441,7 +441,7 @@ Figma（`**Shape`** · **Baseline**）圆角变量分组名为 `**Radius/*`**；
 - **列表**：`List item/List Item: 0 Density`。
 - **表单**：`Field`、`TextFieldsIcon`、`buildingBlocks/promptDialog`。单行输入的文字垂直居中靠 `line-height` 等于输入区内容高度，不靠 padding 凑（Medeo 命令框紧凑态：14px `Body-Medium` 字号、28px 行高）；字号换档时行高仍跟输入区高度走。
 - **勾选框（Checkbox）**：同页所有勾选框（网格卡片、列表行、工具栏全选）一套样式。未选：`State Layers/Background` Opacity-90 填充 + 0.5px `State Layers/On Surface` Opacity-16 描边，描边用 `outline` + `outline-offset: -0.5px`，不用 `border`（不改变尺寸，也不会被内部裁切吃掉）；选中 / 部分选中：`Schemes/Primary` 填充 + `On Primary` 对勾 / 横杠。列表行与工具栏 16px（对勾 12px），网格卡片 18px（对勾 14px）；圆角按所在外框同心算（§4.4）。网格放卡片左上角、距 hover 外框 2px；列表行里垂直居中，左侧与上下的可视间距一致（选择模式下行左内边距相应加大）。
-- **紧凑标签**：身份或状态标签用 `label/medium`（12px）。容器按内容确定宽度，按标签角色一起调整可视高度和内边距，并核对与相邻文字的对齐。Medeo 个人资料里的会员标签外框高 18px，文字为 12px，左右内边距各 4px。
+- **紧凑标签**：身份或状态标签用 `label/medium`（12px）。容器按内容确定宽度，按标签角色一起调整可视高度和内边距，并核对与相邻文字的对齐。
 - **标签溢出**：表示「还有更多」的省略点（`··`）按一个字符占位，和文字同一行、同一对齐方式参与排版，不额外把文字往一侧挤（否则整组看起来没居中）。
 - **进度 / 容量条**：值大于 0 时至少显示 5% 的填充，避免看起来是空的。
 - **结构与导航**：`BuildingBlocks/TopActions`、`BuidldingBlocks/ScrollButton` 等。
