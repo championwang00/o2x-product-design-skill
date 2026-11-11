@@ -4,7 +4,7 @@ All notable changes to this skill pack should be recorded in this file.
 
 ## Unreleased
 
-- 2026-11-11 提炼 Medeo 紧凑面板、个人资料和级联菜单的字阶、开关、标签、子菜单几何、统一的触发箭头及其留白与入口图标规则；将每次 Medeo DSK 优化的公开规范同步纳入固定流程。
+- 2026-11-11 提炼 Medeo 紧凑面板、个人资料和级联菜单的字阶、字幕规格的紧凑开关、开启时的 Primary 轨道、标签、子菜单几何、统一的触发箭头及其留白与入口图标规则；将每次 Medeo DSK 优化的公开规范同步纳入固定流程。
 
 - 2026-11-04 补 Product Design Skill 标题组间距对照方法，记录 01–03 的同角色实测及适用边界。
 
