@@ -307,7 +307,7 @@ Prompt、Hint、Note、Code snippet 等辅助信息块如果同时包含标签�
 - **状态外框与主 / 副对象**：hover / 菜单打开 Hold **1px**，选中 Selected **2px**（按下按 Selected）；主 Hold Primary 50%、Selected 100%；副（同区块内同对象的另一份）= 主透明度的一半（25% / 50%），粗细同主；只在区块内联动、不跨区（素材不点亮所属作品）；同对象按勾选来源分主副，多状态只画最强一条。Medeo 用 `--Createspace-State-*`（`state-outline.css`），不在 painter / 页面硬编码（`design.md` §7.6）。
 - **勾选框统一**：网格 / 列表 / 全选一套样式（未选 Background 90 + 0.5px On Surface 16 的 `outline`，选中 Primary），位置和圆角按所在外框同心、四周等距（`design.md` §6）。
 - **生效中的筛选 / 分组**：Primary 08 底 + Primary 图标，与菜单展开的 default 态区分（`design.md` §4.3）。
-- **编辑器面板空态**按 `design.md` §7.6 验收。并排量素材、剧本和逐字稿的图标、标题及顶部间距，跨 DOM 和画布保持同一规格。主图标对应面板语义，副标题用 10px / 14px、距标题 2px。剧本和逐字稿只展示状态。
+- **编辑器面板空态**按 `design.md` §7.6 验收。并排量素材、剧本和逐字稿的图标、标题及顶部间距，跨 DOM 和画布保持同一规格。主图标对应面板语义，副标题用 10px / 14px、距标题 2px。 素材上传用紧凑 Outlined 按钮。剧本和逐字稿只展示状态。
 - **分组视图不显示空分组**：没内容的分组连标题一起隐藏，全空时显示整体空状态。
 
 ## Out of scope
