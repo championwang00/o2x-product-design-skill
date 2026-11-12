@@ -481,7 +481,7 @@ Figma（`**Shape`** · **Baseline**）圆角变量分组名为 `**Radius/*`**；
 - **同一操作入口沿用同一个语义图标**：Medeo 中带图标的「分享得积分」（Earn Credits by Sharing Videos）入口统一沿用顶栏的 `PurchaseCreditIcon`。
 - **Elite 会员星章**使用 One2X 的 `AwardStarIcon`，前景色用 `Schemes/Primary`（Medeo Web 的 `--Schemes-Primary`）。
 - **任务状态图标**放在关联文案之前。中性图标用 `On Surface Variant` 40%，失败用 `ErrorFillIcon` 和错误色。空圆、进度、完成对勾和失败图标的可见轮廓应等大。已知进度采用 `ClockLoader60Icon` 所在系列的细圆外框与顺时针扇形，扇形按实际比例填充，始终与外框内缘留出可见间隙。
-- **文件传输状态**在列表用固定状态列，在网格和附件用文件名下方的状态行。准备中显示空圆。传输时显示扇形和实际百分比。字节传完后用内圆填满的图标和「处理中」。完成时短暂显示 `CheckCircleIcon` 和「已完成」，随后撤掉状态。失败显示错误图标和文字，可重试时在旁提供灰色文字按钮。紧凑行的文件名用 `On Surface`，状态与重试文字使用更浅的中性色及 10px / 14px。
+- **文件传输状态**在列表用固定状态列，在网格和有文件名的附件用名称下方的状态行。纯封面附件保留原卡片形态，状态行放在封面下方。准备中显示空圆。传输时显示扇形和实际百分比。字节传完后用内圆填满的图标和「处理中」。完成时短暂显示 `CheckCircleIcon` 和「已完成」，随后撤掉状态。失败显示错误图标和文字，可重试时在旁提供灰色文字按钮。紧凑行的文件名用 `On Surface`，状态与重试文字使用更浅的中性色及 10px / 14px。
 - **尺寸**：常用 **18 / 20 / 24px**（随同级文字字号）；Compact 区另有 **14**（菜单项、面板行尾图标）与 **16**（卡片角标、状态图标），24 高工具栏按钮里用 **18**。同一条工具栏里纯图标按钮与带文字按钮的图标**视觉尺寸一致**；组件变体可能改写图标尺寸（§6 IconButton），交付前读计算值。点击区域参照 §9 与组件规范（如 Share 网格 64×64）；热区可以大于可视底（如卡片角标可视 20、热区 24），间距按可视边缘量（§4.5）。
 - **颜色**：用 `currentColor` 继承所在文本的 `On *` 颜色，**不要**给图标硬编码 hex。工具栏里未选中控件的前景统一 `Surface/On Surface Variant`，`On Surface` 只给选中态；组件默认前景（如 `IconButton` 的 `On Surface`）会压过继承色，要读计算值核对。
 - **缺图标**：先查 One2X Figma 图标页（node `60839:470`），常见情况是 Figma 已有、仓库还没同步（如 `PinIcon` / `PinOffIcon` / `TableEyeIcon`）。标准流程是 `packages/o2x-icons` 的 `pnpm sync`（`pull` + `gen` + `build`，`pull` 即 `sync-figma-icons`，需要本机 `FIGMA_TOKEN`）；没有 token 时按该包 README 里「手动补普通图标时…」那段：用 Figma MCP 取矢量写成 `svgs/<Name>.svg`，再 `pnpm gen && pnpm build`。Figma 里也没有的图标，由设计补充后再用。**不要**在业务代码里散放一次性 SVG。
