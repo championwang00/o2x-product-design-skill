@@ -156,7 +156,8 @@ description: >-
 - 宽度优先用 **`0.5px`**；Figma 写入时设置 `strokeWeight = 0.5`，并把 `strokes` 的 paint 绑定到对应 Color 变量。
 - 对容器类节点优先用 `strokeAlign: inside`，避免描边改变外部几何尺寸。
 - 如果 0.5px 在目标渲染环境过淡或不可见，可以升到 1px，但要有明确原因；不要把 1px 当默认值。
-- **描边被裁掉就改 ring**：按钮或容器自身（或组件内部某层）设了 `overflow: hidden` 时，`border` 与外扩的 `outline` 可能根本不显示。先在浏览器里确认线是否被裁，再改用 `box-shadow: inset 0 0 0 0.5px var(…)` 或负 `outline-offset` 的 outline；同时在深色模式下看线色（`Outline` 在深色下是一根浅色线，与浅色模式观感不同）。
+- **核对分隔线粗细**：同组每个接缝查一次绘制来源，实际比较高低行交界处的线宽。半像素线在分数缩放下粗细不一时，按 `design.md` §2.1 改用降低不透明度的 1 CSS px 线。
+- **描边裁切**：用实际组件检查自身和祖先的 `overflow`，对比 Playground 和真实容器的边距。按 `design.md` §4.3 将选中线完整内收，实测滚动边界处的四边和明暗主题。
 - **可拖拽分栏线（resizer）用中性色**：hover、键盘聚焦、拖动中显示的线用 `Surface/Outline`，不用 `Schemes/Primary`；品牌紫只留给最高强调（`design.md` §3.1）。
 
 ```css
