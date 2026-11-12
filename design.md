@@ -480,6 +480,8 @@ Figma（`**Shape`** · **Baseline**）圆角变量分组名为 `**Radius/*`**；
 - **先查再画**：只要库里已有对应语义图标，就必须复用库图标；例如主题切换使用 `LightModeIcon` / `DarkModeIcon`。不要用 CSS 手画太阳、月亮、箭头等已有图标。设计指定了具体图标名时按名字使用，**语义接近不算已有**：要 `TableEyeIcon` 时不能用 `VisibilityIcon` 顶替，库里没有就先同步（见「缺图标」）。切换型状态用成对图标（`PinIcon` / `PinOffIcon`）。
 - **同一操作入口沿用同一个语义图标**：Medeo 中带图标的「分享得积分」（Earn Credits by Sharing Videos）入口统一沿用顶栏的 `PurchaseCreditIcon`。
 - **Elite 会员星章**使用 One2X 的 `AwardStarIcon`，前景色用 `Schemes/Primary`（Medeo Web 的 `--Schemes-Primary`）。
+- **任务状态图标**放在关联文案之前。中性图标用 `On Surface Variant` 40%，失败用 `ErrorFillIcon` 和错误色。空圆、进度、完成对勾和失败图标的可见轮廓应等大。已知进度采用 `ClockLoader60Icon` 所在系列的细圆外框与顺时针扇形，扇形按实际比例填充，始终与外框内缘留出可见间隙。
+- **文件传输状态**在列表用固定状态列，在网格和附件用文件名下方的状态行。准备中显示空圆。传输时显示扇形和实际百分比。字节传完后用内圆填满的图标和「处理中」。完成时短暂显示 `CheckCircleIcon` 和「已完成」，随后撤掉状态。失败显示错误图标和文字，可重试时在旁提供灰色文字按钮。紧凑行的文件名用 `On Surface`，状态与重试文字使用更浅的中性色及 10px / 14px。
 - **尺寸**：常用 **18 / 20 / 24px**（随同级文字字号）；Compact 区另有 **14**（菜单项、面板行尾图标）与 **16**（卡片角标、状态图标），24 高工具栏按钮里用 **18**。同一条工具栏里纯图标按钮与带文字按钮的图标**视觉尺寸一致**；组件变体可能改写图标尺寸（§6 IconButton），交付前读计算值。点击区域参照 §9 与组件规范（如 Share 网格 64×64）；热区可以大于可视底（如卡片角标可视 20、热区 24），间距按可视边缘量（§4.5）。
 - **颜色**：用 `currentColor` 继承所在文本的 `On *` 颜色，**不要**给图标硬编码 hex。工具栏里未选中控件的前景统一 `Surface/On Surface Variant`，`On Surface` 只给选中态；组件默认前景（如 `IconButton` 的 `On Surface`）会压过继承色，要读计算值核对。
 - **缺图标**：先查 One2X Figma 图标页（node `60839:470`），常见情况是 Figma 已有、仓库还没同步（如 `PinIcon` / `PinOffIcon` / `TableEyeIcon`）。标准流程是 `packages/o2x-icons` 的 `pnpm sync`（`pull` + `gen` + `build`，`pull` 即 `sync-figma-icons`，需要本机 `FIGMA_TOKEN`）；没有 token 时按该包 README 里「手动补普通图标时…」那段：用 Figma MCP 取矢量写成 `svgs/<Name>.svg`，再 `pnpm gen && pnpm build`。Figma 里也没有的图标，由设计补充后再用。**不要**在业务代码里散放一次性 SVG。
@@ -748,6 +750,7 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 - 在 Figma 中绑定 **Color / Typescale / Shape** 变量；组件用 **库实例**。
 - 按 **§5.3 / §5.4** 选择字阶；同一语义角色在同一页面内保持一致。
 - 图标统一调用 `**@one2x/o2x-icons**`（`<XxxIcon />` 或 `o2x-icons-<名>`，颜色用 `currentColor`，§6.1）。
+- 同一文件在列表、网格和附件里使用同一套任务状态图标，状态和可用操作贴近文件（§6.1）。
 - Manrope 字阶按稿启用斜杠零（`**font-feature-settings: 'zero' 1`**）；Geist Mono 数字要无斜杠 0 时用 `'ss09' 1`，且不要同时开 `zero` / `slashed-zero`（执行要点见 `**o2x-design-system**` Typography）。
 - 查阅 `**tokens/README.md`** 与 `**o2x-design-system**` skill 获取实现细则。
 - **按区域和内容角色判密度**（§2.1 / §5.4）：托盘配方见 §7.5；聊天阅读正文与紧凑导航可并存，不能把整条侧栏统一压成 12/11（§7.8）。
@@ -825,6 +828,7 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 ### 13.3 Iteration checklist
 
 - CommandBox / RTE 按[模块规范](modules/command-box-rte.md)核对组合状态，并区分 SDK 限制、实现值与待确认设计。
+- 并排核对各入口的空圆、扇形进度、满圆处理中、短暂的完成状态和失败。检查图标可见轮廓等大、扇形与外框留缝、列表状态列对齐，以及灰色重试入口可点击和聚焦（§6.1）。
 
 - 已读取通用规范及[命中模块上下文](modules/README.md)，核对当前参考、默认/备用方案和未确认项；无登记模块的查证与假设已说明。
 
@@ -1181,6 +1185,7 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 
 | 日期         | 说明                                                                                                                                               |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 2026-11-12 | 统一任务状态图标及文件传输各阶段的表现，明确文件名、状态和行内重试的视觉层级（§6.1）。 |
 | 2026-11-11 | Medeo 紧凑面板、个人资料与级联菜单走查：补字阶、字幕规格的紧凑开关与开启轨道颜色、标签、各级菜单项一致的文字渲染与图标间距、圆形账号头像、Elite 星章、子菜单定位、统一触发箭头与留白及同一操作入口的图标复用（§2.1、§5.4、§6、§6.1）。 |
 | 2026-11-04 | Medeo Home 对稿：补区域密度、操作位置、工作区与阅读列宽度及实例更新核验；局部参考见 Home 模块。 |
 | 2026-11-02 | CommandBox / RTE 走查：模块独立维护自身状态、关系副态、局部参数与 SDK 限制，在 §7.6 增加模块例外入口；未确认的父子虚线与深层曲线保留待确认。 |

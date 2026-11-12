@@ -4,6 +4,7 @@ All notable changes to this skill pack should be recorded in this file.
 
 ## Unreleased
 
+- 2026-11-12 统一任务状态图标，补文件传输的扇形进度、阶段文案和行内重试层级。
 - 2026-11-12 素材空态的 Upload 使用轻描边按钮。
 - 2026-11-12 补空态面板图标语义和 10px 副标题间距。
 - 2026-11-12 统一编辑器素材、剧本和逐字稿的面板空态样式。
