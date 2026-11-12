@@ -73,6 +73,7 @@ description: >-
 ### 完成验收
 
 - [ ] 紧凑面板按 `design.md` §2.1 / §5.4 / §6 验收 Switch、字阶与标签容器。分别量 Switch 的可视轨道、滑块和点击区域，核对开启时的 Primary 轨道及键盘焦点。读取实际文字节点的计算字号和行高，分段标签覆盖选中与未选中态，并在窄宽和较长本地化文案下保持一行完整。16px 标明例外角色。
+- [ ] 对照 `design.md` §4.5.1 实测圆角块面的外缘和关联文字的起点。仅给独立标题和说明组添加左右等量的光学补偿，块面保留统一容器内距。设置行第二行用 11px / 14px 和 40%，核对换行后内容撑高与上下内距。
 - [ ] 按 `design.md` §4.3 核对 Tab 的未选中、悬停、按住、选中和键盘焦点。未选中项的悬停及按住反馈只提高文字对比度，保持透明底。
 - [ ] 设置行尾按钮按 `design.md` §4.5 分别核对按钮框的上、下、右等距，以及文字、箭头、开关、头像的视觉右缘。
 - [ ] 级联菜单按 `design.md` §6 核对一级与子菜单的实际字阶、Portal 前后的字体平滑、前置图标槽位和间距，再实测上下空间与左右展开的可视边缘，核对触发行中心对齐、统一的尾部图标和字形上、下、右留白，验证鼠标与键盘。
@@ -154,7 +155,7 @@ description: >-
 
 描边默认是轻边界，不是装饰线。除非组件规范或设计稿另有说明：
 
-- **常态容器描边**统一使用 0.5px `Surface/Outline Variant`。Web 代码用 `var(--color-surface-outline-variant)` 或 Medeo 的 `var(--Surface-Outline-Variant)`。Outlined 按钮和输入框的交互边框按组件规格用 `Surface/Outline`。
+- **常态容器描边**统一使用 0.5px `Surface/Outline Variant`。Web 代码用 `var(--color-surface-outline-variant)` 或 Medeo 的 `var(--Surface-Outline-Variant)`。Outlined 按钮和输入框的常态边框用同一轻描边，状态边框遵循组件规格。
 - Figma 写入时设置 `strokeWeight = 0.5`，绑定对应 Color 变量。容器优先用 `strokeAlign: inside`。
 - 在 Playground 和实际入口核对四边的计算线色与视觉粗细。紧凑变体若继承了组件的深色或 1px 边框，在共享变体统一覆盖。
 - **组内分隔线**由行组在共享接缝居中绘制。按分隔线内缘复量按钮上下净距，并在分数缩放下比较不同高度行的线宽。只在组内 0.5px 分隔线出现不一致时使用 `design.md` §2.1 的 1 CSS px 降不透明度方案。

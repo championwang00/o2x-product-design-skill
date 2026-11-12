@@ -91,7 +91,7 @@ Medeo / One2X 产品界面建立在 **Material Design 3** 的组件语义之上�
 - **层级靠不透明度，不靠换 token**：主文 `Surface/On Surface` 100%；次要文本 `Surface/On Surface Variant` **60%**；分组标题 / 邮箱等三级信息 `On Surface Variant` **40%**；图标随文本同色、同不透明度。同角色用不透明度区分层级，颜色沿用前述语义角色。独立标题按下文字阶。**交互控件前景不走这套降级**：工具栏里未选中的按钮（纯图标与带文字）图标和文字统一 `On Surface Variant` 100%，`On Surface` 只给选中态（§4.1、§6.1）。
 - **紧凑面板字阶**：按钮、分段标签、紧凑标签、常规行和辅助说明用 12px（`label/medium`）。独立面板和小弹窗的标题用 14px（`title/small`）。时间戳等低优先级元信息用 11px（`label/small`）。16px 仅用于有明确设计依据的角色，例如独立登录视图或需要突出风险的系统确认框。
 - **紧凑行的开关**：行尾的紧凑开关垂直居中。Medeo Web 的 `size="compact"` 沿用编辑器字幕开关的几何：可视轨道 24.4 × 15px，圆形滑块直径 11px，在关闭和开启位置距相应轨道边缘 2px。点击区高度至少 24px，保留清晰的键盘焦点，分别测量可视轨道和实际点击区域。`medium` 与 `large` 的轨道仍为 32.5 × 20px 和 52 × 32px。所有尺寸在开启且可用时，轨道用 `Schemes/Primary`（Medeo Web 的 `--Schemes-Primary`）。
-- **全局常态描边**默认用 0.5px `Surface/Outline Variant`，覆盖卡片、图标容器、浮出菜单、面板和 Dialog 的外框。浮层用 Elevation 区分层级。Outlined 按钮、输入框的交互边框按组件规格用 `Surface/Outline`。
+- **全局常态描边**默认用 0.5px `Surface/Outline Variant`，覆盖卡片、图标容器、浮出菜单、面板和 Dialog 的外框。浮层用 Elevation 区分层级。Outlined 按钮和输入框的常态边框沿用这套轻描边，聚焦、选中、错误等状态按组件规格处理。
 - **同组列表分隔线**：由行组统一绘制，每个相邻接缝一条，整组用同一种线色和线宽。将线的中心放在两行共享的边界，按分隔线内缘复量行内容及按钮的上下净距。仅当分数缩放使组内 0.5 CSS px 分隔线粗细不一时，组内分隔线可改用 1 CSS px 实线并降低 `Surface/Outline Variant` 的不透明度。Medeo 设置组用 50%，在浅色、深色和分数缩放下对比不同高度的相邻行。
 - **分组标题行 = 24 高**：`label/medium` @40% 左对齐，右侧放该分组的唯一操作（紧凑黑钮或 20px IconButton）。分组之间不用大留白，靠标题行 + 一条 `HorizontalDivider` 分段。标题行在文档流里独占一行，不用绝对定位压在内容上；标题行与它所属的内容之间只留 1–4px，让两者读作一组，不套用区块间距（Medeo 定稿值见 §7.6）。
 - **进度条单色**：`Progress` 组件，轨道 `On Surface` 10%、进度 `On Surface` 40%、4px 高；**不用**蓝色 `Secondary Container` 做进度。
@@ -141,8 +141,8 @@ One2X 有**两个主色**，按强调层级分工，**紫色要非常克制**。
 | --- | --- | --- | --- | --- |
 | **紧凑黑钮** | 高 **24**，`hasStart` 图标 18 + `label/medium`，pad `[0, 8, 0, 6]` | `Radius/6` | Compact 面板的分组标题行右侧（如「Sync folders · 3 ［＋ Add file］」）；列表内唯一主操作 | ❌ 在列表中间放一个通栏 48 高黑钮 |
 | **通栏黑钮** | 高 **40**，宽 240–280，`label/large` | `Radius/12` | 空态引导（居中）、登录视图、单一行动页 | ❌ 正常列表状态下也保留通栏钮 |
-| **Dialog 双钮** | 高 **44**，两钮等宽平分（gap `s2`）：左 Outlined（`Surface/Outline` 0.5px）取消，右 Filled 黑确认 | `Radius/12` | 系统确认框（360 宽，pad `[12]`，`Radius/16`，顶部 40px Logo，标题 `title/medium` 居中，正文 `body/small` 居中） | ❌ 单个全宽确认钮；❌ 红色危险钮（危险语义只在正文与图标里表达） |
-| **行内 Outlined 对** | 高 **24**，两钮等宽，`Surface/Outline` 0.5px，`Radius/6`，左缩进对齐行内文本（pad-left 40） | 出错行下方的〔Retry〕〔Re-select〕等行级动作 | ❌ 把动作做成红色文字链塞在状态句后面 |
+| **Dialog 双钮** | 高 **44**，两钮等宽平分（gap `s2`）：左 Outlined（`Surface/Outline Variant` 0.5px）取消，右 Filled 黑确认 | `Radius/12` | 系统确认框（360 宽，pad `[12]`，`Radius/16`，顶部 40px Logo，标题 `title/medium` 居中，正文 `body/small` 居中） | ❌ 单个全宽确认钮；❌ 红色危险钮（危险语义只在正文与图标里表达） |
+| **行内 Outlined 对** | 高 **24**，两钮等宽，`Surface/Outline Variant` 0.5px，`Radius/6`，左缩进对齐行内文本（pad-left 40） | 出错行下方的〔Retry〕〔Re-select〕等行级动作 | ❌ 把动作做成红色文字链塞在状态句后面 |
 
 
 第三方登录按钮是唯一例外：**Google = `Schemes/Secondary Container` 蓝 + `On Secondary Container`；Apple = `Surface/On Surface` 黑 + `Inverse On Surface`**，均 280×40 `Radius/12`、`hasStart` 品牌图标（`SocialMediaIcon`）；两者之间不再出现紫色 Primary。
@@ -313,6 +313,7 @@ Figma（`**Shape`** · **Baseline**）圆角变量分组名为 `**Radius/*`**；
 标题、label、hint、辅助说明如果位于圆角卡片、输入框、媒体框、Toolbar、Dialog surface 的上方或下方，并且表达上属于这个容器，不要只做几何左对齐。文字应按圆角稍微向内缩进，让标题和圆角形体的视觉重心对齐。
 
 - **默认规则**：向内缩进约 `radius * 0.5`，再吸附到最近的 `Space/s*`；常见上限为 `12px`，避免标题看起来脱离卡片。
+- **补偿应用在独立文字组**。卡片、输入框、按钮组和菜单块使用原容器网格。先核对块面周围的可视留白，再让关联的标题和说明相对块面左右等量内收。紧凑兑换码标题区和奖励步骤说明用 `Space/s1`（4px）。
 - **小圆角**：`Radius/0`、`Radius/4`、`Radius/6` 通常不需要补偿，或最多用 `Space/s1`。
 - **中等圆角**：`Radius/8`、`Radius/12` 通常用 `Space/s1`；`Radius/16` 通常用 `Space/s2`。
 - **大圆角**：`Radius/20`、`Radius/24` 通常用 `Space/s2` 到 `Space/s3`。
@@ -411,6 +412,7 @@ Figma（`**Shape`** · **Baseline**）圆角变量分组名为 `**Radius/*`**；
 | **Compact 面板 · 按钮、分段标签与紧凑标签** | `label/medium`（12px） | 分段标签的选中和未选中态均验收实际文字节点。标签容器按 §6 核对 |
 | **Compact 面板 · 列表行主文案**（文件夹名、文件名、账号名） | `label/medium`（12，Medium） | 不用 prominent，不升到 14 |
 | **Compact 面板 · 常规辅助说明** | `label/medium`（12px） | 用颜色层级和换行保持可读 |
+| **Compact 面板 · 设置行的补充说明** | `label/small`（11px / 14px）@ `On Surface Variant` **40%** | 标题和说明按内容撑高整行，上下各留 `Space/s1`。多行翻译按实际行数增长。 |
 | **Compact 面板 · 行内元信息**（「306 files · 38.2 GB · Up to date」、速率、百分比、邮箱） | `label/small`（11）@ `On Surface Variant` **60%**（邮箱等三级信息 40%） | 用不透明度做层级 |
 | **Compact 面板 · 分组标题**（「Sync folders · 3」「Transfer activity · Uploading · 3」「Recent · 20」） | `label/medium` @ `On Surface Variant` **40%** | 与行主文案同字号，靠 40% 退后 |
 | **Compact 面板 · 状态条文案**（「Syncing: 3 to upload」「1 errors」） | `label/medium`（错误态填色 `Schemes/Error`，条底 `Schemes/Error Container`） | 速率用 `label/small` @60% 跟在后面 |
