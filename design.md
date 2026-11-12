@@ -244,6 +244,7 @@ Material 3 的 Surface 不是一条单一“越上越亮”的梯子，而是两
 - **Web 实现**：在底色上叠一层 `On Surface` 的半透明层，`mix-blend-mode: plus-darker`（浅）/ `plus-lighter`（深）；或用项目中等效的 `color-mix` / 专用 state token。
 - **只留一层状态底色**：组件自带 state layer（如 `IconButton` 内层方角那层）又在外层叠了 hover 底时，只保留一层，圆角跟随按钮外形；两层叠加会比同排文字按钮更深，还会露出直角（Medeo 工具栏保留外层圆角层、关掉内层）。
 - **展开不算状态**：点开菜单 / 弹层后，触发按钮回到 default，不保留 selected / pressed 底色，只有真实 hover 或按下才叠蒙层；展开用 `aria-expanded` 表达，`:focus-visible` 照常显示。例外：模式开关（如 Select 模式）与分段控件的当前项保留选中样式。
+- **Tab 的悬停与按住**：未选中的 Tab 保持透明底，文字前景从低强调的 `Surface/On Surface Variant` 提到 `Surface/On Surface`。选中态继续显示本变体的底色或指示线，键盘焦点仍需清晰。把规则实现在共享 Tab 或分段控件组件中。
 - **状态不改尺寸**：状态切换只改颜色与蒙层。只在选中态出现的边框，要在默认态预留同宽透明边框，或改用 `outline` / inset `box-shadow`，否则相邻元素会跳动（Medeo 顶栏 Tab 曾因 0.5px 选中边框在切换时跳动）。
 - **裁切区边缘的选中描边**：让状态线完整落在卡片可视边界内。选用 inset ring 时放在内容上方。使用 `outline` 时，`outline-offset` 至少向内移动完整线宽（2px 描边用 -2px），保留未选态和选中态的外框尺寸。实测首尾项与滚动区边界相接时的四边。
 - **生效中 ≠ 展开**：筛选条件、按类型分组这类「条件正在生效」的持续状态，触发按钮用 `State Layers/Primary` Opacity-08 底 + `Schemes/Primary` 图标（Medeo `var(--State-Layers-Primary-Opacity-08, …)` + `var(--Schemes-Primary, …)`），和「菜单展开回到 default」、工具栏「选中用 `On Surface`」区分开，用户一眼能看出列表正被过滤。它是低强调的状态指示，不算 §3.1 的紫色主按钮。同一处所有能「生效」的按钮（筛选、分组）用同一套，不只改被点名的那个（Medeo 编辑器素材面板已用；Createspace 工具栏的 Filter / Group 文字按钮仍是中性选中底，待同步）。
@@ -303,6 +304,8 @@ Figma（`**Shape`** · **Baseline**）圆角变量分组名为 `**Radius/*`**；
 
 
 **间距与圆角尽可能用变量（强制）**：`gap` / `padding` / `margin` / `inset` 以及角标这类位置偏移，值落在 `Space/s*` 档上就一律用 `**var(--space-s*)**`（Medeo 代码 `var(--Space-S-n, Npx)`，带 px 兜底），不裸写 `16px`；负值写 `calc(-1 * var(--Space-S-1, 4px))`，`calc()` 里的档位值也换成变量（如 `calc(100% + var(--Space-S-1, 4px))`）。圆角同理（设计指定确切渲染 px、`--Radius-N` 补偿后会偏离时写字面值，见 §4.4 / §4.6）。**只有**不在档位上、也没有推导关系的 1–3px 光学微调（如工具栏控件 gap 2px、角标 inset 2px、表头与置顶灰底 1px），以及 §7.8 设计明确指定的非档位局部值，才写字面值，并就近注释来源；不要为凑变量写 `calc(var(--Space-S-1) / 2)` 这类表达式。**量法**：间距与对齐都按**可视边缘**量，不按热区或盒子（热区 24、可视 20 时，「距 4px」要扣掉 2px 内缩）；`margin` 与父容器 `gap` 会叠加，改完量实际值。
+
+**设置行尾操作**：按钮可视框垂直居中，上、下、右三侧到单元格边缘等距。32px 行配 24px 按钮时，三侧均留 4px。按钮文字、开关轨道、头像和箭头按实际绘制的右缘对齐。Medeo 设置使用 8px 内容右边线，文字按钮的右内距为 4px，箭头按字形自带留白做光学补偿。
 
 ### 4.5.1 圆角容器标题的视觉补偿
 
