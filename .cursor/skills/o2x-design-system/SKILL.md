@@ -72,7 +72,7 @@ description: >-
 
 ### 完成验收
 
-- [ ] 紧凑面板按 `design.md` §2.1 / §5.4 / §6 验收 Switch、字阶与标签容器。分别量 Switch 的可视轨道、滑块和点击区域，核对开启时的 Primary 轨道及键盘焦点。读取实际文字节点的计算字号和行高，分段标签覆盖选中与未选中态。16px 标明例外角色。
+- [ ] 紧凑面板按 `design.md` §2.1 / §5.4 / §6 验收 Switch、字阶与标签容器。分别量 Switch 的可视轨道、滑块和点击区域，核对开启时的 Primary 轨道及键盘焦点。读取实际文字节点的计算字号和行高，分段标签覆盖选中与未选中态，并在窄宽和较长本地化文案下保持一行完整。16px 标明例外角色。
 - [ ] 按 `design.md` §4.3 核对 Tab 的未选中、悬停、按住、选中和键盘焦点。未选中项的悬停及按住反馈只提高文字对比度，保持透明底。
 - [ ] 设置行尾按钮按 `design.md` §4.5 分别核对按钮框的上、下、右等距，以及文字、箭头、开关、头像的视觉右缘。
 - [ ] 级联菜单按 `design.md` §6 核对一级与子菜单的实际字阶、Portal 前后的字体平滑、前置图标槽位和间距，再实测上下空间与左右展开的可视边缘，核对触发行中心对齐、统一的尾部图标和字形上、下、右留白，验证鼠标与键盘。
@@ -117,8 +117,8 @@ description: >-
 2.2 **Surface 两套层级（强制，见 `design.md` §4.1）**：不要把所有 Surface 当成一条梯子。
    - **页面/大分区底色明度**：用 `Surface/Surface Dim`、`Surface/Surface`、`Surface/Surface Bright`。Dim 更沉，Surface 默认，Bright 更亮。
    - **容器强调层级**：用 `Surface/Surface Container Lowest` → `Low` → `Container` → `High` → `Highest`。用于 Card、Sheet、Menu、Panel、输入区块等 contained area；`Surface Container` 是常规默认，Lowest/Low 降低强调，High/Highest 提高强调。浮出菜单 / 下拉面板例外，用 `Surface Container Lowest`（`design.md` §4.1、§8）。
-   - **禁止混用**：不要把 `Surface Bright` 当作最高容器；不要从 `Surface Container Low` 开始漏掉 `Surface Container Lowest`；嵌套容器靠 Container 层级 + `Outline Variant` / `On Surface Variant` 0.5px 分隔。
-3. **描边（默认）**：低强调容器、卡片、输入框、列表分隔和图标容器的描边，优先用 **`Surface/On Surface Variant`**（代码侧 `--color-surface-on-surface-variant`）+ **`0.5px`**。只有需要更弱层级、禁用态、分隔线层级或设计稿明确指定时，才改用 `Outline` / `Outline Variant` / 1px。Compact 档（弹出菜单、下拉、托盘面板）的容器边框与分隔线改用 `Outline Variant`（`design.md` §2.1）。
+   - **禁止混用**：不要把 `Surface Bright` 当作最高容器；不要从 `Surface Container Low` 开始漏掉 `Surface Container Lowest`；嵌套容器靠 Container 层级 + 0.5px `Surface/Outline Variant` 分隔。
+3. **描边（默认）**。容器、卡片、面板、Dialog 和图标容器的常态描边统一用 0.5px `Surface/Outline Variant`，实现和验收遵循「描边 / Stroke」。
 4. **Figma 组件写入（强制）——「不是只看数值，要看变量绑定」**
    - 写入或更新 One2X 组件时，Auto Layout 的 **`padding*` / `itemSpacing`** 必须绑定 Figma **`Shape/Space/s*`** 变量；四角半径必须绑定 **`Shape/Radius/*`** 变量。  
    - 只把数值设成 8、12、16、999 等，不算完成；右侧面板要能看到变量绑定。胶囊圆角用 **`Radius/Full`**，不要保留裸 `999px`。  
@@ -154,11 +154,10 @@ description: >-
 
 描边默认是轻边界，不是装饰线。除非组件规范或设计稿另有说明：
 
-- 颜色优先用 **`Surface/On Surface Variant`**；代码侧用 `var(--color-surface-on-surface-variant)`。**Compact 档例外**（`design.md` §2.1）：弹出菜单、下拉、托盘面板的容器边框与分隔线用 `Surface/Outline Variant`，可交互的 Outlined 按钮 / 输入框用 `Surface/Outline`。
-- 宽度优先用 **`0.5px`**；Figma 写入时设置 `strokeWeight = 0.5`，并把 `strokes` 的 paint 绑定到对应 Color 变量。
-- 对容器类节点优先用 `strokeAlign: inside`，避免描边改变外部几何尺寸。
-- 如果 0.5px 在目标渲染环境过淡或不可见，可以升到 1px，但要有明确原因；不要把 1px 当默认值。
-- **核对分隔线粗细**：同组每个接缝查一次绘制来源，实际比较高低行交界处的线宽。半像素线在分数缩放下粗细不一时，按 `design.md` §2.1 改用降低不透明度的 1 CSS px 线。
+- **常态容器描边**统一使用 0.5px `Surface/Outline Variant`。Web 代码用 `var(--color-surface-outline-variant)` 或 Medeo 的 `var(--Surface-Outline-Variant)`。Outlined 按钮和输入框的交互边框按组件规格用 `Surface/Outline`。
+- Figma 写入时设置 `strokeWeight = 0.5`，绑定对应 Color 变量。容器优先用 `strokeAlign: inside`。
+- 在 Playground 和实际入口核对四边的计算线色与视觉粗细。紧凑变体若继承了组件的深色或 1px 边框，在共享变体统一覆盖。
+- **组内分隔线**由行组在共享接缝居中绘制。按分隔线内缘复量按钮上下净距，并在分数缩放下比较不同高度行的线宽。只在组内 0.5px 分隔线出现不一致时使用 `design.md` §2.1 的 1 CSS px 降不透明度方案。
 - **描边裁切**：用实际组件检查自身和祖先的 `overflow`，对比 Playground 和真实容器的边距。按 `design.md` §4.3 将选中线完整内收，实测滚动边界处的四边和明暗主题。
 - **可拖拽分栏线（resizer）用中性色**：hover、键盘聚焦、拖动中显示的线用 `Surface/Outline`，不用 `Schemes/Primary`；品牌紫只留给最高强调（`design.md` §3.1）。
 

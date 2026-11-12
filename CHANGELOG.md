@@ -4,6 +4,7 @@ All notable changes to this skill pack should be recorded in this file.
 
 ## Unreleased
 
+- 2026-11-12 统一常态容器为 0.5px Outline Variant，明确组内分隔线的居中与净距验收，以及紧凑分段标签的单行约束。
 - 2026-11-12 统一 Tab 的悬停和按住反馈，未选中项仅提高文字对比度。补设置行尾按钮三侧留白和控件视觉右缘的验收。
 
 - 2026-11-12 补紧凑列表分隔线的分数缩放验证，以及可滚动区域边缘的选中描边裁切规则。

@@ -91,8 +91,8 @@ Medeo / One2X 产品界面建立在 **Material Design 3** 的组件语义之上�
 - **层级靠不透明度，不靠换 token**：主文 `Surface/On Surface` 100%；次要文本 `Surface/On Surface Variant` **60%**；分组标题 / 邮箱等三级信息 `On Surface Variant` **40%**；图标随文本同色、同不透明度。同角色用不透明度区分层级，颜色沿用前述语义角色。独立标题按下文字阶。**交互控件前景不走这套降级**：工具栏里未选中的按钮（纯图标与带文字）图标和文字统一 `On Surface Variant` 100%，`On Surface` 只给选中态（§4.1、§6.1）。
 - **紧凑面板字阶**：按钮、分段标签、紧凑标签、常规行和辅助说明用 12px（`label/medium`）。独立面板和小弹窗的标题用 14px（`title/small`）。时间戳等低优先级元信息用 11px（`label/small`）。16px 仅用于有明确设计依据的角色，例如独立登录视图或需要突出风险的系统确认框。
 - **紧凑行的开关**：行尾的紧凑开关垂直居中。Medeo Web 的 `size="compact"` 沿用编辑器字幕开关的几何：可视轨道 24.4 × 15px，圆形滑块直径 11px，在关闭和开启位置距相应轨道边缘 2px。点击区高度至少 24px，保留清晰的键盘焦点，分别测量可视轨道和实际点击区域。`medium` 与 `large` 的轨道仍为 32.5 × 20px 和 52 × 32px。所有尺寸在开启且可用时，轨道用 `Schemes/Primary`（Medeo Web 的 `--Schemes-Primary`）。
-- **轻描边默认 0.5px**：容器边框、分隔线、图标按钮描边用 `Surface/Outline Variant`；可交互的 Outlined 按钮 / 输入框用 `Surface/Outline`；浮出于页面之上的 Dialog 才用 `Surface/On Surface Variant`（深一档，配 Elevation）。
-- **同组列表分隔线**：由行组统一绘制，每个相邻接缝一条，整组用同一种线色和线宽。浏览器在分数缩放下若把 0.5 CSS px 渲染成粗细不一的线，改用 1 CSS px 实线并降低 `Surface/Outline Variant` 的不透明度。Medeo 设置组用 50%，在浅色、深色和分数缩放下对比不同高度的相邻行。
+- **全局常态描边**默认用 0.5px `Surface/Outline Variant`，覆盖卡片、图标容器、浮出菜单、面板和 Dialog 的外框。浮层用 Elevation 区分层级。Outlined 按钮、输入框的交互边框按组件规格用 `Surface/Outline`。
+- **同组列表分隔线**：由行组统一绘制，每个相邻接缝一条，整组用同一种线色和线宽。将线的中心放在两行共享的边界，按分隔线内缘复量行内容及按钮的上下净距。仅当分数缩放使组内 0.5 CSS px 分隔线粗细不一时，组内分隔线可改用 1 CSS px 实线并降低 `Surface/Outline Variant` 的不透明度。Medeo 设置组用 50%，在浅色、深色和分数缩放下对比不同高度的相邻行。
 - **分组标题行 = 24 高**：`label/medium` @40% 左对齐，右侧放该分组的唯一操作（紧凑黑钮或 20px IconButton）。分组之间不用大留白，靠标题行 + 一条 `HorizontalDivider` 分段。标题行在文档流里独占一行，不用绝对定位压在内容上；标题行与它所属的内容之间只留 1–4px，让两者读作一组，不套用区块间距（Medeo 定稿值见 §7.6）。
 - **进度条单色**：`Progress` 组件，轨道 `On Surface` 10%、进度 `On Surface` 40%、4px 高；**不用**蓝色 `Secondary Container` 做进度。
 - **状态徽标 = 库内实心图标**：`CheckCircleIcon` / `ClockLoader60Icon` / `ErrorFillIcon` 等 10px，放在 24px 文件夹图形右下角、外包一圈 `Surface Container Lowest` 白圈；不手绘圆点。
@@ -245,6 +245,7 @@ Material 3 的 Surface 不是一条单一“越上越亮”的梯子，而是两
 - **只留一层状态底色**：组件自带 state layer（如 `IconButton` 内层方角那层）又在外层叠了 hover 底时，只保留一层，圆角跟随按钮外形；两层叠加会比同排文字按钮更深，还会露出直角（Medeo 工具栏保留外层圆角层、关掉内层）。
 - **展开不算状态**：点开菜单 / 弹层后，触发按钮回到 default，不保留 selected / pressed 底色，只有真实 hover 或按下才叠蒙层；展开用 `aria-expanded` 表达，`:focus-visible` 照常显示。例外：模式开关（如 Select 模式）与分段控件的当前项保留选中样式。
 - **Tab 的悬停与按住**：未选中的 Tab 保持透明底，文字前景从低强调的 `Surface/On Surface Variant` 提到 `Surface/On Surface`。选中态继续显示本变体的底色或指示线，键盘焦点仍需清晰。把规则实现在共享 Tab 或分段控件组件中。
+- **分段标签保持一行完整显示**。按实际本地化文字、图标和内边距分配选项宽度，在最窄受支持的面板验收。空间紧张时先收装饰间距或将其他操作移到独立行，保留标签字阶。
 - **状态不改尺寸**：状态切换只改颜色与蒙层。只在选中态出现的边框，要在默认态预留同宽透明边框，或改用 `outline` / inset `box-shadow`，否则相邻元素会跳动（Medeo 顶栏 Tab 曾因 0.5px 选中边框在切换时跳动）。
 - **裁切区边缘的选中描边**：让状态线完整落在卡片可视边界内。选用 inset ring 时放在内容上方。使用 `outline` 时，`outline-offset` 至少向内移动完整线宽（2px 描边用 -2px），保留未选态和选中态的外框尺寸。实测首尾项与滚动区边界相接时的四边。
 - **生效中 ≠ 展开**：筛选条件、按类型分组这类「条件正在生效」的持续状态，触发按钮用 `State Layers/Primary` Opacity-08 底 + `Schemes/Primary` 图标（Medeo `var(--State-Layers-Primary-Opacity-08, …)` + `var(--Schemes-Primary, …)`），和「菜单展开回到 default」、工具栏「选中用 `On Surface`」区分开，用户一眼能看出列表正被过滤。它是低强调的状态指示，不算 §3.1 的紫色主按钮。同一处所有能「生效」的按钮（筛选、分组）用同一套，不只改被点名的那个（Medeo 编辑器素材面板已用；Createspace 工具栏的 Filter / Group 文字按钮仍是中性选中底，待同步）。
