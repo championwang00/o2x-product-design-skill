@@ -418,7 +418,7 @@ Figma（`**Shape`** · **Baseline**）圆角变量分组名为 `**Radius/*`**；
 | **Compact 面板 · 行内元信息**（「306 files · 38.2 GB · Up to date」、速率、百分比、邮箱） | `label/small`（11）@ `On Surface Variant` **60%**（邮箱等三级信息 40%） | 用不透明度做层级 |
 | **Compact 面板 · 分组标题**（「Sync folders · 3」「Transfer activity · Uploading · 3」「Recent · 20」） | `label/medium` @ `On Surface Variant` **40%** | 与行主文案同字号，靠 40% 退后 |
 | **Compact 面板 · 状态条文案**（「Syncing: 3 to upload」「1 errors」） | `label/medium`（错误态填色 `Schemes/Error`，条底 `Schemes/Error Container`） | 速率用 `label/small` @60% 跟在后面 |
-| **Compact 面板 · 空态提示**（「Folder not synced yet」） | `label/large` @ `On Surface Variant` 60% | 配 48px 灰文件夹图形 40% + 通栏黑钮 |
+| **Compact 同步文件夹托盘 · 空态提示**（「Folder not synced yet」） | `label/large` @ `On Surface Variant` 60% | 配 48px 灰文件夹图形 40% + 通栏黑钮 |
 | **Compact 面板 · 独立标题**（设置、兑换码） | `title/small`（14px） | 16px 按 §2.1 的例外处理 |
 | 登录视图 / 系统确认框标题 | `title/medium` 居中 | 正文 `body/small` @ `On Surface Variant` 居中 |
 | 紧凑黑钮 / 行内 Outlined 钮文案 | `label/medium` | 24 高按钮唯一档 |
@@ -647,6 +647,9 @@ Panel 340×480  VERTICAL pad 0 gap 0  fill Surface Container Lowest  stroke Outl
 - **命令框 / RTE 例外**：自身状态、父子关系与同对象实例关联须独立设计，局部原则、参数与 SDK 限制见 [CommandBox / RTE 模块](modules/command-box-rte.md)。本节 Createspace 的 2px 选中框、父子不联动及单条状态优先级不适用于命令框；旧 chip 点击选中示例不再作为基线。
 
 #### 分组与空状态
+
+- **同一工作区使用统一的面板空态样式**。素材、剧本和逐字稿沿用同一套居中结构。内容区上方留 `Space/s8`，用 24px 语义图标（`On Surface Variant` 40%）和 `label/medium` 状态标题（60%），图标与标题间隔 8px。DOM 和画布用同一规格，并排核对相同尺寸和主题。
+- **说明和操作随面板能力显示**。素材空态可提示拖入或上传。剧本和逐字稿只显示暂无内容的状态，沿用相同图标尺寸、字阶和留白。
 
 - **按类型分组时，空分组整组不显示**：连分组标题一起隐藏，不放「暂无背景音乐」这类占位；所有分组都为空时显示整个面板的空状态。
 

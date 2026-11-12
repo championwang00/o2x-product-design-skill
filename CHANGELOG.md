@@ -4,6 +4,7 @@ All notable changes to this skill pack should be recorded in this file.
 
 ## Unreleased
 
+- 2026-11-12 统一编辑器素材、剧本和逐字稿的面板空态样式。
 - 2026-11-12 补弹层关闭按钮的可见等距和同心圆角验收。
 - 2026-11-12 明确圆角块面的光学补偿落在独立文字组，统一常态按钮轻描边，补设置行说明字阶和自适应留白。
 - 2026-11-12 统一常态容器为 0.5px Outline Variant，明确组内分隔线的居中与净距验收，以及紧凑分段标签的单行约束。
